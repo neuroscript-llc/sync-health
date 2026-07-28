@@ -39,7 +39,7 @@ export function SiteHeader({ content }: { content: SiteHeaderContent }) {
     <header className="flex w-full flex-col items-center gap-2">
       <Ticker messages={content.tickerMessages} />
 
-      <nav className="flex w-full max-w-[980px] items-center gap-3 rounded-full bg-white/60 py-3 pl-8 pr-3 shadow-sm backdrop-blur-md">
+      <nav className="flex w-full max-w-[980px] items-center gap-2 rounded-full bg-white/60 py-3 pl-3 pr-2 shadow-sm backdrop-blur-md sm:gap-3 sm:pl-8 sm:pr-3">
         <Link href="/" className="shrink-0" aria-label="Sync. home">
           <Image
             src="/images/sync-logo.svg"
@@ -47,6 +47,7 @@ export function SiteHeader({ content }: { content: SiteHeaderContent }) {
             width={100}
             height={26}
             priority
+            className="h-auto w-20 sm:w-[100px]"
           />
         </Link>
 
@@ -67,11 +68,11 @@ export function SiteHeader({ content }: { content: SiteHeaderContent }) {
         </div>
 
         {/* Actions */}
-        <div className="flex flex-1 items-center justify-end gap-1">
+        <div className="flex min-w-0 flex-1 items-center justify-end gap-1">
           <button
             type="button"
             aria-label="Search"
-            className="rounded-full p-3 text-ink/80 transition-colors hover:bg-white/70"
+            className="shrink-0 rounded-full p-2 text-ink/80 transition-colors hover:bg-white/70 sm:p-3"
           >
             <Search className="size-5" aria-hidden />
           </button>
@@ -86,10 +87,10 @@ export function SiteHeader({ content }: { content: SiteHeaderContent }) {
 
           <Link
             href={content.ctaHref}
-            className="flex items-center gap-2 rounded-full bg-brand py-3 pl-5 pr-4 text-base font-medium text-brand-foreground transition-transform hover:-translate-y-px"
+            className="flex shrink-0 items-center gap-1.5 rounded-full bg-brand py-2.5 pl-4 pr-3 text-sm font-medium text-brand-foreground transition-transform hover:-translate-y-px sm:gap-2 sm:py-3 sm:pl-5 sm:pr-4 sm:text-base"
           >
             <span className="whitespace-nowrap">{content.ctaLabel}</span>
-            <ArrowUpRight className="size-5" aria-hidden />
+            <ArrowUpRight className="size-5 shrink-0" aria-hidden />
           </Link>
         </div>
       </nav>
