@@ -40,11 +40,11 @@ function CategoryPill({ card }: { card: ProtocolCard }) {
 function ProtocolCardEl({ card }: { card: ProtocolCard }) {
   return (
     <article
-      className="flex w-72 shrink-0 snap-start flex-col gap-5 rounded-[48px] p-2 pb-2.5 sm:w-full sm:max-w-[380px]"
+      className="flex w-72 shrink-0 snap-start flex-col gap-5 rounded-[32px] p-1 pb-1.5 sm:w-full sm:max-w-[380px] sm:rounded-[48px] sm:p-2 sm:pb-2.5"
       style={{ background: CARD_BG, boxShadow: "0 12px 120px rgba(240,240,230,1)" }}
     >
       <div
-        className="relative aspect-[3/2] w-full overflow-hidden rounded-[40px]"
+        className="relative aspect-[3/2] w-full overflow-hidden rounded-[28px] sm:rounded-[40px]"
         style={{ background: PEACH_BG }}
       >
         <div
@@ -60,7 +60,7 @@ function ProtocolCardEl({ card }: { card: ProtocolCard }) {
 
       {/* Mobile: category as a heading with a dot, then the description. */}
       <div className="flex flex-col gap-3 px-3 sm:hidden">
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1">
           <h3 className="text-lg font-medium leading-7 text-ink">
             {card.category}
           </h3>
@@ -70,7 +70,9 @@ function ProtocolCardEl({ card }: { card: ProtocolCard }) {
             aria-hidden
           />
         </div>
-        <p className="text-sm leading-5 text-ink/80">{card.description}</p>
+        <p className="line-clamp-3 h-[60px] text-sm leading-5 text-ink/80">
+          {card.description}
+        </p>
       </div>
 
       {/* Desktop: description, then the category pill. */}
@@ -89,23 +91,25 @@ export function Protocols({
   ...rest
 }: { content: ProtocolsContent } & Omit<React.ComponentPropsWithoutRef<"section">, "content">) {
   return (
-    <section className="bg-cream px-6 py-20 sm:px-9" {...rest}>
+    <section className="bg-cream px-5 py-12 sm:px-9 sm:py-20" {...rest}>
       <div className="mx-auto flex max-w-[1200px] flex-col items-start gap-10 sm:items-center sm:gap-11">
         {/* Header */}
         <div className="flex flex-col items-start gap-4 text-left sm:items-center sm:text-center">
-          <p className="font-mono text-sm font-medium uppercase tracking-[0.04em] text-brand">
-            {content.eyebrow}
-          </p>
-          <h2 className="text-[48px] font-medium leading-[1.16] tracking-[-0.02em] text-ink lg:text-[56px] lg:leading-[64px]">
-            {content.heading}
-          </h2>
+          <div className="flex flex-col items-start gap-1 sm:items-center sm:gap-4">
+            <p className="font-mono text-sm font-medium uppercase tracking-[0.04em] text-brand">
+              {content.eyebrow}
+            </p>
+            <h2 className="text-[48px] font-medium leading-[1.16] tracking-[-0.02em] text-ink lg:text-[56px] lg:leading-[64px]">
+              {content.heading}
+            </h2>
+          </div>
           <p className="max-w-[560px] text-base leading-relaxed text-ink/80 sm:text-lg">
             {content.subtext}
           </p>
         </div>
 
         {/* Cards — horizontal scroll on mobile (full-bleed peek), wrap on desktop. */}
-        <div className="-mx-6 flex w-full snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-2 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:justify-center sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 [&::-webkit-scrollbar]:hidden">
+        <div className="-mx-5 flex w-full snap-x snap-mandatory gap-3 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:justify-center sm:gap-6 sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
           {content.cards.map((card, i) => (
             <ProtocolCardEl key={i} card={card} />
           ))}
