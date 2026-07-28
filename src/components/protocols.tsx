@@ -40,7 +40,7 @@ function CategoryPill({ card }: { card: ProtocolCard }) {
 function ProtocolCardEl({ card }: { card: ProtocolCard }) {
   return (
     <article
-      className="flex w-full max-w-[380px] flex-col gap-5 rounded-[48px] p-2 pb-2.5"
+      className="flex w-72 shrink-0 snap-start flex-col gap-5 rounded-[48px] p-2 pb-2.5 sm:w-full sm:max-w-[380px]"
       style={{ background: CARD_BG, boxShadow: "0 12px 120px rgba(240,240,230,1)" }}
     >
       <div
@@ -58,7 +58,23 @@ function ProtocolCardEl({ card }: { card: ProtocolCard }) {
         />
       </div>
 
-      <div className="flex flex-col gap-5 px-3">
+      {/* Mobile: category as a heading with a dot, then the description. */}
+      <div className="flex flex-col gap-3 px-3 sm:hidden">
+        <div className="flex items-center gap-1.5">
+          <h3 className="text-lg font-medium leading-7 text-ink">
+            {card.category}
+          </h3>
+          <span
+            className="size-2 shrink-0 rounded-full"
+            style={{ background: DOT }}
+            aria-hidden
+          />
+        </div>
+        <p className="text-sm leading-5 text-ink/80">{card.description}</p>
+      </div>
+
+      {/* Desktop: description, then the category pill. */}
+      <div className="hidden flex-col gap-5 px-3 sm:flex">
         <p className="text-base leading-relaxed text-ink/80">
           {card.description}
         </p>
@@ -74,22 +90,22 @@ export function Protocols({
 }: { content: ProtocolsContent } & Omit<React.ComponentPropsWithoutRef<"section">, "content">) {
   return (
     <section className="bg-cream px-6 py-20 sm:px-9" {...rest}>
-      <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-11">
+      <div className="mx-auto flex max-w-[1200px] flex-col items-start gap-10 sm:items-center sm:gap-11">
         {/* Header */}
-        <div className="flex flex-col items-center gap-4 text-center">
+        <div className="flex flex-col items-start gap-4 text-left sm:items-center sm:text-center">
           <p className="font-mono text-sm font-medium uppercase tracking-[0.04em] text-brand">
             {content.eyebrow}
           </p>
-          <h2 className="text-4xl font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[56px] lg:leading-[64px]">
+          <h2 className="text-[48px] font-medium leading-[1.16] tracking-[-0.02em] text-ink lg:text-[56px] lg:leading-[64px]">
             {content.heading}
           </h2>
-          <p className="max-w-[560px] text-lg leading-relaxed text-ink/80">
+          <p className="max-w-[560px] text-base leading-relaxed text-ink/80 sm:text-lg">
             {content.subtext}
           </p>
         </div>
 
-        {/* Cards */}
-        <div className="flex flex-wrap justify-center gap-6">
+        {/* Cards — horizontal scroll on mobile (full-bleed peek), wrap on desktop. */}
+        <div className="-mx-6 flex w-full snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-2 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:justify-center sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 [&::-webkit-scrollbar]:hidden">
           {content.cards.map((card, i) => (
             <ProtocolCardEl key={i} card={card} />
           ))}
@@ -98,7 +114,7 @@ export function Protocols({
         {/* CTA */}
         <Link
           href={content.ctaHref}
-          className="inline-flex items-center gap-2 rounded-full bg-brand py-4 pl-6 pr-5 font-mono text-lg uppercase tracking-wide text-white transition-transform hover:-translate-y-0.5 lg:text-xl"
+          className="inline-flex items-center gap-2 rounded-full bg-brand py-3 pl-5 pr-4 font-mono text-base uppercase tracking-wide text-white transition-transform hover:-translate-y-0.5 sm:py-4 sm:pl-6 sm:pr-5 sm:text-lg lg:text-xl"
         >
           {content.ctaLabel}
           <ArrowRight className="size-6" aria-hidden />
