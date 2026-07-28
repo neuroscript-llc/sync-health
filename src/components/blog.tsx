@@ -1,0 +1,153 @@
+"use client";
+
+import { useRef } from "react";
+import type { Article, BlogContent } from "@/lib/content";
+
+/* eslint-disable @next/next/no-img-element */
+
+const CARD_WIDTH = 424;
+const GAP = 32;
+
+function ChevronLeft() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
+      <path
+        d="M12.5 15L7.5 10l5-5"
+        stroke="#1D1D1B"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function ChevronRight() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
+      <path
+        d="M7.5 5l5 5-5 5"
+        stroke="#1D1D1B"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function ArticleCard({ article }: { article: Article }) {
+  return (
+    <a
+      href={article.href}
+      className="group flex w-[300px] shrink-0 flex-col gap-5 sm:w-[360px] lg:w-[424px]"
+      style={{ scrollSnapAlign: "start" }}
+    >
+      {/* Cover image with category pill */}
+      <div className="relative h-[318px] overflow-hidden rounded-3xl bg-[#EAECEC]">
+        <img
+          src={article.image}
+          alt=""
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+        />
+        <span className="absolute left-4 top-4 rounded-[99px] bg-white px-2 py-1 font-mono text-sm font-medium uppercase tracking-[0.02em] text-brand">
+          {article.category}
+        </span>
+      </div>
+
+      {/* Title + meta */}
+      <div className="flex flex-col gap-3">
+        <h3 className="text-xl font-normal leading-[1.25] tracking-[-0.02em] text-ink">
+          {article.title}
+        </h3>
+        <p className="font-mono text-sm uppercase tracking-[0.02em] text-ink/80">
+          {article.meta}
+        </p>
+      </div>
+    </a>
+  );
+}
+
+export function Blog({
+  content,
+  ...rest
+}: { content: BlogContent } & Omit<React.ComponentPropsWithoutRef<"section">, "content">) {
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (dir: 1 | -1) => {
+    trackRef.current?.scrollBy({
+      left: dir * (CARD_WIDTH + GAP),
+      behavior: "smooth",
+    });
+  };
+
+  return (
+    <section className="bg-white px-9 py-20" {...rest}>
+      <div className="mx-auto flex max-w-[1368px] flex-col gap-16">
+        {/* Header */}
+        <div className="flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-end">
+          <div className="flex max-w-[396px] flex-col gap-6">
+            <div className="flex flex-col gap-1">
+              <p className="font-mono text-sm font-medium uppercase tracking-[0.04em] text-brand">
+                {content.eyebrow}
+              </p>
+              <h2 className="text-4xl font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[56px] lg:leading-[64px]">
+                {content.heading}
+              </h2>
+            </div>
+            <p className="text-lg leading-[1.5] text-ink/80">
+              {content.subtext}
+            </p>
+          </div>
+
+          {/* Nav arrows */}
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => scroll(-1)}
+              aria-label="Previous articles"
+              className="flex size-11 items-center justify-center rounded-full bg-[#EAECEC] transition-opacity hover:opacity-80"
+            >
+              <ChevronLeft />
+            </button>
+            <button
+              type="button"
+              onClick={() => scroll(1)}
+              aria-label="Next articles"
+              className="flex size-11 items-center justify-center rounded-full bg-[#EAECEC] transition-opacity hover:opacity-80"
+            >
+              <ChevronRight />
+            </button>
+          </div>
+        </div>
+
+        {/* Article carousel */}
+        <div
+          ref={trackRef}
+          className="-mx-9 flex snap-x snap-mandatory gap-8 overflow-x-auto scroll-smooth px-9 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {content.articles.map((article, i) => (
+            <ArticleCard key={i} article={article} />
+          ))}
+        </div>
+
+        {/* CTA */}
+        <a
+          href={content.ctaHref}
+          className="flex items-center gap-2 self-start rounded-full bg-brand py-3 pl-5 pr-4 font-mono text-base uppercase tracking-[0.02em] text-brand-foreground transition-opacity hover:opacity-90"
+        >
+          {content.ctaLabel}
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <path
+              d="M5 12h14m0 0l-6-6m6 6l-6 6"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </a>
+      </div>
+    </section>
+  );
+}

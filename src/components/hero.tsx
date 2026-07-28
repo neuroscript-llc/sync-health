@@ -1,0 +1,51 @@
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import type { HeroContent, SiteHeaderContent } from "@/lib/content";
+import { SiteHeader } from "@/components/site-header";
+
+export function Hero({
+  content,
+  header,
+  ...rest
+}: {
+  content: HeroContent;
+  header: SiteHeaderContent;
+} & Omit<React.ComponentPropsWithoutRef<"section">, "content">) {
+  return (
+    <section className="bg-cream" {...rest}>
+      <div className="relative min-h-[720px] overflow-hidden rounded-xl rounded-b-3xl lg:min-h-[856px]">
+        {/* Background image */}
+        <Image
+          src={content.backgroundImage.src}
+          alt={content.backgroundImage.alt}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+        {/* Dark overlay for legibility */}
+        <div className="absolute inset-0 bg-ink/20" aria-hidden />
+
+        {/* Content (12px inset matches Figma) */}
+        <div className="relative z-10 flex min-h-[720px] flex-col p-3 lg:min-h-[856px]">
+          <SiteHeader content={header} />
+
+          <div className="mx-auto flex w-full max-w-[980px] flex-1 flex-col items-center gap-12 pt-24 text-center lg:pt-[120px]">
+            <h1 className="text-balance text-[2.75rem] font-medium leading-[1.05] tracking-[-0.03em] text-white [text-shadow:0_0_180px_rgba(208,53,22,0.95),0_0_90px_rgba(208,53,22,0.55)] sm:text-6xl lg:text-7xl xl:text-[88px] xl:leading-[96px]">
+              {content.headline}
+            </h1>
+
+            <Link
+              href={content.ctaHref}
+              className="inline-flex items-center gap-2 rounded-full bg-ink/80 py-5 pl-6 pr-5 font-mono text-lg uppercase tracking-wide text-white backdrop-blur-sm transition-transform hover:-translate-y-0.5 lg:text-xl"
+            >
+              {content.ctaLabel}
+              <ArrowUpRight className="size-6" aria-hidden />
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
