@@ -34,14 +34,14 @@ export function TrustBar({
 }: { content: TrustBarContent } & Omit<React.ComponentPropsWithoutRef<"section">, "content">) {
   return (
     <section
-      className="flex flex-col items-center gap-6 bg-cream px-6 py-10 sm:px-16"
+      className="flex flex-col items-center gap-6 bg-cream py-10"
       {...rest}
     >
       <p className="font-mono text-sm font-medium uppercase tracking-[0.04em] text-brand">
         {content.eyebrow}
       </p>
 
-      <div className="group/marquee w-full max-w-[1312px] overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+      <div className="group/marquee w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_3%,black_97%,transparent)]">
         <div className="flex w-max animate-marquee-slow">
           <LogoTrack logos={content.logos} />
           <LogoTrack logos={content.logos} ariaHidden />

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowIcon } from "@/components/arrow-icon";
 import type { HeroContent, SiteHeaderContent } from "@/lib/content";
 import { SiteHeader } from "@/components/site-header";
 
@@ -38,10 +38,10 @@ export function Hero({
 
             <Link
               href={content.ctaHref}
-              className="inline-flex items-center gap-2 rounded-full bg-ink/80 py-5 pl-6 pr-5 font-mono text-lg uppercase tracking-wide text-white backdrop-blur-sm transition-transform hover:-translate-y-0.5 lg:text-xl"
+              className="group inline-flex items-center gap-2 rounded-full bg-ink/80 py-5 pl-6 pr-5 font-mono text-lg uppercase tracking-wide text-white backdrop-blur-sm lg:text-xl"
             >
               {content.ctaLabel}
-              <ArrowUpRight className="size-6" aria-hidden />
+              <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />
             </Link>
           </div>
         </div>

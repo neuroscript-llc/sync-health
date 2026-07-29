@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowIcon } from "@/components/arrow-icon";
 import type { ProtocolCard, ProtocolsContent } from "@/lib/content";
 
 const PEACH_BG =
@@ -10,28 +10,34 @@ const DOT = "radial-gradient(circle at 35% 30%, #F4A948, #D9531E)";
 const CARD_BG =
   "linear-gradient(180deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%)";
 
+// One pill, two states. Resting: outlined ring, dot + centred dark label.
+// Hover: the gradient fades in (opacity — cheap), the ring fades out, the dot
+// collapses and the label turns white and slides to the left. The slide is a
+// flex-grow spacer so it adapts to any label width without measuring.
 function CategoryPill({ card }: { card: ProtocolCard }) {
-  if (card.featured) {
-    return (
-      <div
-        className="flex h-[54px] items-center rounded-full px-6"
+  return (
+    <div className="group/pill relative flex h-[54px] w-full items-center overflow-hidden rounded-full ring-1 ring-inset ring-ink/15 transition duration-300 group-hover/pill:ring-transparent">
+      {/* Gradient fill — fades in on hover. */}
+      <span
+        aria-hidden
+        className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover/pill:opacity-100"
         style={{ background: FEATURED_PILL }}
-      >
-        <span className="font-mono text-xl font-medium uppercase tracking-[-0.02em] text-white">
+      />
+      <span className="relative flex h-full w-full items-center px-6">
+        {/* Left spacer collapses on hover → label slides from centre to left. */}
+        <span
+          aria-hidden
+          className="grow transition-[flex-grow] duration-300 group-hover/pill:grow-0"
+        />
+        <span
+          aria-hidden
+          className="mr-3 size-5 shrink-0 rounded-full transition-all duration-300 group-hover/pill:mr-0 group-hover/pill:w-0 group-hover/pill:opacity-0"
+          style={{ background: DOT }}
+        />
+        <span className="whitespace-nowrap font-mono text-xl font-medium uppercase tracking-[-0.02em] text-ink transition-colors duration-300 group-hover/pill:text-white">
           {card.category}
         </span>
-      </div>
-    );
-  }
-  return (
-    <div className="flex h-[54px] items-center justify-center gap-3 rounded-full border border-ink/12 px-6">
-      <span
-        className="size-5 shrink-0 rounded-full"
-        style={{ background: DOT }}
-        aria-hidden
-      />
-      <span className="font-mono text-xl font-medium uppercase tracking-[-0.02em] text-ink">
-        {card.category}
+        <span aria-hidden className="grow" />
       </span>
     </div>
   );
@@ -118,10 +124,10 @@ export function Protocols({
         {/* CTA */}
         <Link
           href={content.ctaHref}
-          className="inline-flex items-center gap-2 rounded-full bg-brand py-3 pl-5 pr-4 font-mono text-base uppercase tracking-wide text-white transition-transform hover:-translate-y-0.5 sm:py-4 sm:pl-6 sm:pr-5 sm:text-lg lg:text-xl"
+          className="group inline-flex items-center gap-2 rounded-full border border-brand bg-brand/5 py-3 pl-5 pr-4 font-mono text-base uppercase tracking-wide text-brand transition-colors duration-300 hover:border-transparent hover:bg-brand hover:text-white sm:py-4 sm:pl-6 sm:pr-5 sm:text-lg lg:text-xl"
         >
           {content.ctaLabel}
-          <ArrowRight className="size-6" aria-hidden />
+          <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />
         </Link>
       </div>
     </section>

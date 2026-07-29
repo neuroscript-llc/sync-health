@@ -1,4 +1,5 @@
 import type { FooterContent, SocialLink } from "@/lib/content";
+import { ArrowIcon } from "@/components/arrow-icon";
 
 /* eslint-disable @next/next/no-img-element */
 
@@ -37,8 +38,8 @@ function SocialIcon({ social }: { social: SocialLink }) {
       className="flex size-12 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
     >
       <svg
-        width="20"
-        height="20"
+        width="18"
+        height="18"
         viewBox="0 0 20 20"
         fill="none"
         stroke="currentColor"
@@ -63,7 +64,7 @@ export function Footer({
         {/* Top: brand + nav + newsletter */}
         <div className="flex flex-col gap-12 lg:flex-row lg:gap-32">
           {/* Brand */}
-          <div className="flex w-full max-w-[252px] flex-col gap-8">
+          <div className="flex w-full shrink-0 flex-col gap-8 lg:max-w-[252px]">
             <div className="flex flex-col gap-3">
               <img
                 src="/images/footer/sync-logo-coral.svg"
@@ -83,10 +84,12 @@ export function Footer({
             </div>
           </div>
 
-          {/* Nav columns + newsletter */}
-          <div className="flex flex-1 flex-col gap-12 sm:flex-row sm:gap-8">
+          {/* Nav columns + newsletter — fixed-width columns per Figma
+              (229 / 231 nav, ~368 newsletter) so the links spread evenly on
+              desktop; below lg they hug with a gap so the newsletter keeps room. */}
+          <div className="flex flex-1 flex-col gap-12 sm:flex-row sm:gap-8 lg:gap-0">
             {content.navColumns.map((col, i) => (
-              <nav key={i} className="flex flex-col gap-4">
+              <nav key={i} className="flex shrink-0 flex-col gap-4 lg:w-[230px]">
                 {col.links.map((link) => (
                   <a
                     key={link.label}
@@ -117,24 +120,10 @@ export function Footer({
                 </label>
                 <button
                   type="submit"
-                  className="flex items-center gap-2 self-start rounded-full bg-brand py-3 pl-5 pr-4 font-mono text-base uppercase tracking-[0.02em] text-brand-foreground transition-opacity hover:opacity-90"
+                  className="group flex items-center gap-2 self-start rounded-full bg-brand py-3 pl-5 pr-4 font-mono text-base uppercase tracking-[0.02em] text-brand-foreground transition-opacity hover:opacity-90"
                 >
                   {content.newsletter.ctaLabel}
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    aria-hidden
-                  >
-                    <path
-                      d="M4 10h12m0 0l-5-5m5 5l-5 5"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+                  <ArrowIcon className="size-5 transition-transform duration-200 group-hover:-rotate-45" />
                 </button>
               </form>
             </div>

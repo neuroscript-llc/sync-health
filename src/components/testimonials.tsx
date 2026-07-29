@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { Testimonial, TestimonialsContent } from "@/lib/content";
+import { ArrowIcon } from "@/components/arrow-icon";
 
 /* eslint-disable @next/next/no-img-element */
 
@@ -9,34 +10,6 @@ import type { Testimonial, TestimonialsContent } from "@/lib/content";
 const PAIR_WIDTH = 817;
 const GAP = 120;
 const PITCH = PAIR_WIDTH + GAP;
-
-function ChevronLeft() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
-      <path
-        d="M12.5 15L7.5 10l5-5"
-        stroke="#1D1D1B"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function ChevronRight() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
-      <path
-        d="M7.5 5l5 5-5 5"
-        stroke="#1D1D1B"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 function Pair({ item, active }: { item: Testimonial; active: boolean }) {
   return (
@@ -144,7 +117,7 @@ export function Testimonials({
               aria-label="Previous testimonial"
               className="flex size-11 items-center justify-center rounded-full bg-[#EAECEC] transition-opacity hover:opacity-80 disabled:opacity-40"
             >
-              <ChevronLeft />
+              <ArrowIcon className="size-5 -scale-x-100 text-ink" />
             </button>
             <button
               type="button"
@@ -153,7 +126,7 @@ export function Testimonials({
               aria-label="Next testimonial"
               className="flex size-11 items-center justify-center rounded-full bg-[#EAECEC] transition-opacity hover:opacity-80 disabled:opacity-40"
             >
-              <ChevronRight />
+              <ArrowIcon className="size-5 text-ink" />
             </button>
           </div>
         </div>

@@ -2,39 +2,12 @@
 
 import { useRef } from "react";
 import type { Article, BlogContent } from "@/lib/content";
+import { ArrowIcon } from "@/components/arrow-icon";
 
 /* eslint-disable @next/next/no-img-element */
 
 const CARD_WIDTH = 424;
 const GAP = 32;
-
-function ChevronLeft() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
-      <path
-        d="M12.5 15L7.5 10l5-5"
-        stroke="#1D1D1B"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function ChevronRight() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
-      <path
-        d="M7.5 5l5 5-5 5"
-        stroke="#1D1D1B"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 function ArticleCard({ article }: { article: Article }) {
   return (
@@ -83,7 +56,7 @@ export function Blog({
 
   return (
     <section className="bg-white px-9 py-20" {...rest}>
-      <div className="mx-auto flex max-w-[1368px] flex-col gap-16">
+      <div className="mx-auto flex max-w-[1368px] flex-col gap-10">
         {/* Header */}
         <div className="flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-end">
           <div className="flex max-w-[396px] flex-col gap-6">
@@ -108,7 +81,7 @@ export function Blog({
               aria-label="Previous articles"
               className="flex size-11 items-center justify-center rounded-full bg-[#EAECEC] transition-opacity hover:opacity-80"
             >
-              <ChevronLeft />
+              <ArrowIcon className="size-5 -scale-x-100 text-ink" />
             </button>
             <button
               type="button"
@@ -116,7 +89,7 @@ export function Blog({
               aria-label="Next articles"
               className="flex size-11 items-center justify-center rounded-full bg-[#EAECEC] transition-opacity hover:opacity-80"
             >
-              <ChevronRight />
+              <ArrowIcon className="size-5 text-ink" />
             </button>
           </div>
         </div>
@@ -124,7 +97,7 @@ export function Blog({
         {/* Article carousel */}
         <div
           ref={trackRef}
-          className="-mx-9 flex snap-x snap-mandatory gap-8 overflow-x-auto scroll-smooth px-9 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="flex snap-x snap-mandatory gap-8 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {content.articles.map((article, i) => (
             <ArticleCard key={i} article={article} />
@@ -134,18 +107,10 @@ export function Blog({
         {/* CTA */}
         <a
           href={content.ctaHref}
-          className="flex items-center gap-2 self-start rounded-full bg-brand py-3 pl-5 pr-4 font-mono text-base uppercase tracking-[0.02em] text-brand-foreground transition-opacity hover:opacity-90"
+          className="group flex items-center gap-2 self-start rounded-full border border-brand bg-brand/5 py-3 pl-5 pr-4 font-mono text-base uppercase tracking-[0.02em] text-brand transition-colors duration-300 hover:border-transparent hover:bg-brand hover:text-white"
         >
           {content.ctaLabel}
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
-            <path
-              d="M5 12h14m0 0l-6-6m6 6l-6 6"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />
         </a>
       </div>
     </section>

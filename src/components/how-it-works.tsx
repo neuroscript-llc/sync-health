@@ -1,16 +1,9 @@
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowIcon } from "@/components/arrow-icon";
 import type { HowItWorksContent } from "@/lib/content";
 
-// The card image is a transparent cutout of a seated portrait. We show the
-// head/shoulders at natural width, centered, sharp on top and dissolving into a
-// warm blurred glow below — matching the Figma render of node 509:2502.
-const IMG_SIZE = "100% auto";
-const IMG_POS = "center top";
-const FADE_MASK =
-  "linear-gradient(to bottom, black 0%, black 46%, transparent 66%)";
-const GLOW_MASK =
-  "linear-gradient(to bottom, black 0%, black 30%, transparent 78%)";
+// The card image is a pre-composed (already-blurred) portrait that dissolves
+// into the card background on its own — shown plainly, no CSS blur or mask.
 
 export function HowItWorks({
   content,
@@ -48,33 +41,19 @@ export function HowItWorks({
                 </span>
               </div>
 
-              {/* Sharp face dissolving into a warm blurred glow (matches Figma). */}
-              <div className="relative h-72 overflow-hidden rounded-[40px]">
-                <div
-                  aria-hidden
-                  className="absolute inset-0 blur-2xl"
-                  style={{
-                    backgroundImage: `url(${content.cardImage})`,
-                    backgroundSize: IMG_SIZE,
-                    backgroundPosition: IMG_POS,
-                    backgroundRepeat: "no-repeat",
-                    maskImage: GLOW_MASK,
-                    WebkitMaskImage: GLOW_MASK,
-                  }}
-                />
-                <div
-                  aria-hidden
-                  className="absolute inset-0"
-                  style={{
-                    backgroundImage: `url(${content.cardImage})`,
-                    backgroundSize: IMG_SIZE,
-                    backgroundPosition: IMG_POS,
-                    backgroundRepeat: "no-repeat",
-                    maskImage: FADE_MASK,
-                    WebkitMaskImage: FADE_MASK,
-                  }}
-                />
-              </div>
+              {/* Pre-blurred portrait, shown plainly (no CSS blur or mask).
+                  Fills the card width (capped) at its natural aspect ratio so
+                  it scales up on wide cards instead of floating small. */}
+              <div
+                aria-hidden
+                className="mx-auto aspect-[320/290] w-full max-w-[440px]"
+                style={{
+                  backgroundImage: `url(${content.cardImage})`,
+                  backgroundSize: "contain",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                }}
+              />
 
               <p className="border-t border-ink/12 pt-3 text-base leading-relaxed text-ink/80">
                 {step.description}
@@ -86,10 +65,10 @@ export function HowItWorks({
         {/* CTA */}
         <Link
           href={content.ctaHref}
-          className="inline-flex items-center gap-2 rounded-full bg-brand py-4 pl-6 pr-5 font-mono text-lg uppercase tracking-wide text-white transition-transform hover:-translate-y-0.5 lg:text-xl"
+          className="group inline-flex items-center gap-2 rounded-full border border-brand bg-brand/5 py-4 pl-6 pr-5 font-mono text-lg uppercase tracking-wide text-brand transition-colors duration-300 hover:border-transparent hover:bg-brand hover:text-white lg:text-xl"
         >
           {content.ctaLabel}
-          <ArrowUpRight className="size-6" aria-hidden />
+          <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />
         </Link>
       </div>
     </section>

@@ -329,7 +329,7 @@ export function FooterBlok({ blok }: { blok: SbBlokData }) {
 /** Top-level page: renders its `body` list of section bloks in order. */
 export function PageBlok({ blok }: { blok: SbBlokData }) {
   return (
-    <main className="min-h-screen bg-white" {...storyblokEditable(blok)}>
+    <main className="min-h-screen overflow-clip bg-white" {...storyblokEditable(blok)}>
       {arr(blok.body).map((nested) => (
         <StoryblokServerComponent blok={nested} key={nested._uid} />
       ))}

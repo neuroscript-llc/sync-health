@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, ChevronDown, Search, User } from "lucide-react";
+import { ChevronDown, Search, User } from "lucide-react";
+import { ArrowIcon } from "@/components/arrow-icon";
 import type { SiteHeaderContent } from "@/lib/content";
 
 function TickerTrack({
@@ -87,10 +88,10 @@ export function SiteHeader({ content }: { content: SiteHeaderContent }) {
 
           <Link
             href={content.ctaHref}
-            className="flex shrink-0 items-center gap-1.5 rounded-full bg-brand py-2.5 pl-4 pr-3 text-sm font-medium text-brand-foreground transition-transform hover:-translate-y-px sm:gap-2 sm:py-3 sm:pl-5 sm:pr-4 sm:text-base"
+            className="group flex shrink-0 items-center gap-1.5 rounded-full bg-brand py-2.5 pl-4 pr-3 text-sm font-medium text-brand-foreground sm:gap-2 sm:py-3 sm:pl-5 sm:pr-4 sm:text-base"
           >
             <span className="whitespace-nowrap">{content.ctaLabel}</span>
-            <ArrowUpRight className="size-5 shrink-0" aria-hidden />
+            <ArrowIcon className="size-5 shrink-0 transition-transform duration-200 group-hover:-rotate-45" />
           </Link>
         </div>
       </nav>

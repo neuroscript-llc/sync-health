@@ -42,7 +42,7 @@ export const seed = {
     heading: "Three steps to in-sync.",
     subtext:
       "From goal to doorstep in a few days — with a clinician reviewing every protocol along the way.",
-    cardImage: "/images/step-glow.png",
+    cardImage: "/images/step-portrait.png",
     steps: [
       { number: "01", title: "Take the assessment", description: "Not a form. We ask what you've run before, what it did, and what you're training for — an intake a clinician can actually reason from." },
       { number: "02", title: "A clinician builds your protocol", description: "Your compound, your dose, your cycle, decided by a licensed provider for your body. Sometimes the answer is less than you came for." },

@@ -1,4 +1,5 @@
 import type { FinalCtaContent } from "@/lib/content";
+import { ArrowIcon } from "@/components/arrow-icon";
 
 export function FinalCta({
   content,
@@ -9,22 +10,17 @@ export function FinalCta({
     // as one backdrop). overflow-x-clip kills the gradient's horizontal bleed
     // without cutting the vertical flow into the footer.
     <section className="relative overflow-x-clip bg-white px-9 py-20" {...rest}>
-      {/* Shared coral glow — exact Figma transform (2495×1347 at x:-528,y:-94
-          in the 1440 frame → w 173.3%, left -36.67%, -3.77% top offset). */}
+      {/* Coral mesh — the elliptical glow centred behind the CTA content so it
+          reads as a halo around it (rather than pooling down in the footer). */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-[-36.67%] top-0 w-[173.3%] select-none"
+        className="pointer-events-none absolute left-1/2 top-1/2 w-[130%] max-w-none -translate-x-1/2 -translate-y-1/2 select-none"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/footer/cta-glow.png"
-          alt=""
-          className="block w-full"
-          style={{ marginTop: "-3.77%" }}
-        />
+        <img src="/images/footer/cta-glow.png" alt="" className="block w-full" />
       </div>
 
-      <div className="relative z-10 mx-auto flex max-w-[1368px] flex-col items-center gap-16">
+      <div className="relative z-10 mx-auto flex max-w-[1368px] flex-col items-center gap-10">
         <div className="flex flex-col items-center gap-6">
           <div className="flex flex-col items-center gap-4">
             <p className="font-mono text-sm font-medium uppercase tracking-[0.04em] text-brand">
@@ -41,18 +37,10 @@ export function FinalCta({
 
         <a
           href={content.ctaHref}
-          className="flex items-center gap-2 rounded-full bg-brand py-4 pl-6 pr-5 font-mono text-xl uppercase tracking-[0.02em] text-brand-foreground transition-opacity hover:opacity-90"
+          className="group flex items-center gap-2 rounded-full border border-brand bg-brand/5 py-4 pl-6 pr-5 font-mono text-xl uppercase tracking-[0.02em] text-brand transition-colors duration-300 hover:border-transparent hover:bg-brand hover:text-white"
         >
           {content.ctaLabel}
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
-            <path
-              d="M5 12h14m0 0l-6-6m6 6l-6 6"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />
         </a>
       </div>
     </section>

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowIcon } from "@/components/arrow-icon";
 import type { CatalogContent, CatalogProduct } from "@/lib/content";
 
 const CARD_BG = "linear-gradient(180deg, #F0F0E6 20%, #FFFFFF 100%)";
@@ -8,7 +8,7 @@ const CARD_BG = "linear-gradient(180deg, #F0F0E6 20%, #FFFFFF 100%)";
 function ProductCard({ product }: { product: CatalogProduct }) {
   return (
     <article
-      className="flex flex-col gap-2 rounded-[32px] border border-ink/[0.08] p-2"
+      className="group flex flex-col gap-2 rounded-[32px] border border-ink/[0.08] p-2"
       style={{ background: CARD_BG }}
     >
       <div className="relative aspect-square w-full overflow-hidden rounded-3xl">
@@ -32,14 +32,13 @@ function ProductCard({ product }: { product: CatalogProduct }) {
         <div className="h-px w-full bg-ink/[0.08]" />
       </div>
 
-      <div className="px-1 pb-1">
+      <div className="flex justify-start px-1 pb-1">
+        {/* Outlined and hugging its label at the left by default; on card hover
+            it fills coral, the label turns white and the button extends to the
+            right to full width — the expand is a flex-grow transition. */}
         <Link
           href={product.ctaHref}
-          className={`flex w-full items-center rounded-full px-5 py-3 font-mono text-base uppercase leading-none transition-colors ${
-            product.featured
-              ? "bg-brand text-white hover:bg-brand/90"
-              : "border border-brand text-brand hover:bg-brand/5"
-          }`}
+          className="flex grow-0 items-center justify-start rounded-full border border-brand px-5 py-3 font-mono text-base uppercase text-brand transition-all duration-300 group-hover:grow group-hover:bg-brand group-hover:text-white"
         >
           {product.ctaLabel}
         </Link>
@@ -94,10 +93,10 @@ export function Catalog({
         {/* CTA */}
         <Link
           href={content.ctaHref}
-          className="inline-flex items-center gap-2 rounded-full bg-brand py-4 pl-6 pr-5 font-mono text-lg uppercase tracking-wide text-white transition-transform hover:-translate-y-0.5 lg:text-xl"
+          className="group inline-flex items-center gap-2 rounded-full border border-brand bg-brand/5 py-4 pl-6 pr-5 font-mono text-lg uppercase tracking-wide text-brand transition-colors duration-300 hover:border-transparent hover:bg-brand hover:text-white lg:text-xl"
         >
           {content.ctaLabel}
-          <ArrowRight className="size-6" aria-hidden />
+          <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />
         </Link>
       </div>
     </section>

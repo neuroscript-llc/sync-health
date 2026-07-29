@@ -247,7 +247,7 @@ export const howItWorks: HowItWorksContent = {
   heading: "Three steps to in-sync.",
   subtext:
     "From goal to doorstep in a few days — with a clinician reviewing every protocol along the way.",
-  cardImage: "/images/step-glow.png",
+  cardImage: "/images/step-portrait.png",
   steps: [
     {
       number: "01",

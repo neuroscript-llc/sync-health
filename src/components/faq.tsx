@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { FaqContent, FaqItem } from "@/lib/content";
+import { ArrowIcon } from "@/components/arrow-icon";
 
 function ToggleIcon({ open }: { open: boolean }) {
   return (
@@ -98,24 +99,10 @@ export function Faq({
           </p>
           <a
             href={content.ctaHref}
-            className="mt-1 flex items-center gap-2 self-start rounded-full bg-brand py-3 pl-5 pr-4 font-mono text-base uppercase tracking-[0.02em] text-brand-foreground transition-opacity hover:opacity-90"
+            className="group mt-1 flex items-center gap-2 self-start rounded-full border border-brand bg-brand/5 py-3 pl-5 pr-4 font-mono text-base uppercase tracking-[0.02em] text-brand transition-colors duration-300 hover:border-transparent hover:bg-brand hover:text-white"
           >
             {content.ctaLabel}
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              aria-hidden
-            >
-              <path
-                d="M5 12h14m0 0l-6-6m6 6l-6 6"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />
           </a>
         </div>
 

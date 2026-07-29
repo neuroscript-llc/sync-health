@@ -34,7 +34,7 @@ import {
  */
 export function HomeFallback() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen overflow-clip bg-white">
       <Hero content={hero} header={siteHeader} />
       <TrustBar content={trustBar} />
       <HowItWorks content={howItWorks} />
