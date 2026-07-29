@@ -38,7 +38,7 @@ export function Hero({
 
             <Link
               href={content.ctaHref}
-              className="group inline-flex items-center gap-2 rounded-full bg-ink/80 py-5 pl-6 pr-5 font-mono text-lg uppercase tracking-wide text-white backdrop-blur-sm lg:text-xl"
+              className="group inline-flex items-center gap-2 rounded-full bg-ink/70 py-5 pl-6 pr-5 font-mono text-lg uppercase tracking-wide text-white backdrop-blur-sm lg:text-xl"
             >
               {content.ctaLabel}
               <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />
