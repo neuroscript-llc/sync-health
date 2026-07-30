@@ -110,7 +110,7 @@ export function Catalog({
         <div
           ref={trackRef}
           onScroll={onScroll}
-          className="-mx-6 flex w-full snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-6 px-6 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 lg:grid-cols-4 [&::-webkit-scrollbar]:hidden"
+          className="-mx-6 flex w-[calc(100%+48px)] snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-6 px-6 [scrollbar-width:none] sm:mx-0 sm:grid sm:w-full sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 lg:grid-cols-4 [&::-webkit-scrollbar]:hidden"
         >
           {content.products.map((product, i) => (
             <ProductCard key={i} product={product} />
