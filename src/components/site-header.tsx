@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronDown, Search } from "lucide-react";
 import { ArrowIcon } from "@/components/arrow-icon";
+import { MobileMenu } from "@/components/mobile-menu";
+import { menuForLabel } from "@/components/nav-links";
 import type { SiteHeaderContent } from "@/lib/content";
 
 function TickerTrack({
@@ -34,19 +36,6 @@ function Ticker({ messages }: { messages: string[] }) {
     </div>
   );
 }
-
-/** Nav link groups shown inside each mega-menu (Figma 190:2797 / 304:1096). */
-const LEARN_LINKS = [
-  { label: "About Us", href: "/about" },
-  { label: "Blog", href: "/blog" },
-];
-const PROTOCOL_LINKS = [
-  { label: "Recovery", href: "/protocols/recovery" },
-  { label: "Performance", href: "/protocols/performance" },
-  { label: "Metabolic", href: "/protocols/metabolic" },
-  { label: "Skin & Longevity", href: "/protocols/skin-longevity" },
-  { label: "Hormonal Health", href: "/protocols/hormonal-health" },
-];
 
 /**
  * Shared nav mega-menu. Two columns: eyebrow + links + CTA on the left, a
@@ -145,12 +134,7 @@ export function SiteHeader({ content }: { content: SiteHeaderContent }) {
         {/* Primary links */}
         <div className="hidden items-center gap-0.5 md:flex">
           {content.navLinks.map((link) => {
-            const menu =
-              link.label === "Protocols"
-                ? { eyebrow: "Resources", links: PROTOCOL_LINKS }
-                : link.label === "Learn"
-                  ? { eyebrow: "Learn", links: LEARN_LINKS }
-                  : null;
+            const menu = menuForLabel(link.label);
             return (
               <div
                 key={link.label}
@@ -178,6 +162,8 @@ export function SiteHeader({ content }: { content: SiteHeaderContent }) {
 
         {/* Actions */}
         <div className="flex min-w-0 flex-1 items-center justify-end gap-1">
+          <MobileMenu content={content} />
+
           <button
             type="button"
             aria-label="Search"
