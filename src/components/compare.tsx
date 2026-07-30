@@ -14,7 +14,9 @@ function Icon({ type }: { type: "check" | "cross" | "yes" }) {
       : type === "yes"
         ? "/images/compare/check-green.svg"
         : "/images/compare/cross-red.svg";
-  return <img src={src} alt="" width={24} height={24} className="size-6" />;
+  return (
+    <img src={src} alt="" width={24} height={24} className="size-5 sm:size-6" />
+  );
 }
 
 function CompetitorCell({ cell }: { cell: CompareCell }) {
@@ -22,7 +24,7 @@ function CompetitorCell({ cell }: { cell: CompareCell }) {
     const muted = cell.text === "—";
     return (
       <span
-        className={`text-[17px] ${muted ? "text-[rgba(140,140,135,0.9)]" : "text-ink"}`}
+        className={`text-sm sm:text-[17px] ${muted ? "text-[rgba(140,140,135,0.9)]" : "text-ink"}`}
       >
         {cell.text}
       </span>
@@ -37,7 +39,7 @@ export function Compare({
 }: { content: CompareContent } & Omit<React.ComponentPropsWithoutRef<"section">, "content">) {
   return (
     <section
-      className="relative overflow-x-clip px-6 py-20 sm:px-9"
+      className="relative overflow-x-clip px-5 py-12 sm:px-9 sm:py-20"
       style={{ background: SECTION_BG }}
       {...rest}
     >
@@ -57,13 +59,13 @@ export function Compare({
         />
       </div>
 
-      <div className="relative z-10 mx-auto flex max-w-[1100px] flex-col items-center gap-16">
+      <div className="relative z-10 mx-auto flex max-w-[1100px] flex-col items-start gap-8 sm:items-center sm:gap-16">
         {/* Header */}
-        <div className="flex flex-col items-center gap-4 text-center">
+        <div className="flex flex-col items-start gap-3 text-left sm:items-center sm:gap-4 sm:text-center">
           <p className="font-mono text-sm font-medium uppercase tracking-[0.04em] text-brand">
             {content.eyebrow}
           </p>
-          <h2 className="max-w-[578px] text-4xl font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[56px] lg:leading-[64px]">
+          <h2 className="max-w-[578px] text-5xl font-medium leading-[1.1] tracking-[-0.02em] text-ink lg:text-[56px] lg:leading-[64px]">
             {content.heading}
           </h2>
           <p className="max-w-[470px] text-base leading-relaxed text-ink/[0.66]">
@@ -72,15 +74,15 @@ export function Compare({
         </div>
 
         {/* Comparison table */}
-        <div className="w-full overflow-x-auto">
-          <div className="mx-auto flex w-fit">
+        <div className="w-full overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex w-fit sm:mx-auto">
             {/* Feature labels */}
             <div className="flex flex-col">
-              <div className="h-[72px]" />
+              <div className="h-14 sm:h-[72px]" />
               {content.features.map((feature) => (
                 <div
                   key={feature}
-                  className="flex h-16 w-[300px] items-center px-6 text-lg text-ink/80 lg:w-[456px] lg:text-xl"
+                  className="flex h-14 w-[180px] items-center px-4 text-sm text-ink/80 sm:h-16 sm:w-[300px] sm:px-6 sm:text-lg lg:w-[456px] lg:text-xl"
                 >
                   {feature}
                 </div>
@@ -88,26 +90,26 @@ export function Compare({
             </div>
 
             {/* SYNC (highlighted card) */}
-            <div className="flex w-[180px] flex-col rounded-[20px] bg-[#FCFCFA] shadow-[0_12px_64px_rgba(0,0,0,0.08)] lg:w-[200px]">
-              <div className="flex h-[72px] items-center justify-center rounded-t-[20px] bg-[#D03402]">
+            <div className="flex w-24 flex-col rounded-[20px] bg-[#FCFCFA] shadow-[0_12px_64px_rgba(0,0,0,0.08)] sm:w-[180px] lg:w-[200px]">
+              <div className="flex h-14 items-center justify-center rounded-t-[20px] bg-[#D03402] sm:h-[72px]">
                 <img
                   src="/images/compare/sync-white.svg"
                   alt="Sync."
                   width={72}
                   height={20}
-                  className="h-5 w-auto"
+                  className="h-3.5 w-auto sm:h-5"
                 />
               </div>
               {content.sync.map((cell, i) => (
                 <div
                   key={i}
-                  className={`flex h-16 items-center justify-center ${
+                  className={`flex h-14 items-center justify-center sm:h-16 ${
                     i === content.sync.length - 1 ? "rounded-b-[20px]" : ""
                   }`}
                   style={{ background: `rgba(208, 52, 2, ${SYNC_OPACITY[i]})` }}
                 >
                   {cell.type === "text" ? (
-                    <span className="text-[17px] font-medium text-brand">
+                    <span className="text-sm font-medium text-brand sm:text-[17px]">
                       {cell.text}
                     </span>
                   ) : (
@@ -119,16 +121,16 @@ export function Compare({
 
             {/* Competitor columns */}
             {content.competitors.map((col) => (
-              <div key={col.title} className="flex w-[180px] flex-col lg:w-[200px]">
+              <div key={col.title} className="flex w-24 flex-col sm:w-[180px] lg:w-[200px]">
                 <div
-                  className={`flex h-[72px] items-center justify-center text-xl font-medium text-ink ${ROW_BORDER}`}
+                  className={`flex h-14 items-center justify-center px-2 text-center text-base font-medium text-ink sm:h-[72px] sm:px-0 sm:text-xl ${ROW_BORDER}`}
                 >
                   {col.title}
                 </div>
                 {col.cells.map((cell, i) => (
                   <div
                     key={i}
-                    className={`flex h-16 items-center justify-center ${
+                    className={`flex h-14 items-center justify-center sm:h-16 ${
                       i < col.cells.length - 1 ? ROW_BORDER : ""
                     }`}
                   >
@@ -141,10 +143,10 @@ export function Compare({
         </div>
 
         {/* Supporting lines */}
-        <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-4">
+        <div className="flex flex-wrap items-center justify-start gap-x-6 gap-y-4 sm:justify-center sm:gap-x-12">
           {content.supporting.map((item) => (
             <div key={item.label} className="flex items-center gap-2">
-              <img src={item.icon} alt="" width={24} height={24} className="size-6" />
+              <img src={item.icon} alt="" width={24} height={24} className="size-5 sm:size-6" />
               <span className="text-base font-medium text-ink/85">
                 {item.label}
               </span>

@@ -46,7 +46,7 @@ function CategoryPill({ card }: { card: ProtocolCard }) {
 function ProtocolCardEl({ card }: { card: ProtocolCard }) {
   return (
     <article
-      className="flex w-full shrink-0 snap-start flex-col gap-5 rounded-[32px] p-1 pb-1.5 sm:max-w-[calc(50%-12px)] sm:rounded-[48px] sm:p-2 sm:pb-2.5 lg:max-w-[380px]"
+      className="flex w-[286px] shrink-0 snap-start flex-col gap-5 rounded-[32px] p-1 pb-1.5 sm:w-full sm:max-w-[calc(50%-12px)] sm:rounded-[48px] sm:p-2 sm:pb-2.5 lg:max-w-[380px]"
       style={{ background: CARD_BG, boxShadow: "0 12px 120px rgba(240,240,230,1)" }}
     >
       <div
@@ -115,7 +115,7 @@ export function Protocols({
         </div>
 
         {/* Cards — horizontal scroll on mobile (full-bleed peek), wrap on desktop. */}
-        <div className="-mx-5 flex w-full snap-x snap-mandatory gap-3 overflow-x-auto scroll-px-5 px-5 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:justify-center sm:gap-6 sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
+        <div className="-mx-5 flex w-[calc(100%+40px)] snap-x snap-mandatory gap-3 overflow-x-auto scroll-px-5 px-5 [scrollbar-width:none] sm:mx-0 sm:w-full sm:flex-wrap sm:justify-center sm:gap-6 sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
           {content.cards.map((card, i) => (
             <ProtocolCardEl key={i} card={card} />
           ))}

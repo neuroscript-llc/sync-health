@@ -59,12 +59,12 @@ export function Footer({
   ...rest
 }: { content: FooterContent } & Omit<React.ComponentPropsWithoutRef<"footer">, "content">) {
   return (
-    <footer className="relative px-9 pb-9" {...rest}>
-      <div className="mx-auto flex max-w-[1600px] flex-col gap-20 rounded-[40px] bg-ink p-8 sm:p-12 lg:p-20">
-        {/* Top: brand + nav + newsletter */}
+    <footer className="relative p-3 sm:p-0 sm:px-9 sm:pb-9" {...rest}>
+      <div className="mx-auto flex max-w-[1600px] flex-col gap-12 rounded-[40px] bg-ink px-8 py-10 sm:gap-20 sm:p-12 lg:p-20">
+        {/* Top: brand + newsletter + nav */}
         <div className="flex flex-col gap-12 lg:flex-row lg:gap-32">
           {/* Brand */}
-          <div className="flex w-full shrink-0 flex-col gap-8 lg:max-w-[252px]">
+          <div className="flex w-full shrink-0 flex-col gap-6 sm:gap-8 lg:max-w-[252px]">
             <div className="flex flex-col gap-3">
               <img
                 src="/images/footer/sync-logo-coral.svg"
@@ -73,7 +73,7 @@ export function Footer({
                 height={31}
                 className="h-[30px] w-auto self-start"
               />
-              <p className="max-w-[268px] text-sm leading-5 text-[#FCF8F1]">
+              <p className="text-sm leading-5 text-[#FCF8F1] sm:max-w-[268px]">
                 {content.tagline}
               </p>
             </div>
@@ -88,29 +88,34 @@ export function Footer({
               (229 / 231 nav, ~368 newsletter) so the links spread evenly on
               desktop; below lg they hug with a gap so the newsletter keeps room. */}
           <div className="flex flex-1 flex-col gap-12 sm:flex-row sm:justify-between sm:gap-8 lg:gap-8">
-            {content.navColumns.map((col, i) => (
-              <nav key={i} className="flex shrink-0 flex-col gap-4 lg:w-[230px]">
-                {col.links.map((link) => (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    className={`text-sm leading-5 transition-colors hover:text-white ${
-                      link.muted ? "text-[#EAECEC]/60" : "text-[#FCF8F1]"
-                    }`}
-                  >
-                    {link.label}
-                  </a>
-                ))}
-              </nav>
-            ))}
+            {/* Nav columns — two columns side by side on mobile (order-last, after
+                the newsletter). `sm:contents` dissolves this wrapper at ≥sm so each
+                column becomes a direct flex child of the row again (desktop layout). */}
+            <div className="order-last grid grid-cols-2 gap-x-4 sm:contents">
+              {content.navColumns.map((col, i) => (
+                <nav key={i} className="flex shrink-0 flex-col gap-3 sm:gap-4 lg:w-[230px]">
+                  {col.links.map((link) => (
+                    <a
+                      key={link.label}
+                      href={link.href}
+                      className={`text-sm leading-5 transition-colors hover:text-white ${
+                        link.muted ? "text-[#EAECEC]/60" : "text-[#FCF8F1]"
+                      }`}
+                    >
+                      {link.label}
+                    </a>
+                  ))}
+                </nav>
+              ))}
+            </div>
 
-            {/* Newsletter — grows to fill, capped so the input never over-stretches
-                on wide screens (justify-between then spreads the slack as gaps). */}
-            <div className="flex w-full flex-col gap-2 sm:flex-1 lg:max-w-[420px]">
+            {/* Newsletter — first on mobile (before the nav columns), then flows back
+                to the right on ≥sm. Grows to fill, capped on wide screens. */}
+            <div className="order-first flex w-full flex-col gap-2 sm:order-none sm:flex-1 lg:max-w-[420px]">
               <p className="text-sm leading-5 text-[#EAECEC]/60">
                 {content.newsletter.text}
               </p>
-              <form className="flex flex-col gap-3" action="#">
+              <form className="flex flex-col gap-2 sm:gap-3" action="#">
                 <label className="flex items-center rounded-full border border-white/12 py-3 pl-5 pr-4">
                   <span className="sr-only">Email address</span>
                   <input
@@ -136,14 +141,14 @@ export function Footer({
           {content.disclaimer}
         </p>
 
-        {/* Payment logos */}
-        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-6">
+        {/* Payment logos — two even rows on mobile (grid), single spread row ≥sm. */}
+        <div className="grid grid-cols-5 items-center justify-items-center gap-x-2 gap-y-6 sm:flex sm:flex-wrap sm:justify-between sm:gap-x-6">
           {content.payments.map((pay) => (
             <img
               key={pay.alt}
               src={pay.src}
               alt={pay.alt}
-              className="h-[26px] w-auto opacity-90"
+              className="h-5 w-auto opacity-90 sm:h-[26px]"
             />
           ))}
         </div>

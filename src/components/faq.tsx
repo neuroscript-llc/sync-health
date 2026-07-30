@@ -5,6 +5,8 @@ import type { FaqContent, FaqItem } from "@/lib/content";
 import { ArrowIcon } from "@/components/arrow-icon";
 
 function ToggleIcon({ open }: { open: boolean }) {
+  // Open state shows a coral minus; closed shows a dark plus (Figma 444:4925).
+  const stroke = open ? "#D03516" : "#1D1D1B";
   return (
     <svg
       width="24"
@@ -14,15 +16,10 @@ function ToggleIcon({ open }: { open: boolean }) {
       aria-hidden
       className="shrink-0"
     >
-      <path
-        d="M5 12h14"
-        stroke="#1D1D1B"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
+      <path d="M5 12h14" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" />
       <path
         d="M12 5v14"
-        stroke="#1D1D1B"
+        stroke={stroke}
         strokeWidth="1.5"
         strokeLinecap="round"
         className="origin-center transition-transform duration-300"
@@ -42,22 +39,14 @@ function AccordionItem({
   onToggle: () => void;
 }) {
   return (
-    <div
-      className={`rounded-3xl bg-[#F2ECE2] px-6 py-5 transition-opacity ${
-        open ? "opacity-100" : "opacity-80"
-      }`}
-    >
+    <div className="rounded-3xl bg-[#F2ECE2] px-5 py-4 sm:px-6 sm:py-5">
       <button
         type="button"
         onClick={onToggle}
         aria-expanded={open}
-        className="flex w-full items-center justify-between gap-4 text-left"
+        className="flex w-full items-center justify-between gap-2 text-left sm:gap-4"
       >
-        <span
-          className={`text-xl leading-7 tracking-[-0.01em] text-ink ${
-            open ? "font-medium" : "font-normal"
-          }`}
-        >
+        <span className="text-base font-medium leading-6 tracking-[-0.01em] text-ink sm:text-xl sm:leading-7">
           {item.question}
         </span>
         <ToggleIcon open={open} />
@@ -84,22 +73,24 @@ export function Faq({
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section className="bg-white px-9 py-20" {...rest}>
-      <div className="mx-auto flex max-w-[1368px] flex-col justify-between gap-12 lg:flex-row lg:gap-16">
+    <section className="bg-white px-5 py-12 sm:px-9 sm:py-20" {...rest}>
+      <div className="mx-auto flex max-w-[1368px] flex-col justify-between gap-10 lg:flex-row lg:gap-16">
         {/* Left column */}
-        <div className="flex w-full max-w-[396px] flex-col gap-[18px]">
-          <p className="font-mono text-sm font-medium uppercase tracking-[0.04em] text-brand">
-            {content.eyebrow}
-          </p>
-          <h2 className="whitespace-pre-line text-4xl font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[56px] lg:leading-[64px]">
-            {content.heading}
-          </h2>
-          <p className="max-w-[320px] text-base leading-[1.5] text-ink/[0.66]">
+        <div className="flex w-full max-w-[396px] flex-col gap-4 lg:gap-[18px]">
+          <div className="flex flex-col gap-1 lg:gap-[18px]">
+            <p className="font-mono text-sm font-medium uppercase tracking-[0.04em] text-brand">
+              {content.eyebrow}
+            </p>
+            <h2 className="whitespace-pre-line text-5xl font-medium leading-[1.1] tracking-[-0.02em] text-ink lg:text-[56px] lg:leading-[64px]">
+              {content.heading}
+            </h2>
+          </div>
+          <p className="text-base leading-[1.5] text-ink/[0.66] sm:max-w-[320px]">
             {content.subtext}
           </p>
           <a
             href={content.ctaHref}
-            className="group mt-1 flex items-center gap-2 self-start rounded-full border border-brand bg-brand/5 py-3 pl-5 pr-4 font-mono text-base uppercase tracking-[0.02em] text-brand transition-colors duration-300 hover:border-transparent hover:bg-brand hover:text-white"
+            className="group flex items-center gap-2 self-start rounded-full bg-brand py-3 pl-5 pr-4 font-mono text-base uppercase text-white transition-colors duration-300 sm:mt-1 sm:border sm:border-brand sm:bg-brand/5 sm:text-brand sm:hover:border-transparent sm:hover:bg-brand sm:hover:text-white"
           >
             {content.ctaLabel}
             <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />

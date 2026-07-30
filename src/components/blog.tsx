@@ -17,13 +17,13 @@ function ArticleCard({ article }: { article: Article }) {
       style={{ scrollSnapAlign: "start" }}
     >
       {/* Cover image with category pill */}
-      <div className="relative h-[318px] overflow-hidden rounded-3xl bg-[#EAECEC]">
+      <div className="relative h-[220px] overflow-hidden rounded-2xl bg-[#EAECEC] sm:h-[318px] sm:rounded-3xl">
         <img
           src={article.image}
           alt=""
           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
         />
-        <span className="absolute left-4 top-4 rounded-[99px] bg-white px-2 py-1 font-mono text-sm font-medium uppercase tracking-[0.02em] text-brand">
+        <span className="absolute left-3 top-3 rounded-lg bg-white px-1.5 py-0.5 font-mono text-sm font-medium uppercase tracking-[0.02em] text-brand sm:left-4 sm:top-4 sm:rounded-[99px] sm:px-2 sm:py-1">
           {article.category}
         </span>
       </div>
@@ -55,26 +55,26 @@ export function Blog({
   };
 
   return (
-    <section className="bg-white px-9 py-20" {...rest}>
+    <section className="bg-white px-5 py-12 sm:px-9 sm:py-20" {...rest}>
       <div className="mx-auto flex max-w-[1368px] flex-col gap-10">
         {/* Header */}
         <div className="flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-end">
-          <div className="flex max-w-[396px] flex-col gap-6">
+          <div className="flex max-w-[396px] flex-col gap-4 sm:gap-6">
             <div className="flex flex-col gap-1">
               <p className="font-mono text-sm font-medium uppercase tracking-[0.04em] text-brand">
                 {content.eyebrow}
               </p>
-              <h2 className="text-4xl font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[56px] lg:leading-[64px]">
+              <h2 className="text-5xl font-medium leading-[1.1] tracking-[-0.02em] text-ink lg:text-[56px] lg:leading-[64px]">
                 {content.heading}
               </h2>
             </div>
-            <p className="text-lg leading-[1.5] text-ink/80">
+            <p className="text-base leading-[1.5] text-ink/80 sm:text-lg">
               {content.subtext}
             </p>
           </div>
 
-          {/* Nav arrows */}
-          <div className="flex items-center gap-1">
+          {/* Nav arrows — hidden on mobile (Figma slider has none there) */}
+          <div className="hidden items-center gap-1 sm:flex">
             <button
               type="button"
               onClick={() => scroll(-1)}
@@ -94,24 +94,28 @@ export function Blog({
           </div>
         </div>
 
-        {/* Article carousel */}
-        <div
-          ref={trackRef}
-          className="flex snap-x snap-mandatory gap-8 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        >
-          {content.articles.map((article, i) => (
-            <ArticleCard key={i} article={article} />
-          ))}
-        </div>
+        {/* Carousel + CTA — grouped so the CTA sits 24px under the cards on
+            mobile (Figma), while staying 40px on desktop. */}
+        <div className="flex flex-col gap-6 sm:gap-10">
+          {/* Article carousel */}
+          <div
+            ref={trackRef}
+            className="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] sm:gap-8 [&::-webkit-scrollbar]:hidden"
+          >
+            {content.articles.map((article, i) => (
+              <ArticleCard key={i} article={article} />
+            ))}
+          </div>
 
-        {/* CTA */}
-        <a
-          href={content.ctaHref}
-          className="group flex items-center gap-2 self-start rounded-full border border-brand bg-brand/5 py-3 pl-5 pr-4 font-mono text-base uppercase tracking-[0.02em] text-brand transition-colors duration-300 hover:border-transparent hover:bg-brand hover:text-white"
-        >
-          {content.ctaLabel}
-          <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />
-        </a>
+          {/* CTA — filled coral on mobile; outlined→fill on hover from sm up. */}
+          <a
+            href={content.ctaHref}
+            className="group flex items-center gap-2 self-start rounded-full bg-brand py-3 pl-5 pr-4 font-mono text-base uppercase text-white transition-colors duration-300 sm:border sm:border-brand sm:bg-brand/5 sm:text-brand sm:hover:border-transparent sm:hover:bg-brand sm:hover:text-white"
+          >
+            {content.ctaLabel}
+            <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />
+          </a>
+        </div>
       </div>
     </section>
   );

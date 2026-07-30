@@ -1,29 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Testimonial, TestimonialsContent } from "@/lib/content";
 import { ArrowIcon } from "@/components/arrow-icon";
 
 /* eslint-disable @next/next/no-img-element */
 
-/** One testimonial = bordered quote card + portrait, side by side (817×320). */
-const PAIR_WIDTH = 817;
-const GAP = 120;
-const PITCH = PAIR_WIDTH + GAP;
-
+/** One testimonial: quote card + portrait. Stacks on mobile, side by side (≥sm). */
 function Pair({ item, active }: { item: Testimonial; active: boolean }) {
   return (
     <div
-      className="flex shrink-0 gap-[30px] transition-opacity duration-500"
-      style={{ width: PAIR_WIDTH, height: 320, opacity: active ? 1 : 0.4 }}
+      className={`flex h-full flex-col gap-4 transition-opacity duration-500 sm:flex-row sm:gap-[30px] ${
+        active ? "opacity-100" : "opacity-40"
+      }`}
     >
       {/* Quote card */}
-      <div
-        className={`flex flex-1 flex-col justify-between rounded-[32px] border border-[#EAECEC] ${
-          active ? "p-8" : "p-5"
-        }`}
-      >
-        <p className="text-xl font-medium leading-[30px] tracking-[-0.01em]">
+      <div className="flex flex-1 flex-col justify-between gap-8 rounded-[32px] border border-[#EAECEC] p-6 sm:p-8">
+        <p className="text-lg font-medium leading-[26px] tracking-[-0.01em] sm:text-xl sm:leading-[30px]">
           {item.highlight && (
             <span className="text-[#D03402]">{item.highlight}</span>
           )}
@@ -32,7 +25,7 @@ function Pair({ item, active }: { item: Testimonial; active: boolean }) {
           </span>
         </p>
         <div className="flex flex-col gap-0.5">
-          <span className="text-xl font-normal leading-[30px] text-ink">
+          <span className="text-lg font-normal leading-7 text-ink sm:text-xl sm:leading-[30px]">
             {item.name}
           </span>
           <span className="font-mono text-sm uppercase tracking-[-0.02em] text-ink/80">
@@ -42,9 +35,7 @@ function Pair({ item, active }: { item: Testimonial; active: boolean }) {
       </div>
 
       {/* Portrait */}
-      <div
-        className="h-[320px] w-[280px] shrink-0 overflow-hidden rounded-[32px] bg-[#EAECEC]"
-      >
+      <div className="h-[240px] w-full shrink-0 overflow-hidden rounded-[32px] bg-[#EAECEC] sm:h-[320px] sm:w-[280px]">
         <img
           src={item.image}
           alt=""
@@ -61,16 +52,49 @@ export function Testimonials({
   content,
   ...rest
 }: { content: TestimonialsContent } & Omit<React.ComponentPropsWithoutRef<"section">, "content">) {
-  const [active, setActive] = useState(
-    Math.floor(content.testimonials.length / 2),
-  );
+  const trackRef = useRef<HTMLDivElement>(null);
+  const middle = Math.floor(content.testimonials.length / 2);
+  const [active, setActive] = useState(middle);
   const last = content.testimonials.length - 1;
 
+  // Scroll the track (only) so card `idx` is centred — no page jump.
+  const centerOn = (idx: number, smooth: boolean) => {
+    const track = trackRef.current;
+    const child = track?.children[idx] as HTMLElement | undefined;
+    if (!track || !child) return;
+    track.scrollTo({
+      left: child.offsetLeft - (track.clientWidth - child.clientWidth) / 2,
+      behavior: smooth ? "smooth" : "auto",
+    });
+  };
+
+  // Keep `active` in sync with whichever card sits nearest the centre.
+  const onScroll = () => {
+    const track = trackRef.current;
+    if (!track) return;
+    const center = track.scrollLeft + track.clientWidth / 2;
+    let best = 0;
+    let bestDist = Infinity;
+    Array.from(track.children).forEach((c, i) => {
+      const el = c as HTMLElement;
+      const d = Math.abs(el.offsetLeft + el.clientWidth / 2 - center);
+      if (d < bestDist) {
+        bestDist = d;
+        best = i;
+      }
+    });
+    setActive(best);
+  };
+
+  // Centre the middle testimonial on mount.
+  useEffect(() => {
+    centerOn(middle, false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    // Transparent: the coral glow filling this section bleeds down from the
-    // compare section above (they share one gradient, per Figma).
-    <section className="relative px-9 py-20" {...rest}>
-      <div className="relative z-10 mx-auto flex max-w-[1360px] flex-col items-center gap-20">
+    <section className="relative px-6 py-20 sm:px-9" {...rest}>
+      <div className="relative z-10 mx-auto flex max-w-[1360px] flex-col items-center gap-12 sm:gap-20">
         {/* Header */}
         <div className="flex w-full max-w-[710px] flex-col items-center gap-4 text-center">
           <p className="font-mono text-sm font-medium uppercase tracking-[0.04em] text-brand">
@@ -93,26 +117,28 @@ export function Testimonials({
           </div>
         </div>
 
-        {/* Carousel */}
-        <div className="relative w-full overflow-hidden">
-          <div
-            className="relative left-1/2 flex w-max gap-[120px] transition-transform duration-500 ease-out"
-            style={{
-              transform: `translateX(-${active * PITCH + PAIR_WIDTH / 2}px)`,
-            }}
-          >
-            {content.testimonials.map((item, i) => (
-              <Pair key={i} item={item} active={i === active} />
-            ))}
-          </div>
+        {/* Carousel — horizontal scroll-snap; card widths adapt per breakpoint. */}
+        <div
+          ref={trackRef}
+          onScroll={onScroll}
+          className="flex w-full snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] sm:gap-[120px] [&::-webkit-scrollbar]:hidden"
+        >
+          {content.testimonials.map((item, i) => (
+            <div
+              key={i}
+              className="w-[86%] shrink-0 snap-center sm:w-full lg:w-[817px]"
+            >
+              <Pair item={item} active={i === active} />
+            </div>
+          ))}
         </div>
 
         {/* Nav arrows */}
-        <div className="flex w-full justify-start pl-[114px]">
+        <div className="flex w-full justify-center sm:justify-start lg:pl-[114px]">
           <div className="flex items-center gap-1">
             <button
               type="button"
-              onClick={() => setActive((i) => Math.max(0, i - 1))}
+              onClick={() => centerOn(Math.max(0, active - 1), true)}
               disabled={active === 0}
               aria-label="Previous testimonial"
               className="flex size-11 items-center justify-center rounded-full bg-[#EAECEC] transition-opacity hover:opacity-80 disabled:opacity-40"
@@ -121,7 +147,7 @@ export function Testimonials({
             </button>
             <button
               type="button"
-              onClick={() => setActive((i) => Math.min(last, i + 1))}
+              onClick={() => centerOn(Math.min(last, active + 1), true)}
               disabled={active === last}
               aria-label="Next testimonial"
               className="flex size-11 items-center justify-center rounded-full bg-[#EAECEC] transition-opacity hover:opacity-80 disabled:opacity-40"
