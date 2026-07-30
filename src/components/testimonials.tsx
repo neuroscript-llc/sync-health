@@ -93,16 +93,18 @@ export function Testimonials({
   }, []);
 
   return (
-    <section className="relative px-6 py-20 sm:px-9" {...rest}>
+    <section className="relative px-5 py-12 sm:px-9 sm:py-20" {...rest}>
       <div className="relative z-10 mx-auto flex max-w-[1360px] flex-col items-center gap-12 sm:gap-20">
         {/* Header */}
-        <div className="flex w-full max-w-[710px] flex-col items-center gap-4 text-center">
-          <p className="font-mono text-sm font-medium uppercase tracking-[0.04em] text-brand">
-            {content.eyebrow}
-          </p>
-          <h2 className="text-4xl font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[56px] lg:leading-[64px]">
-            {content.heading}
-          </h2>
+        <div className="flex w-full max-w-[710px] flex-col items-start gap-4 text-left sm:items-center sm:text-center">
+          <div className="flex flex-col items-start gap-1 sm:items-center sm:gap-4">
+            <p className="font-mono text-sm font-medium uppercase tracking-[0.08em] text-brand">
+              {content.eyebrow}
+            </p>
+            <h2 className="text-5xl font-medium leading-[1.16] tracking-[-0.03em] text-ink lg:text-[56px] lg:leading-[64px]">
+              {content.heading}
+            </h2>
+          </div>
           <div className="flex items-center gap-[13px]">
             <span className="text-xs font-bold text-black">
               {content.ratingLabel}

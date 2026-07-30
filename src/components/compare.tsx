@@ -142,12 +142,12 @@ export function Compare({
           </div>
         </div>
 
-        {/* Supporting lines */}
-        <div className="flex flex-wrap items-center justify-start gap-x-6 gap-y-4 sm:justify-center sm:gap-x-12">
+        {/* Supporting lines — centred, wrapping (Figma: 12x24 gaps, centered). */}
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 sm:gap-x-12">
           {content.supporting.map((item) => (
-            <div key={item.label} className="flex items-center gap-2">
+            <div key={item.label} className="flex items-center gap-1 sm:gap-2">
               <img src={item.icon} alt="" width={24} height={24} className="size-5 sm:size-6" />
-              <span className="text-base font-medium text-ink/85">
+              <span className="text-sm font-medium text-ink/85 sm:text-base">
                 {item.label}
               </span>
             </div>

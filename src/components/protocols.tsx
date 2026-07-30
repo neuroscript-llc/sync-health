@@ -6,7 +6,9 @@ const PEACH_BG =
   "linear-gradient(180deg, #F6C6A0 0%, #F3D4BB 52%, #F1ECDE 100%)";
 const FEATURED_PILL =
   "linear-gradient(90deg, #BE4415 0%, #E0842F 46%, rgba(240,240,230,0) 100%)";
-const DOT = "radial-gradient(circle at 35% 30%, #F4A948, #D9531E)";
+// Figma "GRADIENT 2.png" (node Frame 36) — the gradient sphere used for the
+// category dots, centre-cropped and optimised from the source asset.
+const DOT = "url(/images/protocols/dot-gradient.png) center/cover no-repeat";
 const CARD_BG =
   "linear-gradient(180deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%)";
 

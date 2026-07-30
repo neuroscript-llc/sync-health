@@ -24,7 +24,10 @@ function ProductCard({ product }: { product: CatalogProduct }) {
         />
       </div>
 
-      <div className="flex flex-col gap-3 px-2 pt-1">
+      {/* Content fills the stretched card; the divider + CTA are pinned to the
+          bottom (mt-auto) so buttons align across cards of different text
+          lengths. */}
+      <div className="flex flex-1 flex-col gap-3 px-2 pb-1 pt-1">
         <div className="flex flex-col gap-0.5">
           <p className="font-mono text-xs font-medium uppercase tracking-[0.02em] text-brand">
             {product.category}
@@ -32,18 +35,22 @@ function ProductCard({ product }: { product: CatalogProduct }) {
           <h3 className="text-xl font-medium text-ink">{product.name}</h3>
           <p className="text-sm text-ink/80">{product.description}</p>
         </div>
-        <div className="h-px w-full bg-ink/[0.08]" />
-      </div>
 
-      <div className="flex px-1 pb-1">
-        {/* Mobile: full-width outlined. Desktop: hugs left and, on card hover,
-            fills coral + extends to full width (flex-grow transition). */}
-        <Link
-          href={product.ctaHref}
-          className="flex w-full items-center justify-center whitespace-nowrap rounded-full border border-brand px-5 py-3 font-mono text-base uppercase text-brand transition-all duration-300 sm:w-auto sm:grow-0 sm:justify-start sm:group-hover:grow sm:group-hover:bg-brand sm:group-hover:text-white"
-        >
-          {product.ctaLabel}
-        </Link>
+        <div className="mt-auto flex flex-col gap-3">
+          <div className="h-px w-full bg-ink/[0.08]" />
+          {/* Row wrapper keeps the desktop button hugging left (w-auto) instead
+              of stretching in the parent column. */}
+          <div className="flex">
+            {/* Mobile: full-width outlined. Desktop: hugs left and, on card
+                hover, fills coral + extends to full width (flex-grow). */}
+            <Link
+              href={product.ctaHref}
+              className="flex w-full items-center justify-center whitespace-nowrap rounded-full border border-brand px-5 py-3 font-mono text-base uppercase text-brand transition-all duration-300 sm:w-auto sm:grow-0 sm:justify-start sm:group-hover:grow sm:group-hover:bg-brand sm:group-hover:text-white"
+            >
+              {product.ctaLabel}
+            </Link>
+          </div>
+        </div>
       </div>
     </article>
   );
@@ -75,15 +82,15 @@ export function Catalog({
   };
 
   return (
-    <section className="bg-white px-6 py-20 sm:px-9" {...rest}>
+    <section className="bg-white px-5 py-12 sm:px-9 sm:py-20" {...rest}>
       <div className="mx-auto flex max-w-[1368px] flex-col items-center gap-11">
         {/* Header */}
         <div className="flex w-full flex-col items-start justify-between gap-8 sm:flex-row sm:items-end">
-          <div className="flex flex-col gap-4">
-            <p className="font-mono text-sm font-medium uppercase tracking-[0.04em] text-brand">
+          <div className="flex flex-col gap-1 sm:gap-4">
+            <p className="font-mono text-sm font-medium uppercase tracking-[0.08em] text-brand">
               {content.eyebrow}
             </p>
-            <h2 className="whitespace-pre-line text-4xl font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[56px] lg:leading-[64px]">
+            <h2 className="whitespace-pre-line text-5xl font-medium leading-[1.16] tracking-[-0.03em] text-ink lg:text-[56px] lg:leading-[64px]">
               {content.heading}
             </h2>
           </div>
@@ -110,24 +117,30 @@ export function Catalog({
         <div
           ref={trackRef}
           onScroll={onScroll}
-          className="-mx-6 flex w-[calc(100%+48px)] snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-6 px-6 [scrollbar-width:none] sm:mx-0 sm:grid sm:w-full sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 lg:grid-cols-4 [&::-webkit-scrollbar]:hidden"
+          className="-mx-5 flex w-[calc(100%+40px)] snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-5 px-5 [scrollbar-width:none] sm:mx-0 sm:grid sm:w-full sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 lg:grid-cols-4 [&::-webkit-scrollbar]:hidden"
         >
           {content.products.map((product, i) => (
             <ProductCard key={i} product={product} />
           ))}
         </div>
 
-        {/* Slider dots (mobile only) */}
-        <div className="flex justify-center gap-2 sm:hidden">
-          {content.products.map((_, i) => (
-            <span
-              key={i}
-              className={`size-2 rounded-full transition-colors ${
-                i === active ? "bg-ink" : "bg-ink/25"
-              }`}
-              aria-hidden
-            />
-          ))}
+        {/* Slider dots (mobile only) — graduated by distance from the active
+            card: active 16px (ink), neighbours 10px, farther 6px (Figma). */}
+        <div className="flex h-6 items-center justify-center gap-[7px] sm:hidden">
+          {content.products.map((_, i) => {
+            const dist = Math.abs(i - active);
+            const size = dist === 0 ? 16 : dist === 1 ? 10 : 6;
+            return (
+              <span
+                key={i}
+                className={`shrink-0 rounded-full transition-all duration-300 ${
+                  i === active ? "bg-ink" : "bg-black/[0.56]"
+                }`}
+                style={{ width: size, height: size }}
+                aria-hidden
+              />
+            );
+          })}
         </div>
 
         {/* CTA */}
