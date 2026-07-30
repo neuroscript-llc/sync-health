@@ -38,8 +38,8 @@ function SocialIcon({ social }: { social: SocialLink }) {
       className="flex size-12 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
     >
       <svg
-        width="18"
-        height="18"
+        width="28"
+        height="28"
         viewBox="0 0 20 20"
         fill="none"
         stroke="currentColor"

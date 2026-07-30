@@ -4,7 +4,7 @@ import { satoshi, sourceCode, manrope } from "./fonts";
 import StoryblokProvider from "@/components/storyblok-provider";
 
 export const metadata: Metadata = {
-  title: "Sync. — Simplifying the path to the Good Life",
+  title: "Sync. Simplifying the path to the Good Life",
   description:
     "Sync. helps you simplify the path to the Good Life with personalized health protocols.",
 };
