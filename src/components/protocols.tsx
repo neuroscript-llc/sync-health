@@ -46,7 +46,7 @@ function CategoryPill({ card }: { card: ProtocolCard }) {
 function ProtocolCardEl({ card }: { card: ProtocolCard }) {
   return (
     <article
-      className="flex w-72 shrink-0 snap-start flex-col gap-5 rounded-[32px] p-1 pb-1.5 sm:w-full sm:max-w-[380px] sm:rounded-[48px] sm:p-2 sm:pb-2.5"
+      className="flex w-full shrink-0 snap-start flex-col gap-5 rounded-[32px] p-1 pb-1.5 sm:max-w-[380px] sm:rounded-[48px] sm:p-2 sm:pb-2.5"
       style={{ background: CARD_BG, boxShadow: "0 12px 120px rgba(240,240,230,1)" }}
     >
       <div
@@ -98,7 +98,7 @@ export function Protocols({
 }: { content: ProtocolsContent } & Omit<React.ComponentPropsWithoutRef<"section">, "content">) {
   return (
     <section className="bg-cream px-5 py-12 sm:px-9 sm:py-20" {...rest}>
-      <div className="mx-auto flex max-w-[1200px] flex-col items-start gap-6 sm:items-center sm:gap-11">
+      <div className="mx-auto flex max-w-[1200px] flex-col items-start gap-10 sm:items-center sm:gap-11">
         {/* Header */}
         <div className="flex flex-col items-start gap-4 text-left sm:items-center sm:text-center">
           <div className="flex flex-col items-start gap-1 sm:items-center sm:gap-4">
@@ -115,7 +115,7 @@ export function Protocols({
         </div>
 
         {/* Cards — horizontal scroll on mobile (full-bleed peek), wrap on desktop. */}
-        <div className="-mx-5 flex w-full snap-x snap-mandatory gap-3 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:justify-center sm:gap-6 sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
+        <div className="-mx-5 flex w-full snap-x snap-mandatory gap-3 overflow-x-auto scroll-px-5 px-5 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:justify-center sm:gap-6 sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
           {content.cards.map((card, i) => (
             <ProtocolCardEl key={i} card={card} />
           ))}
@@ -124,7 +124,7 @@ export function Protocols({
         {/* CTA */}
         <Link
           href={content.ctaHref}
-          className="group inline-flex items-center gap-2 rounded-full border border-brand bg-brand/5 py-3 pl-5 pr-4 font-mono text-base uppercase tracking-wide text-brand transition-colors duration-300 hover:border-transparent hover:bg-brand hover:text-white sm:py-4 sm:pl-6 sm:pr-5 sm:text-lg lg:text-xl"
+          className="group inline-flex items-center gap-2 rounded-full border border-brand bg-brand py-3 pl-5 pr-4 font-mono text-base uppercase tracking-wide text-white transition-colors duration-300 sm:bg-brand/5 sm:text-brand sm:hover:border-transparent sm:hover:bg-brand sm:hover:text-white sm:py-4 sm:pl-6 sm:pr-5 sm:text-lg lg:text-xl"
         >
           {content.ctaLabel}
           <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />

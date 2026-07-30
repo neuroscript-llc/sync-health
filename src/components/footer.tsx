@@ -60,7 +60,7 @@ export function Footer({
 }: { content: FooterContent } & Omit<React.ComponentPropsWithoutRef<"footer">, "content">) {
   return (
     <footer className="relative px-9 pb-9" {...rest}>
-      <div className="mx-auto flex max-w-[1368px] flex-col gap-20 rounded-[40px] bg-ink p-8 sm:p-12 lg:p-20">
+      <div className="mx-auto flex max-w-[1600px] flex-col gap-20 rounded-[40px] bg-ink p-8 sm:p-12 lg:p-20">
         {/* Top: brand + nav + newsletter */}
         <div className="flex flex-col gap-12 lg:flex-row lg:gap-32">
           {/* Brand */}
@@ -87,7 +87,7 @@ export function Footer({
           {/* Nav columns + newsletter — fixed-width columns per Figma
               (229 / 231 nav, ~368 newsletter) so the links spread evenly on
               desktop; below lg they hug with a gap so the newsletter keeps room. */}
-          <div className="flex flex-1 flex-col gap-12 sm:flex-row sm:gap-8 lg:gap-0">
+          <div className="flex flex-1 flex-col gap-12 sm:flex-row sm:justify-between sm:gap-8 lg:gap-8">
             {content.navColumns.map((col, i) => (
               <nav key={i} className="flex shrink-0 flex-col gap-4 lg:w-[230px]">
                 {col.links.map((link) => (
@@ -104,8 +104,9 @@ export function Footer({
               </nav>
             ))}
 
-            {/* Newsletter */}
-            <div className="flex flex-1 flex-col gap-2">
+            {/* Newsletter — grows to fill, capped so the input never over-stretches
+                on wide screens (justify-between then spreads the slack as gaps). */}
+            <div className="flex w-full flex-col gap-2 sm:flex-1 lg:max-w-[420px]">
               <p className="text-sm leading-5 text-[#EAECEC]/60">
                 {content.newsletter.text}
               </p>

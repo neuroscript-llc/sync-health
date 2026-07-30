@@ -1,3 +1,6 @@
+"use client";
+
+import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowIcon } from "@/components/arrow-icon";
@@ -8,7 +11,7 @@ const CARD_BG = "linear-gradient(180deg, #F0F0E6 20%, #FFFFFF 100%)";
 function ProductCard({ product }: { product: CatalogProduct }) {
   return (
     <article
-      className="group flex flex-col gap-2 rounded-[32px] border border-ink/[0.08] p-2"
+      className="group flex w-[80%] shrink-0 snap-start flex-col gap-2 rounded-[32px] border border-ink/[0.08] p-2 sm:w-auto"
       style={{ background: CARD_BG }}
     >
       <div className="relative aspect-square w-full overflow-hidden rounded-3xl">
@@ -16,7 +19,7 @@ function ProductCard({ product }: { product: CatalogProduct }) {
           src={product.image}
           alt={product.name}
           fill
-          sizes="(max-width: 1024px) 50vw, 25vw"
+          sizes="(max-width: 640px) 80vw, (max-width: 1024px) 50vw, 25vw"
           className="object-cover"
         />
       </div>
@@ -32,13 +35,12 @@ function ProductCard({ product }: { product: CatalogProduct }) {
         <div className="h-px w-full bg-ink/[0.08]" />
       </div>
 
-      <div className="flex justify-start px-1 pb-1">
-        {/* Outlined and hugging its label at the left by default; on card hover
-            it fills coral, the label turns white and the button extends to the
-            right to full width — the expand is a flex-grow transition. */}
+      <div className="flex px-1 pb-1">
+        {/* Mobile: full-width outlined. Desktop: hugs left and, on card hover,
+            fills coral + extends to full width (flex-grow transition). */}
         <Link
           href={product.ctaHref}
-          className="flex grow-0 items-center justify-start rounded-full border border-brand px-5 py-3 font-mono text-base uppercase text-brand transition-all duration-300 group-hover:grow group-hover:bg-brand group-hover:text-white"
+          className="flex w-full items-center justify-center whitespace-nowrap rounded-full border border-brand px-5 py-3 font-mono text-base uppercase text-brand transition-all duration-300 sm:w-auto sm:grow-0 sm:justify-start sm:group-hover:grow sm:group-hover:bg-brand sm:group-hover:text-white"
         >
           {product.ctaLabel}
         </Link>
@@ -51,6 +53,27 @@ export function Catalog({
   content,
   ...rest
 }: { content: CatalogContent } & Omit<React.ComponentPropsWithoutRef<"section">, "content">) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+
+  // Track which card is nearest centre (mobile slider dot indicator).
+  const onScroll = () => {
+    const track = trackRef.current;
+    if (!track) return;
+    const center = track.scrollLeft + track.clientWidth / 2;
+    let best = 0;
+    let bestDist = Infinity;
+    Array.from(track.children).forEach((c, i) => {
+      const el = c as HTMLElement;
+      const d = Math.abs(el.offsetLeft + el.clientWidth / 2 - center);
+      if (d < bestDist) {
+        bestDist = d;
+        best = i;
+      }
+    });
+    setActive(best);
+  };
+
   return (
     <section className="bg-white px-6 py-20 sm:px-9" {...rest}>
       <div className="mx-auto flex max-w-[1368px] flex-col items-center gap-11">
@@ -83,10 +106,27 @@ export function Catalog({
           </div>
         </div>
 
-        {/* Product grid */}
-        <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Products — horizontal scroll-snap slider on mobile, grid on desktop. */}
+        <div
+          ref={trackRef}
+          onScroll={onScroll}
+          className="-mx-6 flex w-full snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-6 px-6 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 lg:grid-cols-4 [&::-webkit-scrollbar]:hidden"
+        >
           {content.products.map((product, i) => (
             <ProductCard key={i} product={product} />
+          ))}
+        </div>
+
+        {/* Slider dots (mobile only) */}
+        <div className="flex justify-center gap-2 sm:hidden">
+          {content.products.map((_, i) => (
+            <span
+              key={i}
+              className={`size-2 rounded-full transition-colors ${
+                i === active ? "bg-ink" : "bg-ink/25"
+              }`}
+              aria-hidden
+            />
           ))}
         </div>
 
