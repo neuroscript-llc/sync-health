@@ -33,16 +33,16 @@ export function ProductHero({
 
   return (
     <section {...rest}>
-      <div className="mx-auto flex max-w-[1228px] flex-col justify-center gap-12 px-6 pb-6 pt-14 lg:flex-row lg:items-start">
+      <div className="mx-auto flex max-w-[1276px] flex-col justify-center gap-12 px-6 pb-6 pt-14 xl:flex-row xl:items-start">
         {/* ---- Gallery ------------------------------------------------ */}
-        <div className="flex w-full flex-col gap-5 lg:w-[560px] lg:shrink-0">
+        <div className="flex w-full flex-col gap-5 xl:w-[560px] xl:shrink-0">
           <div className="relative aspect-[560/520] w-full overflow-hidden rounded-[32px]">
             <Image
               src={content.gallery.main}
               alt={content.name}
               fill
               priority
-              sizes="(min-width: 1024px) 560px, 100vw"
+              sizes="(min-width: 1280px) 560px, 100vw"
               className="object-cover"
             />
           </div>
@@ -78,7 +78,7 @@ export function ProductHero({
         </div>
 
         {/* ---- Product info ------------------------------------------- */}
-        <div className="flex w-full flex-col gap-6 lg:w-[620px] lg:shrink-0">
+        <div className="flex w-full flex-col gap-6 xl:min-w-0 xl:flex-1">
           <div className="flex flex-col gap-2">
             <p className="font-mono text-sm font-medium uppercase tracking-[0.04em] text-brand">
               {content.eyebrow}
@@ -157,7 +157,7 @@ export function ProductHero({
             <p className="text-lg leading-[1.5] text-ink/80">
               {content.planLabel}
             </p>
-            <div className="flex gap-3">
+            <div className="-mx-6 flex w-[calc(100%+48px)] snap-x snap-mandatory gap-3 overflow-x-auto scroll-px-6 px-6 pt-4 [scrollbar-width:none] sm:mx-0 sm:w-full sm:snap-none sm:overflow-visible sm:px-0 sm:pt-0 [&::-webkit-scrollbar]:hidden">
             {content.plans.map((plan, i) => {
               const active = i === activePlan;
               return (
@@ -166,7 +166,7 @@ export function ProductHero({
                   type="button"
                   onClick={() => setActivePlan(i)}
                   aria-pressed={active}
-                  className={`relative flex flex-1 items-center gap-3 rounded-2xl p-3 text-left transition-colors ${
+                  className={`relative flex w-[220px] shrink-0 snap-start items-center gap-3 rounded-2xl p-3 text-left transition-colors sm:w-auto sm:flex-1 ${
                     active ? "border-2 border-brand" : "border border-ink/20"
                   }`}
                 >

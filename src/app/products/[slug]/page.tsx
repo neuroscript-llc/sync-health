@@ -36,7 +36,7 @@ export default async function ProductPage({
   const product = bpc157Product;
 
   return (
-    <main className="min-h-screen bg-[linear-gradient(180deg,#f0f0e6_0%,#ffffff_100%)]">
+    <main className="min-h-screen overflow-x-clip bg-[linear-gradient(180deg,#f0f0e6_0%,#ffffff_100%)]">
       <div className="p-3">
         <SiteHeader content={siteHeader} />
       </div>
