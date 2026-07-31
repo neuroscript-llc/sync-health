@@ -99,7 +99,7 @@ export function Faq({
           </p>
           <a
             href={content.ctaHref}
-            className="group mt-1 flex items-center gap-2 self-start rounded-full border border-brand bg-brand/5 py-3 pl-5 pr-4 font-mono text-base uppercase tracking-[0.02em] text-brand transition-colors duration-300 hover:border-transparent hover:bg-brand hover:text-white"
+            className="group mt-1 flex items-center gap-2 self-start rounded-full bg-ink py-3 pl-5 pr-4 font-mono text-base uppercase tracking-[0.02em] text-white transition-opacity duration-300 hover:opacity-90"
           >
             {content.ctaLabel}
             <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />

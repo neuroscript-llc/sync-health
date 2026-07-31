@@ -146,14 +146,18 @@ export function ProductHero({
 
           {/* Price */}
           <p className="font-medium text-ink">
-            <span className="text-[32px] leading-[40px] tracking-[-0.02em]">
+            <span className="text-[40px] leading-[48px] tracking-[-0.02em]">
               {content.price.amount}
             </span>
-            <span className="text-base text-ink/80">{content.price.period}</span>
+            <span className="text-lg text-ink/80">{content.price.period}</span>
           </p>
 
           {/* Plan selector */}
-          <div className="flex gap-3">
+          <div className="flex flex-col gap-2">
+            <p className="text-lg leading-[1.5] text-ink/80">
+              {content.planLabel}
+            </p>
+            <div className="flex gap-3">
             {content.plans.map((plan, i) => {
               const active = i === activePlan;
               return (
@@ -190,6 +194,7 @@ export function ProductHero({
                 </button>
               );
             })}
+            </div>
           </div>
 
           {/* CTA */}
@@ -250,7 +255,7 @@ export function ProductHero({
           {/* Safety information */}
           <Link
             href={content.safetyHref}
-            className="inline-flex items-center gap-2 self-start border-b border-ink pb-1 pt-2 font-mono text-sm font-medium uppercase leading-5 text-ink transition-colors hover:text-brand hover:border-brand"
+            className="inline-flex items-center gap-2 self-start rounded-full border border-ink py-3 pl-5 pr-4 font-mono text-base font-medium uppercase leading-6 text-ink transition-colors hover:border-brand hover:text-brand"
           >
             {content.safetyLabel}
             <ArrowUpRight className="size-5 shrink-0" aria-hidden />

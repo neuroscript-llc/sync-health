@@ -1,4 +1,8 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { ProductContent, ProductWhyFeature } from "@/lib/content";
 
 function WhyCard({
@@ -34,6 +38,37 @@ function WhyCard({
   );
 }
 
+// Compact card used in the mobile carousel (Figma: 359 × 90, 74px icon).
+function MobileWhyCard({
+  feature,
+  className,
+}: {
+  feature: ProductWhyFeature;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`flex items-center gap-3 rounded-[36px] border border-white bg-[#EBDCCD] p-2 pr-4 shadow-[0_4px_64px_rgba(0,0,0,0.08)] ${className ?? ""}`}
+    >
+      <Image
+        src={feature.icon}
+        alt=""
+        width={74}
+        height={74}
+        className="size-[74px] shrink-0"
+      />
+      <div className="flex min-w-0 flex-col gap-1">
+        <h3 className="font-manrope text-lg font-medium leading-[26px] tracking-[-0.01em] text-ink">
+          {feature.title}
+        </h3>
+        <p className="text-sm leading-[1.4] text-ink/80">
+          {feature.description}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 // Absolute placement of each element inside the 691.3 × 900 stage (Figma coords).
 const STAGE_W = 691.3;
 const STAGE_H = 900;
@@ -52,11 +87,15 @@ export function ProductWhy({
   "content"
 >) {
   const { heading, features } = content.why;
+  const n = features.length;
+  const [active, setActive] = useState(n - 1);
+  const prev = () => setActive((active - 1 + n) % n);
+  const next = () => setActive((active + 1) % n);
 
   return (
     <section {...rest}>
-      <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-16 px-9 py-20">
-        <h2 className="text-center text-4xl font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[56px] lg:leading-[64px]">
+      <div className="mx-auto flex max-w-[1440px] flex-col items-start gap-10 px-5 py-12 xl:items-center xl:gap-16 xl:px-9 xl:py-20">
+        <h2 className="self-stretch text-[48px] font-medium leading-[56px] tracking-[-0.03em] text-ink xl:text-center xl:text-[56px] xl:leading-[64px] xl:tracking-[-0.02em]">
           {heading}
         </h2>
 
@@ -111,37 +150,67 @@ export function ProductWhy({
           />
         </div>
 
-        {/* Mobile / tablet: stacked */}
-        <div className="flex w-full max-w-[520px] flex-col items-center gap-8 xl:hidden">
-          <div className="relative w-full">
-            <Image
-              src="/images/pdp/hand-top.png"
-              alt=""
-              aria-hidden
-              width={918}
-              height={467}
-              className="absolute -top-6 left-1/2 w-[90%] -translate-x-1/2"
-            />
-            <Image
-              src="/images/pdp/why-vial.png"
-              alt={content.name}
-              width={1267}
-              height={1212}
-              className="relative z-10 mx-auto w-[60%]"
-            />
-            <Image
-              src="/images/pdp/hand-bottom.png"
-              alt=""
-              aria-hidden
-              width={933}
-              height={458}
-              className="absolute -bottom-6 left-1/2 w-[95%] -translate-x-1/2"
-            />
-          </div>
-          <div className="flex w-full flex-col gap-4">
-            {features.map((feature) => (
-              <WhyCard key={feature.title} feature={feature} />
-            ))}
+        {/* Mobile: card carousel over the vial / blurred-hands backdrop */}
+        <div className="relative mx-auto h-[550px] w-full max-w-[350px] self-center overflow-hidden xl:hidden">
+          {/* Blurred coral hands + vial (backdrop) */}
+          <Image
+            src="/images/pdp/hand-top.png"
+            alt=""
+            aria-hidden
+            width={918}
+            height={467}
+            className="pointer-events-none absolute -left-8 -top-2 z-0 w-[300px] blur-[3px]"
+          />
+          <Image
+            src="/images/pdp/hand-bottom.png"
+            alt=""
+            aria-hidden
+            width={933}
+            height={458}
+            className="pointer-events-none absolute -right-10 top-[210px] z-0 w-[320px] blur-[3px]"
+          />
+          <Image
+            src="/images/pdp/why-vial.png"
+            alt={content.name}
+            width={1267}
+            height={1212}
+            className="absolute left-1/2 top-[58px] z-[1] w-[320px] -translate-x-1/2"
+          />
+
+          {/* Blurred neighbouring cards peeking in from the sides */}
+          <MobileWhyCard
+            feature={features[(active - 1 + n) % n]}
+            className="absolute -left-[275px] top-[339px] z-10 w-[359px] blur-[4px]"
+          />
+          <MobileWhyCard
+            feature={features[(active + 1) % n]}
+            className="absolute left-[235px] top-[339px] z-10 w-[359px] blur-[4px]"
+          />
+
+          {/* Active card (sharp, full width, bottom) */}
+          <MobileWhyCard
+            feature={features[active]}
+            className="absolute bottom-0 left-0 z-20 w-full"
+          />
+
+          {/* Prev / next arrows */}
+          <div className="absolute inset-x-0 top-[223px] z-30 flex items-center justify-between">
+            <button
+              type="button"
+              onClick={prev}
+              aria-label="Previous feature"
+              className="grid size-11 place-items-center rounded-full bg-[#DFD5CE] transition-opacity hover:opacity-80"
+            >
+              <ArrowLeft className="size-5 text-ink" aria-hidden />
+            </button>
+            <button
+              type="button"
+              onClick={next}
+              aria-label="Next feature"
+              className="grid size-11 place-items-center rounded-full bg-[#DFD5CE] transition-opacity hover:opacity-80"
+            >
+              <ArrowRight className="size-5 text-ink" aria-hidden />
+            </button>
           </div>
         </div>
       </div>

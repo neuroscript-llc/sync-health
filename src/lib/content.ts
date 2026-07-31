@@ -239,6 +239,23 @@ export type ProductWhyFeature = {
   description: string;
 };
 
+export type ProductQualityTest = {
+  name: string;
+  /** Status pill label, e.g. "Passed". */
+  status: string;
+  description: string;
+};
+
+export type ProductQualityContent = {
+  heading: string;
+  /** Three overlapping photo cards: left, elevated middle, right. */
+  collage: string[];
+  /** Emphasised intro line (larger, medium weight). */
+  lead: string;
+  body: string;
+  tests: ProductQualityTest[];
+};
+
 export type ProductContent = {
   slug: string;
   eyebrow: string;
@@ -253,12 +270,14 @@ export type ProductContent = {
   methodLabel: string;
   methods: ProductMethod[];
   price: { amount: string; period: string };
+  planLabel: string;
   plans: ProductPlan[];
   cta: { label: string; href: string; note: string };
   accordion: ProductAccordionItem[];
   safetyLabel: string;
   safetyHref: string;
   why: { heading: string; features: ProductWhyFeature[] };
+  qualityTest: ProductQualityContent;
   howItWorks: HowItWorksContent;
 };
 
@@ -714,6 +733,7 @@ export const bpc157Product: ProductContent = {
     { image: "/images/pdp/method-3.png", alt: "Oral capsules" },
   ],
   price: { amount: "$225.00", period: "/month" },
+  planLabel: "Select a plan",
   plans: [
     { label: "1-month plan", price: "$225.00", period: "/month" },
     {
@@ -776,6 +796,42 @@ export const bpc157Product: ProductContent = {
         title: "Research Focused",
         description:
           "A foundational peptide molecule studied extensively for soft tissue response.",
+      },
+    ],
+  },
+  qualityTest: {
+    heading: "Always quality tested, with proven results",
+    collage: [
+      "/images/pdp/quality-a.png",
+      "/images/pdp/quality-b.png",
+      "/images/pdp/quality-a.png",
+    ],
+    lead: "Our medication is conveniently delivered from a state-licensed pharmacy within our network, straight to your door when you need it.",
+    body: 'Every batch is fully tested in full chemistry and microbiology labs at the pharmacy facility to meet strict guidelines and parameters. This provides full confidence in producing industry best results for our consumers through strict compliance with cGMP regulations."',
+    tests: [
+      {
+        name: "Potency",
+        status: "Passed",
+        description:
+          "This test is performed every 3 to 6 months. It confirms that the medication has plus or minus 10% of the appropriate concentration of the active ingredient.",
+      },
+      {
+        name: "Sterility",
+        status: "Passed",
+        description:
+          "This test ensures the medication is free from any contaminants, including bacteria or other pathogens. Every batch is tested and must meet the requirements of USP 797.1.",
+      },
+      {
+        name: "pH Balance.",
+        status: "Passed",
+        description:
+          "This test assesses the acid/base balance to ensure minimal irritation upon injection, helping maintain physiological compatibility & comfort for the patient during administration.",
+      },
+      {
+        name: "Endotoxicity",
+        status: "Passed",
+        description:
+          "This test measures bacterial endotoxins to prevent fever and adverse reactions, ensuring the medication meets strict safety standards.",
       },
     ],
   },

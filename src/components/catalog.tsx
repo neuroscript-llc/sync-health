@@ -11,7 +11,7 @@ const CARD_BG = "linear-gradient(180deg, #F0F0E6 20%, #FFFFFF 100%)";
 function ProductCard({ product }: { product: CatalogProduct }) {
   return (
     <article
-      className="group flex w-[80%] shrink-0 snap-start flex-col gap-2 rounded-[32px] border border-ink/[0.08] p-2 sm:w-auto"
+      className="group flex w-full shrink-0 snap-start flex-col gap-2 rounded-[32px] border border-ink/[0.08] p-2 sm:w-auto"
       style={{ background: CARD_BG }}
     >
       <div className="relative aspect-square w-full overflow-hidden rounded-3xl">
@@ -36,11 +36,15 @@ function ProductCard({ product }: { product: CatalogProduct }) {
       </div>
 
       <div className="flex px-1 pb-1">
-        {/* Mobile: full-width outlined. Desktop: hugs left and, on card hover,
-            fills coral + extends to full width (flex-grow transition). */}
+        {/* Featured card: solid dark pill with left-aligned label. Others:
+            full-width ink-outlined pill (centred label) that fills dark on hover. */}
         <Link
           href={product.ctaHref}
-          className="flex w-full items-center justify-center whitespace-nowrap rounded-full border border-brand px-5 py-3 font-mono text-base uppercase text-brand transition-all duration-300 sm:w-auto sm:grow-0 sm:justify-start sm:group-hover:grow sm:group-hover:bg-brand sm:group-hover:text-white"
+          className={`flex w-full items-center whitespace-nowrap rounded-full px-5 py-3 font-mono text-base uppercase transition-colors duration-300 ${
+            product.featured
+              ? "justify-start bg-ink text-white hover:opacity-90"
+              : "justify-center border border-ink text-ink hover:bg-ink hover:text-white"
+          }`}
         >
           {product.ctaLabel}
         </Link>
@@ -110,7 +114,7 @@ export function Catalog({
         <div
           ref={trackRef}
           onScroll={onScroll}
-          className="-mx-6 flex w-full snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-6 px-6 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 lg:grid-cols-4 [&::-webkit-scrollbar]:hidden"
+          className="flex w-full snap-x snap-mandatory gap-4 overflow-x-auto [scrollbar-width:none] sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible lg:grid-cols-4 [&::-webkit-scrollbar]:hidden"
         >
           {content.products.map((product, i) => (
             <ProductCard key={i} product={product} />
@@ -133,7 +137,7 @@ export function Catalog({
         {/* CTA */}
         <Link
           href={content.ctaHref}
-          className="group inline-flex items-center gap-2 rounded-full border border-brand bg-brand/5 py-4 pl-6 pr-5 font-mono text-lg uppercase tracking-wide text-brand transition-colors duration-300 hover:border-transparent hover:bg-brand hover:text-white lg:text-xl"
+          className="group inline-flex items-center gap-2 rounded-full bg-ink py-4 pl-6 pr-5 font-mono text-lg uppercase tracking-wide text-white transition-opacity duration-300 hover:opacity-90 lg:text-xl"
         >
           {content.ctaLabel}
           <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />

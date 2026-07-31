@@ -2,8 +2,24 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/site-header";
 import { ProductHero } from "@/components/product-hero";
 import { ProductWhy } from "@/components/product-why";
+import { ProductQuality } from "@/components/product-quality";
 import { HowItWorks } from "@/components/how-it-works";
-import { siteHeader, bpc157Product } from "@/lib/content";
+import { Testimonials } from "@/components/testimonials";
+import { Catalog } from "@/components/catalog";
+import { Blog } from "@/components/blog";
+import { Faq } from "@/components/faq";
+import { FinalCta } from "@/components/final-cta";
+import { Footer } from "@/components/footer";
+import {
+  siteHeader,
+  bpc157Product,
+  testimonials,
+  catalog,
+  blog,
+  faq,
+  finalCta,
+  footer,
+} from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "BPC-157 — Sync.",
@@ -27,6 +43,13 @@ export default async function ProductPage({
       <ProductHero content={product} />
       <ProductWhy content={product} />
       <HowItWorks content={product.howItWorks} variant="product" />
+      <ProductQuality content={product} />
+      <Testimonials content={testimonials} />
+      <Catalog content={catalog} />
+      <Blog content={blog} />
+      <Faq content={faq} />
+      <FinalCta content={finalCta} />
+      <Footer content={footer} />
     </main>
   );
 }
