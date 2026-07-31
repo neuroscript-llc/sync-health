@@ -432,7 +432,7 @@ export const catalog: CatalogContent = {
       description: "Tissue repair, joint and gut support.",
       image: "/images/catalog/vial-recovery.png",
       ctaLabel: "Start your protocol",
-      ctaHref: "/start",
+      ctaHref: "/products/bpc-157",
       featured: true,
     },
     {
@@ -441,7 +441,7 @@ export const catalog: CatalogContent = {
       description: "Dual-action weight management, once weekly.",
       image: "/images/catalog/vial-bpc157.png",
       ctaLabel: "Start your protocol",
-      ctaHref: "/start",
+      ctaHref: "/products/bpc-157",
     },
     {
       category: "Hormonal",
@@ -449,7 +449,7 @@ export const catalog: CatalogContent = {
       description: "Growth-hormone support, recovery and sleep.",
       image: "/images/catalog/vial-recovery.png",
       ctaLabel: "Start your protocol",
-      ctaHref: "/start",
+      ctaHref: "/products/bpc-157",
     },
     {
       category: "Skin",
@@ -457,11 +457,11 @@ export const catalog: CatalogContent = {
       description: "Skin, hair and collagen renewal.",
       image: "/images/catalog/vial-bpc157.png",
       ctaLabel: "Start your protocol",
-      ctaHref: "/start",
+      ctaHref: "/products/bpc-157",
     },
   ],
   ctaLabel: "Shop all",
-  ctaHref: "/shop",
+  ctaHref: "/products/bpc-157",
 };
 
 export const compare: CompareContent = {
