@@ -7,10 +7,19 @@ import type { HowItWorksContent } from "@/lib/content";
 
 export function HowItWorks({
   content,
+  variant = "default",
   ...rest
-}: { content: HowItWorksContent } & Omit<React.ComponentPropsWithoutRef<"section">, "content">) {
+}: {
+  content: HowItWorksContent;
+  /** "product" drops the cream backdrop and uses a solid-ink CTA (PDP). */
+  variant?: "default" | "product";
+} & Omit<React.ComponentPropsWithoutRef<"section">, "content">) {
+  const isProduct = variant === "product";
   return (
-    <section className="bg-cream px-6 py-20 sm:px-9" {...rest}>
+    <section
+      className={`${isProduct ? "" : "bg-cream"} px-6 py-20 sm:px-9`}
+      {...rest}
+    >
       <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-16">
         {/* Section header */}
         <div className="flex w-full flex-col gap-4">
@@ -65,7 +74,11 @@ export function HowItWorks({
         {/* CTA */}
         <Link
           href={content.ctaHref}
-          className="group inline-flex items-center gap-2 rounded-full border border-brand bg-brand/5 py-4 pl-6 pr-5 font-mono text-lg uppercase tracking-wide text-brand transition-colors duration-300 hover:border-transparent hover:bg-brand hover:text-white lg:text-xl"
+          className={
+            isProduct
+              ? "group inline-flex items-center gap-2 rounded-full bg-ink py-4 pl-6 pr-5 font-mono text-lg uppercase tracking-wide text-white transition-opacity duration-300 hover:opacity-90 lg:text-xl"
+              : "group inline-flex items-center gap-2 rounded-full border border-brand bg-brand/5 py-4 pl-6 pr-5 font-mono text-lg uppercase tracking-wide text-brand transition-colors duration-300 hover:border-transparent hover:bg-brand hover:text-white lg:text-xl"
+          }
         >
           {content.ctaLabel}
           <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />

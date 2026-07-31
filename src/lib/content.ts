@@ -206,6 +206,81 @@ export type TrustBarContent = {
   logos: CertLogo[];
 };
 
+/* --- Product detail page (PDP) --------------------------------------- */
+
+export type ProductTrust = {
+  icon: string;
+  label: string;
+};
+
+export type ProductMethod = {
+  image: string;
+  alt: string;
+};
+
+export type ProductPlan = {
+  label: string;
+  /** Per-month price, e.g. "$225.00". */
+  price: string;
+  /** Suffix rendered smaller/muted, e.g. "/month". */
+  period: string;
+  /** Optional floating badge above the plan card. */
+  badge?: { text: string; variant: "recommended" | "best" };
+};
+
+export type ProductAccordionItem = {
+  title: string;
+  body?: string;
+};
+
+export type ProductWhyFeature = {
+  icon: string;
+  title: string;
+  description: string;
+};
+
+export type ProductQualityTest = {
+  name: string;
+  /** Status pill label, e.g. "Passed". */
+  status: string;
+  description: string;
+};
+
+export type ProductQualityContent = {
+  heading: string;
+  /** Three overlapping photo cards: left, elevated middle, right. */
+  collage: string[];
+  /** Emphasised intro line (larger, medium weight). */
+  lead: string;
+  body: string;
+  tests: ProductQualityTest[];
+};
+
+export type ProductContent = {
+  slug: string;
+  eyebrow: string;
+  name: string;
+  description: string;
+  gallery: {
+    main: string;
+    /** First entry is the active/coloured thumb; the rest are muted. */
+    thumbnails: string[];
+  };
+  trust: ProductTrust[];
+  methodLabel: string;
+  methods: ProductMethod[];
+  price: { amount: string; period: string };
+  planLabel: string;
+  plans: ProductPlan[];
+  cta: { label: string; href: string; note: string };
+  accordion: ProductAccordionItem[];
+  safetyLabel: string;
+  safetyHref: string;
+  why: { heading: string; features: ProductWhyFeature[] };
+  qualityTest: ProductQualityContent;
+  howItWorks: HowItWorksContent;
+};
+
 /** Default content for the home page (stands in for the Storyblok story). */
 export const siteHeader: SiteHeaderContent = {
   tickerMessages: [
@@ -626,4 +701,139 @@ export const hero: HeroContent = {
     src: "/images/hero-bg.jpg",
     alt: "",
   },
+};
+
+export const bpc157Product: ProductContent = {
+  slug: "bpc-157",
+  eyebrow: "Recovery",
+  name: "BPC-157",
+  description:
+    "BPC-157 acts as a cellular signaling peptide that modulates angiogenic and growth factor expression. It mimics the body's natural gastric protective protein to support systemic connective tissue integrity and vascular endothelial response.",
+  gallery: {
+    main: "/images/pdp/hero-main.png",
+    thumbnails: [
+      "/images/pdp/thumb-color.png",
+      "/images/pdp/thumb-grey.png",
+      "/images/pdp/thumb-grey.png",
+      "/images/pdp/thumb-grey.png",
+      "/images/pdp/thumb-grey.png",
+      "/images/pdp/thumb-grey.png",
+    ],
+  },
+  trust: [
+    { icon: "/images/pdp/check.svg", label: "Physician-supervised" },
+    { icon: "/images/pdp/check.svg", label: "Licensed US pharmacy" },
+    { icon: "/images/pdp/check.svg", label: "Third-party tested" },
+    { icon: "/images/pdp/check.svg", label: "Built around your body" },
+  ],
+  methodLabel: "Injection method",
+  methods: [
+    { image: "/images/pdp/method-1.png", alt: "Subcutaneous injection" },
+    { image: "/images/pdp/method-2.png", alt: "Nasal spray" },
+    { image: "/images/pdp/method-3.png", alt: "Oral capsules" },
+  ],
+  price: { amount: "$225.00", period: "/month" },
+  planLabel: "Select a plan",
+  plans: [
+    { label: "1-month plan", price: "$225.00", period: "/month" },
+    {
+      label: "3-month plan",
+      price: "$189.00",
+      period: "/month",
+      badge: { text: "Recommended", variant: "recommended" },
+    },
+    {
+      label: "6-month plan",
+      price: "$166.00",
+      period: "/month",
+      badge: { text: "Best Value", variant: "best" },
+    },
+  ],
+  cta: {
+    label: "Start your protocol",
+    href: "/start",
+    note: "Charged only after your protocol is approved. Cancel anytime.",
+  },
+  accordion: [
+    {
+      title: "What it is",
+      body: "A cellular signaling peptide studied for its role in modulating angiogenic and growth-factor expression to support connective-tissue repair.",
+    },
+    {
+      title: "How it's used",
+      body: "Prescribed as part of a supervised protocol. Your clinician sets the compound, dose and cycle based on your intake — most reviews complete within 1–2 hours.",
+    },
+    {
+      title: "What's in the vial",
+      body: "Pharmaceutical-grade BPC-157, compounded at a licensed US pharmacy and batch-tested for purity and potency before it ships.",
+    },
+  ],
+  safetyLabel: "Important safety information",
+  safetyHref: "/safety",
+  why: {
+    heading: "Why BPC-157",
+    features: [
+      {
+        icon: "/images/pdp/icon-cellular.svg",
+        title: "Cellular Signaling",
+        description:
+          "Modulates angiogenic and growth factor expression at the site of repair.",
+      },
+      {
+        icon: "/images/pdp/icon-tissue.svg",
+        title: "Tissue Integrity",
+        description:
+          "Mimics natural gastric protective proteins to support systemic connective tissue.",
+      },
+      {
+        icon: "/images/pdp/icon-optimized.svg",
+        title: "SYNC Optimized",
+        description:
+          "Pure, pharmaceutical-grade peptide delivered through a supervised protocol.",
+      },
+      {
+        icon: "/images/pdp/icon-research.svg",
+        title: "Research Focused",
+        description:
+          "A foundational peptide molecule studied extensively for soft tissue response.",
+      },
+    ],
+  },
+  qualityTest: {
+    heading: "Always quality tested, with proven results",
+    collage: [
+      "/images/pdp/quality-a.png",
+      "/images/pdp/quality-b.png",
+      "/images/pdp/quality-a.png",
+    ],
+    lead: "Our medication is conveniently delivered from a state-licensed pharmacy within our network, straight to your door when you need it.",
+    body: 'Every batch is fully tested in full chemistry and microbiology labs at the pharmacy facility to meet strict guidelines and parameters. This provides full confidence in producing industry best results for our consumers through strict compliance with cGMP regulations."',
+    tests: [
+      {
+        name: "Potency",
+        status: "Passed",
+        description:
+          "This test is performed every 3 to 6 months. It confirms that the medication has plus or minus 10% of the appropriate concentration of the active ingredient.",
+      },
+      {
+        name: "Sterility",
+        status: "Passed",
+        description:
+          "This test ensures the medication is free from any contaminants, including bacteria or other pathogens. Every batch is tested and must meet the requirements of USP 797.1.",
+      },
+      {
+        name: "pH Balance.",
+        status: "Passed",
+        description:
+          "This test assesses the acid/base balance to ensure minimal irritation upon injection, helping maintain physiological compatibility & comfort for the patient during administration.",
+      },
+      {
+        name: "Endotoxicity",
+        status: "Passed",
+        description:
+          "This test measures bacterial endotoxins to prevent fever and adverse reactions, ensuring the medication meets strict safety standards.",
+      },
+    ],
+  },
+  howItWorks: howItWorks,
 };
