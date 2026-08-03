@@ -224,8 +224,10 @@ export type ProductPlan = {
   price: string;
   /** Suffix rendered smaller/muted, e.g. "/month". */
   period: string;
-  /** Optional floating badge above the plan card. */
+  /** Optional corner badge, e.g. "Recommended" / "Best Value". */
   badge?: { text: string; variant: "recommended" | "best" };
+  /** Optional inline savings pill, e.g. "Save 15%". */
+  save?: string;
 };
 
 export type ProductAccordionItem = {
@@ -741,12 +743,14 @@ export const bpc157Product: ProductContent = {
       price: "$189.00",
       period: "/month",
       badge: { text: "Recommended", variant: "recommended" },
+      save: "Save 15%",
     },
     {
       label: "6-month plan",
       price: "$166.00",
       period: "/month",
       badge: { text: "Best Value", variant: "best" },
+      save: "Save 25%",
     },
   ],
   cta: {

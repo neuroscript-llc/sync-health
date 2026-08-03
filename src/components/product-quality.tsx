@@ -2,10 +2,12 @@ import Image from "next/image";
 import type { ProductContent, ProductQualityTest } from "@/lib/content";
 
 // Overlapping photo collage — positions as % of a 325.97 × 160 Figma box.
+// Three equal cards (107.99 × 140.39); the outer two fan out ±12°, the
+// upright middle sits in front. Left card is at the back, so it has no shadow.
 const COLLAGE_POS = [
-  { left: 0, top: 0.14, width: 41.36, height: 99.86, shadow: false },
-  { left: 33.43, top: 0, width: 33.13, height: 87.74, shadow: true },
-  { left: 58.63, top: 0, width: 41.36, height: 99.86, shadow: true },
+  { left: 0, top: 0.14, width: 33.13, height: 87.74, rotate: -12, shadow: false },
+  { left: 33.43, top: 0, width: 33.13, height: 87.74, rotate: 0, shadow: true },
+  { left: 58.64, top: 0, width: 33.13, height: 87.74, rotate: 12, shadow: true },
 ];
 
 function PassedBadge({ label }: { label: string }) {
@@ -82,6 +84,7 @@ export function ProductQuality({
                     top: `${p.top}%`,
                     width: `${p.width}%`,
                     height: `${p.height}%`,
+                    transform: `rotate(${p.rotate}deg)`,
                   }}
                 >
                   <Image

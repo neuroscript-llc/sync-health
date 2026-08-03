@@ -37,7 +37,7 @@ export function FinalCta({
 
         <a
           href={content.ctaHref}
-          className="group flex items-center gap-2 rounded-full bg-brand py-4 pl-6 pr-5 font-mono text-xl uppercase text-white transition-colors duration-300 sm:border sm:border-brand sm:bg-brand/5 sm:text-brand sm:hover:border-transparent sm:hover:bg-brand sm:hover:text-white"
+          className="group flex items-center gap-2 rounded-full bg-ink py-4 pl-6 pr-5 font-mono text-xl uppercase leading-8 text-white transition-colors duration-300 hover:bg-ink/90"
         >
           {content.ctaLabel}
           <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />

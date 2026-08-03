@@ -45,7 +45,7 @@ function ProductCard({ product }: { product: CatalogProduct }) {
                 hover, fills coral + extends to full width (flex-grow). */}
             <Link
               href={product.ctaHref}
-              className="flex w-full items-center justify-center whitespace-nowrap rounded-full border border-brand px-5 py-3 font-mono text-base uppercase text-brand transition-all duration-300 sm:w-auto sm:grow-0 sm:justify-start sm:group-hover:grow sm:group-hover:bg-brand sm:group-hover:text-white"
+              className="flex w-full items-center justify-center whitespace-nowrap rounded-full border border-ink px-5 py-3 font-mono text-base uppercase text-ink transition-all duration-300 sm:w-auto sm:grow-0 sm:justify-start sm:group-hover:grow sm:group-hover:bg-ink sm:group-hover:text-white"
             >
               {product.ctaLabel}
             </Link>
@@ -146,7 +146,7 @@ export function Catalog({
         {/* CTA */}
         <Link
           href={content.ctaHref}
-          className="group inline-flex items-center gap-2 rounded-full border border-brand bg-brand/5 py-4 pl-6 pr-5 font-mono text-lg uppercase tracking-wide text-brand transition-colors duration-300 hover:border-transparent hover:bg-brand hover:text-white lg:text-xl"
+          className="group inline-flex items-center gap-2 rounded-full bg-ink py-4 pl-6 pr-5 font-mono text-lg uppercase leading-8 tracking-wide text-white transition-colors duration-300 hover:bg-ink/90 lg:text-xl"
         >
           {content.ctaLabel}
           <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />

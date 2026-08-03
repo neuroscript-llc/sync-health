@@ -7,14 +7,25 @@ import { ArrowDown, ArrowUpRight } from "lucide-react";
 import type { ProductContent } from "@/lib/content";
 
 function Radio({ active }: { active: boolean }) {
+  // 24px frame with a 20px disc. Selected: white disc with a coral tick.
+  // Unselected: 1.5px ink/48 outline ring.
   return (
-    <span
-      aria-hidden
-      className={`grid size-6 shrink-0 place-items-center rounded-full border-[1.5px] ${
-        active ? "border-brand" : "border-ink/25"
-      }`}
-    >
-      {active && <span className="size-3 rounded-full bg-brand" />}
+    <span aria-hidden className="grid size-6 shrink-0 place-items-center">
+      {active ? (
+        <span className="grid size-5 place-items-center rounded-full bg-white">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
+            <path
+              d="M2.5 6.2 5 8.6 9.5 3.4"
+              stroke="#D03516"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </span>
+      ) : (
+        <span className="size-5 rounded-full border-[1.5px] border-ink/[0.48]" />
+      )}
     </span>
   );
 }
@@ -157,7 +168,7 @@ export function ProductHero({
             <p className="text-lg leading-[1.5] text-ink/80">
               {content.planLabel}
             </p>
-            <div className="-mx-6 flex w-[calc(100%+48px)] snap-x snap-mandatory gap-3 overflow-x-auto scroll-px-6 px-6 pt-4 [scrollbar-width:none] sm:mx-0 sm:w-full sm:snap-none sm:overflow-visible sm:px-0 sm:pt-0 [&::-webkit-scrollbar]:hidden">
+            <div className="-mx-6 flex w-[calc(100%+48px)] snap-x snap-mandatory items-stretch gap-3 overflow-x-auto scroll-px-6 px-6 [scrollbar-width:none] sm:mx-0 sm:w-full sm:snap-none sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
             {content.plans.map((plan, i) => {
               const active = i === activePlan;
               return (
@@ -166,30 +177,47 @@ export function ProductHero({
                   type="button"
                   onClick={() => setActivePlan(i)}
                   aria-pressed={active}
-                  className={`relative flex w-[220px] shrink-0 snap-start items-center gap-3 rounded-2xl p-3 text-left transition-colors sm:w-auto sm:flex-1 ${
-                    active ? "border-2 border-brand" : "border border-ink/20"
+                  className={`relative flex w-[220px] shrink-0 snap-start flex-col items-start gap-3 rounded-2xl p-3 pt-4 text-left transition-colors sm:w-auto sm:flex-1 ${
+                    active ? "bg-brand" : "border border-ink/20"
                   }`}
                 >
                   {plan.badge && (
                     <span
-                      className={`absolute -top-3 z-10 rounded-md px-2 py-1 font-mono text-xs font-medium uppercase leading-4 tracking-[-0.04em] ${
+                      className={`absolute right-3 top-3 z-10 rounded-md px-2 py-1 font-mono text-xs font-medium uppercase leading-4 tracking-[-0.04em] ${
                         plan.badge.variant === "best"
-                          ? "right-2 bg-brand text-white"
-                          : "left-1/2 -translate-x-1/2 border border-ink bg-white text-ink"
+                          ? active
+                            ? "bg-white text-brand"
+                            : "bg-brand text-white"
+                          : "border border-ink bg-white text-ink"
                       }`}
                     >
                       {plan.badge.text}
                     </span>
                   )}
                   <Radio active={active} />
-                  <span className="flex flex-col gap-[3px]">
-                    <span className="text-xl font-medium leading-[30px] tracking-[-0.02em] text-ink">
-                      {plan.label}
+                  <span className="flex flex-col gap-1.5">
+                    <span className="flex flex-col gap-[3px]">
+                      <span
+                        className={`text-xl font-medium leading-[30px] tracking-[-0.02em] ${
+                          active ? "text-white" : "text-ink"
+                        }`}
+                      >
+                        {plan.label}
+                      </span>
+                      <span
+                        className={`text-base leading-[1.4] ${
+                          active ? "text-white/80" : "text-ink/80"
+                        }`}
+                      >
+                        {plan.price}
+                        {plan.period}
+                      </span>
                     </span>
-                    <span className="text-ink/80">
-                      <span className="text-base">{plan.price}</span>
-                      <span className="text-xs">{plan.period}</span>
-                    </span>
+                    {plan.save && (
+                      <span className="inline-flex w-fit items-center rounded-md border border-[#127B0A] bg-white px-2 py-1 font-mono text-xs font-medium uppercase leading-4 tracking-[-0.04em] text-[#127B0A]">
+                        {plan.save}
+                      </span>
+                    )}
                   </span>
                 </button>
               );
@@ -255,10 +283,10 @@ export function ProductHero({
           {/* Safety information */}
           <Link
             href={content.safetyHref}
-            className="inline-flex items-center gap-2 self-start rounded-full border border-ink py-3 pl-5 pr-4 font-mono text-base font-medium uppercase leading-6 text-ink transition-colors hover:border-brand hover:text-brand"
+            className="inline-flex items-center gap-2 self-start border-b border-ink pb-1 pt-2 font-mono text-sm font-medium uppercase leading-5 text-ink transition-colors hover:border-brand hover:text-brand"
           >
             {content.safetyLabel}
-            <ArrowUpRight className="size-5 shrink-0" aria-hidden />
+            <ArrowUpRight className="size-5 shrink-0" strokeWidth={1.5} aria-hidden />
           </Link>
         </div>
       </div>
