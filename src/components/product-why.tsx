@@ -94,8 +94,8 @@ export function ProductWhy({
 
   return (
     <section {...rest}>
-      <div className="mx-auto flex max-w-[1440px] flex-col items-start gap-10 px-5 py-12 xl:items-center xl:gap-16 xl:px-9 xl:py-20">
-        <h2 className="self-stretch text-[48px] font-medium leading-[56px] tracking-[-0.03em] text-ink xl:text-center xl:text-[56px] xl:leading-[64px] xl:tracking-[-0.02em]">
+      <div className="mx-auto flex max-w-[1440px] flex-col items-start gap-10 py-12 xl:items-center xl:gap-16 xl:px-9 xl:py-20">
+        <h2 className="self-stretch px-5 text-[48px] font-medium leading-[56px] tracking-[-0.03em] text-ink xl:px-0 xl:text-center xl:text-[56px] xl:leading-[64px] xl:tracking-[-0.02em]">
           {heading}
         </h2>
 
@@ -150,8 +150,10 @@ export function ProductWhy({
           />
         </div>
 
-        {/* Mobile: card carousel over the vial / blurred-hands backdrop */}
-        <div className="relative mx-auto h-[550px] w-full max-w-[350px] self-center overflow-hidden xl:hidden">
+        {/* Mobile: card carousel over the vial / blurred-hands backdrop.
+            Positions are percentages of a 350 x 550 design stage, so the whole
+            composition scales with the viewport instead of sitting inset. */}
+        <div className="relative mx-auto aspect-[350/550] w-full max-w-[600px] overflow-hidden xl:hidden">
           {/* Blurred coral hands + vial (backdrop) */}
           <Image
             src="/images/pdp/hand-top.png"
@@ -159,7 +161,7 @@ export function ProductWhy({
             aria-hidden
             width={918}
             height={467}
-            className="pointer-events-none absolute -left-8 -top-2 z-0 w-[300px] blur-[3px]"
+            className="pointer-events-none absolute right-[-2.3%] top-[-0.4%] z-0 w-[85.7%] blur-[3px]"
           />
           <Image
             src="/images/pdp/hand-bottom.png"
@@ -167,24 +169,24 @@ export function ProductWhy({
             aria-hidden
             width={933}
             height={458}
-            className="pointer-events-none absolute -right-10 top-[210px] z-0 w-[320px] blur-[3px]"
+            className="pointer-events-none absolute left-[-2.9%] top-[51.5%] z-0 w-[91.4%] blur-[3px]"
           />
           <Image
             src="/images/pdp/why-vial.png"
             alt={content.name}
             width={1267}
             height={1212}
-            className="absolute left-1/2 top-[58px] z-[1] w-[320px] -translate-x-1/2"
+            className="absolute left-1/2 top-[10.5%] z-[1] w-[91.4%] -translate-x-1/2"
           />
 
           {/* Blurred neighbouring cards peeking in from the sides */}
           <MobileWhyCard
             feature={features[(active - 1 + n) % n]}
-            className="absolute -left-[275px] top-[339px] z-10 w-[359px] blur-[4px]"
+            className="absolute left-[-78.6%] top-[61.6%] z-10 w-[102.6%] blur-[4px]"
           />
           <MobileWhyCard
             feature={features[(active + 1) % n]}
-            className="absolute left-[235px] top-[339px] z-10 w-[359px] blur-[4px]"
+            className="absolute left-[67.1%] top-[61.6%] z-10 w-[102.6%] blur-[4px]"
           />
 
           {/* Active card (sharp, full width, bottom) */}
@@ -193,15 +195,15 @@ export function ProductWhy({
             className="absolute bottom-0 left-0 z-20 w-full"
           />
 
-          {/* Prev / next arrows */}
-          <div className="absolute inset-x-0 top-[223px] z-30 flex items-center justify-between">
+          {/* Prev / next arrows (Figma Frame 9: 350px row, centred) */}
+          <div className="absolute left-1/2 top-[40.5%] z-30 flex w-[350px] max-w-full -translate-x-1/2 items-center justify-between">
             <button
               type="button"
               onClick={prev}
               aria-label="Previous feature"
               className="grid size-11 place-items-center rounded-full bg-[#DFD5CE] transition-opacity hover:opacity-80"
             >
-              <ArrowLeft className="size-5 text-ink" aria-hidden />
+              <ArrowLeft className="size-5 text-ink" strokeWidth={1} aria-hidden />
             </button>
             <button
               type="button"
@@ -209,7 +211,7 @@ export function ProductWhy({
               aria-label="Next feature"
               className="grid size-11 place-items-center rounded-full bg-[#DFD5CE] transition-opacity hover:opacity-80"
             >
-              <ArrowRight className="size-5 text-ink" aria-hidden />
+              <ArrowRight className="size-5 text-ink" strokeWidth={1} aria-hidden />
             </button>
           </div>
         </div>

@@ -12,14 +12,14 @@ const COLLAGE_POS = [
 
 function PassedBadge({ label }: { label: string }) {
   return (
-    <span className="inline-flex items-center gap-2 self-start rounded-lg bg-[#3E704E] py-1 pl-2.5 pr-3">
+    <span className="inline-flex shrink-0 items-center gap-1.5 self-start rounded-md bg-[#3E704E] px-2 py-1 sm:gap-2 sm:rounded-lg sm:pl-2.5 sm:pr-3">
       <svg
-        width="10"
-        height="7"
+        width="9"
+        height="6"
         viewBox="0 0 10 7"
         fill="none"
         aria-hidden="true"
-        className="shrink-0"
+        className="shrink-0 sm:h-[7px] sm:w-[10px]"
       >
         <path
           d="M1 3.6 3.5 6 9 1"
@@ -29,7 +29,7 @@ function PassedBadge({ label }: { label: string }) {
           strokeLinejoin="round"
         />
       </svg>
-      <span className="font-mono text-sm uppercase leading-[1.4] tracking-[-0.02em] text-white">
+      <span className="font-mono text-xs uppercase leading-4 tracking-[-0.02em] text-white sm:text-sm sm:leading-[1.4]">
         {label}
       </span>
     </span>
@@ -38,14 +38,14 @@ function PassedBadge({ label }: { label: string }) {
 
 function TestRow({ test }: { test: ProductQualityTest }) {
   return (
-    <div className="flex flex-col gap-3 border-t border-black/25 pt-6 sm:flex-row sm:gap-3">
-      <div className="flex flex-1 flex-col gap-3">
-        <h3 className="font-manrope text-[28px] font-medium leading-8 tracking-[-0.01em] text-ink">
+    <div className="flex flex-col gap-3 border-t border-black/25 pt-4 sm:flex-row sm:pt-6">
+      <div className="flex items-start justify-between gap-3 sm:flex-1 sm:flex-col sm:justify-start">
+        <h3 className="font-manrope text-xl font-medium leading-7 tracking-[-0.01em] text-ink sm:text-[28px] sm:leading-8">
           {test.name}
         </h3>
         <PassedBadge label={test.status} />
       </div>
-      <p className="text-base leading-[1.5] text-ink/80 sm:w-[320px] sm:shrink-0 sm:text-right">
+      <p className="text-sm leading-[1.4] text-ink/80 sm:w-[320px] sm:shrink-0 sm:text-right sm:text-base sm:leading-[1.5]">
         {test.description}
       </p>
     </div>
@@ -63,7 +63,7 @@ export function ProductQuality({
 
   return (
     <section {...rest}>
-      <div className="mx-auto flex max-w-[1440px] flex-col gap-16 px-9 py-20">
+      <div className="mx-auto flex max-w-[1440px] flex-col gap-12 px-5 py-12 sm:gap-16 sm:px-9 sm:py-20">
         {/* Row 1 — heading + photo collage */}
         <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
           <h2 className="max-w-[615px] text-4xl font-medium leading-[1.15] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[56px] lg:leading-[64px]">
@@ -109,7 +109,7 @@ export function ProductQuality({
             <p className="text-base leading-[1.5] text-ink/80">{body}</p>
           </div>
 
-          <div className="flex flex-1 flex-col gap-6">
+          <div className="flex flex-1 flex-col gap-4 sm:gap-6">
             {tests.map((test) => (
               <TestRow key={test.name} test={test} />
             ))}

@@ -100,7 +100,7 @@ export function Blog({
           {/* Article carousel */}
           <div
             ref={trackRef}
-            className="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] sm:gap-8 [&::-webkit-scrollbar]:hidden"
+            className="-mx-5 flex w-[calc(100%+40px)] snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth scroll-px-5 px-5 pb-2 [scrollbar-width:none] sm:mx-0 sm:w-full sm:scroll-px-0 sm:gap-8 sm:px-0 [&::-webkit-scrollbar]:hidden"
           >
             {content.articles.map((article, i) => (
               <ArticleCard key={i} article={article} />

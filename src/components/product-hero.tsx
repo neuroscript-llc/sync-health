@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
-import type { ProductContent } from "@/lib/content";
+import { ArrowDown, ArrowUpRight, ChevronDown } from "lucide-react";
+import type { ProductContent, ProductPlan } from "@/lib/content";
 
 function Radio({ active }: { active: boolean }) {
   // 24px frame with a 20px disc. Selected: white disc with a coral tick.
@@ -27,6 +27,153 @@ function Radio({ active }: { active: boolean }) {
         <span className="size-5 rounded-full border-[1.5px] border-ink/[0.48]" />
       )}
     </span>
+  );
+}
+
+/** Price line: amount at 14px, period ("/month") at 11px, both muted. */
+function PriceText({ price, period }: { price: string; period: string }) {
+  return (
+    <span className="text-sm leading-[1.4] text-ink/80">
+      {price}
+      <span className="text-[11px]">{period}</span>
+    </span>
+  );
+}
+
+/** Dropdown radio: coral ring + dot when selected, grey ring when not. */
+function PlanRadio({ active }: { active: boolean }) {
+  return (
+    <span aria-hidden className="grid size-6 shrink-0 place-items-center">
+      {active ? (
+        <span className="grid size-5 place-items-center rounded-full border-2 border-brand">
+          <span className="size-2 rounded-full bg-brand" />
+        </span>
+      ) : (
+        <span className="size-5 rounded-full border-[1.5px] border-ink/30" />
+      )}
+    </span>
+  );
+}
+
+/** Small pill: SAVE badge (green) or the recommended / best-value tag. */
+function PlanBadge({ badge }: { badge: NonNullable<ProductPlan["badge"]> }) {
+  return (
+    <span
+      className={`inline-flex shrink-0 items-center rounded-md px-2 py-1 font-mono text-xs font-medium uppercase leading-4 tracking-[-0.04em] ${
+        badge.variant === "best"
+          ? "bg-brand text-white"
+          : "border border-ink bg-white text-ink"
+      }`}
+    >
+      {badge.text}
+    </span>
+  );
+}
+
+/**
+ * Mobile plan selector (Figma): a collapsed "Select a plan" box that expands
+ * into a glassy dropdown listing every plan with a radio, price, savings pill
+ * and recommended / best-value tag.
+ */
+function PlanDropdown({
+  plans,
+  label,
+  active,
+  onSelect,
+}: {
+  plans: ProductPlan[];
+  label: string;
+  active: number;
+  onSelect: (i: number) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const selected = plans[active];
+
+  // Close when tapping outside the control.
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [open]);
+
+  return (
+    <div ref={ref} className="flex flex-col gap-1.5">
+      <p className="text-base leading-[1.4] text-ink/80">{label}</p>
+
+      <div className="relative">
+        {/* Trigger stays in place; the panel below floats over the page. */}
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          className="flex w-full items-center gap-2 rounded-2xl border border-ink/20 px-5 py-2 text-left"
+        >
+          <span className="flex flex-1 flex-col gap-0.5">
+            <span className="text-base font-medium leading-6 tracking-[-0.02em] text-ink">
+              {selected.label}
+            </span>
+            <PriceText price={selected.price} period={selected.period} />
+          </span>
+          <ChevronDown
+            className={`size-6 shrink-0 text-ink transition-transform duration-200 ${
+              open ? "rotate-180" : ""
+            }`}
+            aria-hidden
+          />
+        </button>
+
+        {open && (
+          <div
+            role="listbox"
+            className="absolute inset-x-0 top-full z-40 mt-2 flex flex-col gap-1 rounded-2xl border border-white bg-[#EAE8E1] p-1 shadow-[0_12px_40px_rgba(29,29,27,0.18)]"
+          >
+            {plans.map((plan, i) => {
+              const isActive = i === active;
+              return (
+                <Fragment key={plan.label}>
+                  {i > 0 && <div className="mx-2 h-px bg-ink/[0.08]" />}
+                  <button
+                    type="button"
+                    role="option"
+                    aria-selected={isActive}
+                    onClick={() => {
+                      onSelect(i);
+                      setOpen(false);
+                    }}
+                    className={`flex w-full items-center gap-2 rounded-2xl px-3 py-2 text-left transition-colors ${
+                      isActive
+                        ? "bg-white shadow-[0_4px_16px_rgba(29,29,27,0.12)]"
+                        : ""
+                    }`}
+                  >
+                    <PlanRadio active={isActive} />
+                    <span className="flex flex-1 flex-col gap-0.5">
+                      <span className="text-base font-medium leading-6 tracking-[-0.02em] text-ink">
+                        {plan.label}
+                      </span>
+                      <span className="flex flex-wrap items-center gap-2">
+                        <PriceText price={plan.price} period={plan.period} />
+                        {plan.save && (
+                          <span className="inline-flex items-center rounded border border-[#127B0A] bg-white px-1.5 py-[3px] font-mono text-[10px] font-medium uppercase leading-[14px] tracking-[-0.04em] text-[#127B0A]">
+                            {plan.save}
+                          </span>
+                        )}
+                      </span>
+                    </span>
+                    {plan.badge && <PlanBadge badge={plan.badge} />}
+                  </button>
+                </Fragment>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -163,8 +310,17 @@ export function ProductHero({
             <span className="text-lg text-ink/80">{content.price.period}</span>
           </p>
 
-          {/* Plan selector */}
-          <div className="flex flex-col gap-2">
+          {/* Plan selector — mobile: dropdown (Figma); desktop: plan cards */}
+          <div className="sm:hidden">
+            <PlanDropdown
+              plans={content.plans}
+              label={content.planLabel}
+              active={activePlan}
+              onSelect={setActivePlan}
+            />
+          </div>
+
+          <div className="hidden flex-col gap-2 sm:flex">
             <p className="text-lg leading-[1.5] text-ink/80">
               {content.planLabel}
             </p>
@@ -257,6 +413,7 @@ export function ProductHero({
                       className={`size-6 shrink-0 text-ink transition-transform duration-200 ${
                         open ? "rotate-180" : ""
                       }`}
+                      strokeWidth={1.5}
                       aria-hidden
                     />
                   </button>

@@ -48,6 +48,41 @@ function Pair({ item, active }: { item: Testimonial; active: boolean }) {
   );
 }
 
+/** Compact testimonial card (mobile, Figma): quote + small avatar with name/tag. */
+function CompactCard({ item }: { item: Testimonial }) {
+  return (
+    <div className="flex h-full w-full flex-col gap-6 rounded-[32px] border border-[#EAECEC] p-5">
+      <p className="text-xl font-medium leading-[30px] tracking-[-0.01em]">
+        {item.highlight && (
+          <span className="text-[#D03402]">{item.highlight}</span>
+        )}
+        <span className={item.highlight ? "text-ink/80" : "text-ink"}>
+          {item.quote}
+        </span>
+      </p>
+      <div className="mt-auto flex items-end gap-4">
+        <div className="h-20 w-[70px] shrink-0 overflow-hidden rounded-2xl bg-[#EAECEC]">
+          <img
+            src={item.image}
+            alt=""
+            width={70}
+            height={80}
+            className="h-full w-full object-cover"
+          />
+        </div>
+        <div className="flex flex-col gap-0.5">
+          <span className="text-xl font-normal leading-[30px] text-ink">
+            {item.name}
+          </span>
+          <span className="font-mono text-sm uppercase leading-5 tracking-[-0.02em] text-ink/80">
+            {item.tag}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function Testimonials({
   content,
   ...rest
@@ -86,9 +121,12 @@ export function Testimonials({
     setActive(best);
   };
 
-  // Centre the middle testimonial on mount.
+  // On mount: desktop centres the middle testimonial; mobile starts at the
+  // first card, left-aligned (Figma).
   useEffect(() => {
-    centerOn(middle, false);
+    const desktop = window.matchMedia("(min-width: 640px)").matches;
+    centerOn(desktop ? middle : 0, false);
+    if (!desktop) setActive(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -123,14 +161,20 @@ export function Testimonials({
         <div
           ref={trackRef}
           onScroll={onScroll}
-          className="flex w-full snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-2 [scrollbar-width:none] sm:gap-[120px] [&::-webkit-scrollbar]:hidden"
+          className="-mx-5 flex w-[calc(100%+40px)] snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth scroll-px-5 px-5 pb-2 [scrollbar-width:none] sm:mx-0 sm:w-full sm:scroll-px-0 sm:gap-[120px] sm:px-0 [&::-webkit-scrollbar]:hidden"
         >
           {content.testimonials.map((item, i) => (
             <div
               key={i}
-              className="w-[86%] shrink-0 snap-center sm:w-full lg:w-[817px]"
+              className="w-[300px] shrink-0 snap-start sm:w-full sm:snap-center lg:w-[817px]"
             >
-              <Pair item={item} active={i === active} />
+              {/* Mobile: compact card (Figma). Desktop: quote + portrait pair. */}
+              <div className="h-full sm:hidden">
+                <CompactCard item={item} />
+              </div>
+              <div className="hidden h-full sm:block">
+                <Pair item={item} active={i === active} />
+              </div>
             </div>
           ))}
         </div>
