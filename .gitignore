@@ -46,3 +46,6 @@ next-env.d.ts
 # Extra local/secret hardening
 *.local
 .claude/settings.local.json
+
+# local verification / temp files
+scratchpad/

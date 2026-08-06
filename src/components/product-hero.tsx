@@ -4,6 +4,7 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown, ArrowUpRight, ChevronDown } from "lucide-react";
+import { useCart } from "@/components/cart-provider";
 import type { ProductContent, ProductPlan } from "@/lib/content";
 
 function Radio({ active }: { active: boolean }) {
@@ -188,6 +189,24 @@ export function ProductHero({
   const [activeMethod, setActiveMethod] = useState(0);
   const [activePlan, setActivePlan] = useState(0);
   const [openItem, setOpenItem] = useState<number | null>(null);
+  const { addItem } = useCart();
+
+  const addToCart = () => {
+    addItem({
+      id: content.slug,
+      category: content.eyebrow,
+      name: content.name,
+      description: content.tagline,
+      image: content.gallery.main,
+      plans: content.plans.map((p) => ({
+        label: p.label,
+        price: p.price,
+        period: p.period,
+        save: p.save,
+      })),
+      planIndex: activePlan,
+    });
+  };
 
   return (
     <section {...rest}>
@@ -381,14 +400,15 @@ export function ProductHero({
             </div>
           </div>
 
-          {/* CTA */}
+          {/* CTA — opens the cart drawer (add-to-cart) */}
           <div className="flex flex-col gap-2">
-            <Link
-              href={content.cta.href}
+            <button
+              type="button"
+              onClick={addToCart}
               className="flex w-full items-center justify-center rounded-full bg-ink px-6 py-5 font-mono text-base uppercase leading-6 text-white transition-opacity hover:opacity-90"
             >
               {content.cta.label}
-            </Link>
+            </button>
             <p className="text-center text-xs leading-[1.4] text-ink/80">
               {content.cta.note}
             </p>

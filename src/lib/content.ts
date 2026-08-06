@@ -263,6 +263,8 @@ export type ProductContent = {
   eyebrow: string;
   name: string;
   description: string;
+  /** Short one-line tagline (used in cart line items, upsells). */
+  tagline: string;
   gallery: {
     main: string;
     /** First entry is the active/coloured thumb; the rest are muted. */
@@ -711,6 +713,7 @@ export const bpc157Product: ProductContent = {
   name: "BPC-157",
   description:
     "BPC-157 acts as a cellular signaling peptide that modulates angiogenic and growth factor expression. It mimics the body's natural gastric protective protein to support systemic connective tissue integrity and vascular endothelial response.",
+  tagline: "Tissue repair, joint and gut support.",
   gallery: {
     main: "/images/pdp/hero-main.png",
     thumbnails: [
@@ -840,4 +843,149 @@ export const bpc157Product: ProductContent = {
     ],
   },
   howItWorks: howItWorks,
+};
+
+export type CartUpsell = {
+  category: string;
+  name: string;
+  description: string;
+  image: string;
+  price: string;
+  href: string;
+};
+
+export type CartPaymentLogo = {
+  src: string;
+  alt: string;
+};
+
+export type CartContent = {
+  title: string;
+  emptyLabel: string;
+  /** Upsell heading when the cart is empty vs. populated. */
+  upsellTitle: string;
+  pairedTitle: string;
+  upsells: CartUpsell[];
+  /** Line-item labels (populated state). */
+  subscriptionLabel: string;
+  removeLabel: string;
+  switchPlanLabel: string;
+  shippingLabel: string;
+  shippingValue: string;
+  paymentLabel: string;
+  paymentLogos: CartPaymentLogo[];
+  /** Trailing "5+" chip after the logos. */
+  paymentMore: string;
+  goodieLabel: string;
+  goodieHighlight: string;
+  goodieText: string;
+  subtotalLabel: string;
+  viewCartLabel: string;
+  checkoutLabel: string;
+  noteLabel: string;
+  note: string;
+};
+
+export const cart: CartContent = {
+  title: "Cart",
+  emptyLabel: "Your cart is empty.",
+  upsellTitle: "You might like",
+  pairedTitle: "Paired well with",
+  subscriptionLabel: "Subscription plan",
+  removeLabel: "Remove",
+  switchPlanLabel: "Switch plan",
+  upsells: [
+    {
+      category: "Recovery",
+      name: "BPC-157",
+      description: "Tissue repair, joint and gut support.",
+      image: "/images/catalog/vial-recovery.png",
+      price: "$89.00",
+      href: "/products/bpc-157",
+    },
+    {
+      category: "Weight",
+      name: "Compounded Tirzepatide",
+      description: "Dual-action weight management, once weekly.",
+      image: "/images/catalog/vial-bpc157.png",
+      price: "$129.00",
+      href: "/products/bpc-157",
+    },
+    {
+      category: "Hormonal",
+      name: "Sermorelin",
+      description: "Growth-hormone support, recovery and sleep.",
+      image: "/images/catalog/vial-recovery.png",
+      price: "$99.00",
+      href: "/products/bpc-157",
+    },
+    {
+      category: "Skin",
+      name: "GHK-Cu",
+      description: "Skin, hair and collagen renewal.",
+      image: "/images/catalog/vial-bpc157.png",
+      price: "$79.00",
+      href: "/products/bpc-157",
+    },
+  ],
+  shippingLabel: "Shipping",
+  shippingValue: "Free",
+  paymentLabel: "Payment methods",
+  paymentLogos: [
+    { src: "/images/cart/mastercard.svg", alt: "Mastercard" },
+    { src: "/images/cart/maestro.svg", alt: "Maestro" },
+    { src: "/images/cart/visa.svg", alt: "Visa" },
+    { src: "/images/cart/unionpay.svg", alt: "UnionPay" },
+  ],
+  paymentMore: "5+",
+  goodieLabel: "Your exclusive goodie",
+  goodieHighlight: "24 hours",
+  goodieText: "Clinician review, included",
+  subtotalLabel: "Subtotal",
+  viewCartLabel: "View cart (3)",
+  checkoutLabel: "Check out",
+  noteLabel: "Note:",
+  note: "Shipping and taxes are estimated and will be confirmed at checkout.",
+};
+
+export type CartPageContent = {
+  eyebrow: string;
+  heading: string;
+  subtext: string;
+  summaryTitle: string;
+  subtotalLabel: string;
+  shippingLabel: string;
+  shippingValue: string;
+  taxLabel: string;
+  taxValue: string;
+  dueLabel: string;
+  checkoutLabel: string;
+  trustLine: string;
+  emptyLabel: string;
+  emptyCtaLabel: string;
+  emptyCtaHref: string;
+  stackedEyebrow: string;
+  stackedHeading: string;
+};
+
+/** Standalone /cart page (the "View cart" destination). Line items and totals
+    come from the live cart; the "often stacked" grid reuses catalog products. */
+export const cartPage: CartPageContent = {
+  eyebrow: "Your cart",
+  heading: "Cart",
+  subtext: "Nothing here is charged yet. Proceed to check-out to buy the products.",
+  summaryTitle: "Order summary",
+  subtotalLabel: "Subtotal",
+  shippingLabel: "Shipping · cold-chain",
+  shippingValue: "Free",
+  taxLabel: "Estimated tax",
+  taxValue: "$0.00",
+  dueLabel: "Due today",
+  checkoutLabel: "Continue to checkout",
+  trustLine: "Secure checkout · HIPAA-compliant · Cancel anytime",
+  emptyLabel: "Your cart is empty.",
+  emptyCtaLabel: "Browse protocols",
+  emptyCtaHref: "/products/bpc-157",
+  stackedEyebrow: "Often stacked with this",
+  stackedHeading: "The architecture of in sync.",
 };

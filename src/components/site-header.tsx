@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronDown, Search } from "lucide-react";
 import { ArrowIcon } from "@/components/arrow-icon";
+import { CartButton } from "@/components/cart-button";
 import { MobileMenu } from "@/components/mobile-menu";
 import { menuForLabel } from "@/components/nav-links";
 import type { SiteHeaderContent } from "@/lib/content";
@@ -171,6 +172,8 @@ export function SiteHeader({ content }: { content: SiteHeaderContent }) {
           >
             <Search className="size-5" aria-hidden />
           </button>
+
+          <CartButton />
 
           <Link
             href={content.loginHref}
