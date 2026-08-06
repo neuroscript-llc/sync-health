@@ -288,7 +288,7 @@ function InfoRow({
 }) {
   return (
     <div
-      className={`flex items-center justify-between gap-4 py-4 ${
+      className={`flex items-center justify-between gap-4 py-3 sm:py-4 ${
         first ? "" : "border-t border-ink/[0.12]"
       }`}
     >
@@ -382,7 +382,7 @@ export function CartDrawer({ content }: { content: CartContent }) {
         role="dialog"
         aria-modal="true"
         aria-label={content.title}
-        className={`absolute right-0 top-0 flex h-full w-[calc(100%-20px)] max-w-[980px] flex-col gap-6 overflow-hidden rounded-l-[32px] bg-[#FCF8F1] px-4 py-8 shadow-[-24px_0_80px_rgba(29,29,27,0.18)] transition-transform duration-300 ease-out sm:w-full sm:rounded-none sm:px-10 sm:py-8 ${
+        className={`absolute right-0 top-0 flex h-full w-[calc(100%-20px)] max-w-[980px] flex-col gap-4 overflow-hidden rounded-l-[32px] bg-[#FCF8F1] px-4 py-6 shadow-[-24px_0_80px_rgba(29,29,27,0.18)] transition-transform duration-300 ease-out sm:w-full sm:gap-6 sm:rounded-none sm:px-10 sm:py-8 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -409,7 +409,7 @@ export function CartDrawer({ content }: { content: CartContent }) {
         {/* Middle — the one scroll region. The header above and the summary /
             checkout below stay pinned; the line item(s) and the upsells scroll
             together as one block, so nothing clips at any screen height. */}
-        <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-6">
           {/* Cart body — empty card grows to fill; line items are natural. */}
           {empty ? (
             <div className="grid min-h-[196px] w-full shrink-0 grow place-items-center rounded-[18px] border border-ink/[0.08] bg-white">
@@ -424,7 +424,7 @@ export function CartDrawer({ content }: { content: CartContent }) {
 
           {/* You might like / Paired well with — its own block, full height,
               scrolls with the region above. */}
-          <div className="flex shrink-0 flex-col gap-2 sm:gap-5">
+          <div className="mt-auto flex shrink-0 flex-col gap-2 sm:mt-0 sm:gap-5">
             <h3 className="text-xl font-medium leading-7 tracking-[-0.01em] text-ink">
               <span className="sm:hidden">{content.pairedTitle}</span>
               <span className="hidden sm:inline">
@@ -535,7 +535,7 @@ export function CartDrawer({ content }: { content: CartContent }) {
             </div>
           )}
 
-          <div className={`mt-2 flex-col items-center gap-5 ${empty ? "flex sm:hidden" : "flex"}`}>
+          <div className={`mt-2 flex-col items-center gap-3 sm:gap-5 ${empty ? "flex sm:hidden" : "flex"}`}>
             <button
               type="button"
               disabled={empty}
