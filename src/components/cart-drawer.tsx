@@ -217,21 +217,25 @@ function DesktopUpsellCard({ item }: { item: CartUpsell }) {
           planIndex: 0,
         })
       }
-      className="flex shrink-0 items-end gap-3 rounded-2xl bg-white p-2 text-left transition-shadow hover:shadow-[0_8px_32px_rgba(29,29,27,0.08)]"
+      className="flex shrink-0 items-stretch gap-3 rounded-2xl bg-white p-2 text-left transition-shadow hover:shadow-[0_8px_32px_rgba(29,29,27,0.08)]"
     >
-      <div className="relative size-[122px] shrink-0 overflow-hidden rounded-lg bg-[#EBDCCD]">
+      <div className="relative size-[122px] shrink-0 self-center overflow-hidden rounded-lg bg-[#EBDCCD]">
         <Image src={item.image} alt={item.name} fill sizes="122px" className="object-cover" />
       </div>
-      <div className="flex w-[240px] flex-col gap-3">
+      {/* Category top-aligns across cards; the divider + price pin to the
+          bottom so cards stay aligned even when taglines differ in length. */}
+      <div className="flex w-[240px] flex-col">
         <div className="flex flex-col gap-0.5">
           <p className="font-mono text-xs font-medium uppercase leading-5 text-brand">
             {item.category}
           </p>
           <h4 className="text-xl font-medium leading-[30px] text-ink">{item.name}</h4>
-          <p className="text-sm leading-5 text-ink/[0.72]">{item.description}</p>
+          <p className="line-clamp-1 text-sm leading-5 text-ink/[0.72]">{item.description}</p>
         </div>
-        <div className="h-px w-full bg-ink/[0.12]" />
-        <p className="text-base leading-6 text-ink">{item.price}</p>
+        <div className="mt-auto flex flex-col gap-3 pt-3">
+          <div className="h-px w-full bg-ink/[0.12]" />
+          <p className="text-base leading-6 text-ink">{item.price}</p>
+        </div>
       </div>
     </button>
   );
@@ -402,23 +406,27 @@ export function CartDrawer({ content }: { content: CartContent }) {
           </button>
         </div>
 
-        {/* Scrollable middle — header + summary stay pinned so the sheet fits
-            any screen height without the checkout dropping off-screen. */}
-        <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto sm:gap-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {/* Cart body — line items or empty state */}
-          {empty ? (
-            <div className="grid h-[196px] w-full shrink-0 place-items-center rounded-[18px] border border-ink/[0.08] bg-white sm:h-[196px]">
-              <p className="text-xl font-medium leading-[30px] text-ink">{content.emptyLabel}</p>
-            </div>
-          ) : (
-            <>
-              <MobileLineItems content={content} />
-              <DesktopLineItems content={content} />
-            </>
-          )}
+        {/* Middle — no internal scroll. Header + summary stay pinned; the cart
+            body is always fully visible and the upsell rail fills (and only on
+            very short screens gracefully clips) the remaining height. */}
+        <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-hidden sm:gap-8">
+          {/* Cart body — line items or empty state (never clipped) */}
+          <div className="shrink-0">
+            {empty ? (
+              <div className="grid h-[196px] w-full place-items-center rounded-[18px] border border-ink/[0.08] bg-white">
+                <p className="text-xl font-medium leading-[30px] text-ink">{content.emptyLabel}</p>
+              </div>
+            ) : (
+              <>
+                <MobileLineItems content={content} />
+                <DesktopLineItems content={content} />
+              </>
+            )}
+          </div>
 
-          {/* Upsells — pushed to the bottom of the flexible area on mobile. */}
-          <div className="mt-auto flex flex-col gap-2 sm:mt-0 sm:gap-5">
+          {/* Upsells — fill the remaining space; the whole block (title
+              included) clips together on very short screens. */}
+          <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden sm:gap-5">
             <h3 className="text-xl font-medium leading-7 tracking-[-0.01em] text-ink">
               <span className="sm:hidden">{content.pairedTitle}</span>
               <span className="hidden sm:inline">
