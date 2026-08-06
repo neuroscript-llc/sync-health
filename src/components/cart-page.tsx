@@ -9,65 +9,135 @@ import type { CartPageContent, CatalogContent } from "@/lib/content";
 
 const STACKED_BG = "linear-gradient(180deg, #F0F0E6 20%, #FFFFFF 100%)";
 
+/** Shared quantity stepper. `pill` rounds fully (desktop); otherwise 12px (mobile). */
+function QtyStepper({
+  qty,
+  onDec,
+  onInc,
+  pill,
+}: {
+  qty: number;
+  onDec: () => void;
+  onInc: () => void;
+  pill?: boolean;
+}) {
+  return (
+    <div
+      className={`flex w-fit items-center gap-1 border border-ink/[0.18] px-3 py-1.5 ${
+        pill ? "rounded-full" : "rounded-xl"
+      }`}
+    >
+      <button
+        type="button"
+        onClick={onDec}
+        aria-label="Decrease quantity"
+        className="grid size-5 place-items-center text-ink transition-opacity hover:opacity-60"
+      >
+        <Minus className="size-4" strokeWidth={1.5} aria-hidden />
+      </button>
+      <span className="w-6 text-center text-base font-medium leading-6 text-ink">{qty}</span>
+      <button
+        type="button"
+        onClick={onInc}
+        aria-label="Increase quantity"
+        className="grid size-5 place-items-center text-ink transition-opacity hover:opacity-60"
+      >
+        <Plus className="size-4" strokeWidth={1.5} aria-hidden />
+      </button>
+    </div>
+  );
+}
+
+/** Cart line item. Mobile (Figma 1030-15080): 64px thumb, plan badge, dark
+    REMOVE. Desktop (Figma 1030-15207): 160px thumb, description, red REMOVE. */
 function CartPageItem({ id }: { id: string }) {
   const { items, updateQty, removeItem } = useCart();
   const item = items.find((i) => i.id === id);
   if (!item) return null;
   const plan = item.plans[item.planIndex];
   return (
-    <div className="flex gap-2 rounded-[18px] border border-ink/[0.08] bg-white p-2">
-      <div className="relative size-[120px] shrink-0 overflow-hidden rounded-xl bg-[#9B7C67] sm:size-40">
-        <Image src={item.image} alt={item.name} fill sizes="160px" className="object-cover" />
-      </div>
-      <div className="flex flex-1 flex-col justify-between gap-4 py-2 pr-1">
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex flex-col gap-0.5">
-            <p className="font-mono text-xs font-medium uppercase leading-5 text-brand">
-              {item.category}
-            </p>
-            <h3 className="text-xl font-medium leading-[30px] text-ink">{item.name}</h3>
-            <p className="text-sm leading-5 text-ink/80">{item.description}</p>
-          </div>
-          <div className="flex shrink-0 flex-col items-end gap-1">
-            <span className="text-xl font-medium leading-tight text-ink">{plan.price}</span>
-            <span className="font-mono text-xs uppercase leading-4 text-ink/80">
-              {plan.period}
-            </span>
-          </div>
+    <>
+      {/* Mobile */}
+      <div className="flex gap-2 rounded-[18px] border border-ink/[0.08] bg-white p-2 sm:hidden">
+        <div className="relative size-16 shrink-0 overflow-hidden rounded-xl bg-[#9B7C67]">
+          <Image src={item.image} alt={item.name} fill sizes="64px" className="object-cover" />
         </div>
-        <div className="flex items-end justify-between gap-3">
-          <div className="flex items-center gap-1 rounded-full border border-ink/[0.18] px-3 py-1.5">
+        <div className="flex flex-1 justify-end gap-2 py-1 pr-1">
+          <div className="flex flex-1 flex-col gap-1.5">
+            <div className="flex flex-col gap-0.5">
+              <p className="font-mono text-[10px] font-medium uppercase leading-4 text-brand">
+                {item.category}
+              </p>
+              <h3 className="text-lg font-medium leading-7 text-ink">{item.name}</h3>
+            </div>
+            <span className="w-fit rounded-md border border-brand bg-white px-2 py-1 font-mono text-xs font-medium uppercase leading-5 tracking-[-0.04em] text-brand">
+              {plan.label}
+            </span>
+            <QtyStepper
+              qty={item.qty}
+              onDec={() => updateQty(item.id, -1)}
+              onInc={() => updateQty(item.id, 1)}
+            />
+          </div>
+          <div className="flex flex-col items-end justify-between">
+            <div className="flex flex-col items-end gap-1">
+              <span className="text-xl font-medium leading-tight text-ink">{plan.price}</span>
+              <span className="font-mono text-xs uppercase leading-4 text-ink/80">
+                {plan.period}
+              </span>
+            </div>
             <button
               type="button"
-              onClick={() => updateQty(item.id, -1)}
-              aria-label="Decrease quantity"
-              className="grid size-5 place-items-center text-ink transition-opacity hover:opacity-60"
+              onClick={() => removeItem(item.id)}
+              className="inline-flex items-center gap-2 border-b border-ink pb-0.5 font-mono text-sm font-medium uppercase leading-5 text-ink transition-opacity hover:opacity-70"
             >
-              <Minus className="size-4" strokeWidth={1.5} aria-hidden />
-            </button>
-            <span className="w-6 text-center text-base font-medium leading-6 text-ink">
-              {item.qty}
-            </span>
-            <button
-              type="button"
-              onClick={() => updateQty(item.id, 1)}
-              aria-label="Increase quantity"
-              className="grid size-5 place-items-center text-ink transition-opacity hover:opacity-60"
-            >
-              <Plus className="size-4" strokeWidth={1.5} aria-hidden />
+              <Trash2 className="size-5" strokeWidth={1.5} aria-hidden />
+              Remove
             </button>
           </div>
-          <button
-            type="button"
-            onClick={() => removeItem(item.id)}
-            className="inline-flex items-center gap-2 border-b border-[#BA0A0A] pb-0.5 font-mono text-sm font-medium uppercase leading-5 text-[#BA0A0A] transition-opacity hover:opacity-70"
-          >
-            <Trash2 className="size-5" strokeWidth={1.5} aria-hidden />
-            Remove
-          </button>
         </div>
       </div>
-    </div>
+
+      {/* Desktop */}
+      <div className="hidden gap-2 rounded-[18px] border border-ink/[0.08] bg-white p-2 sm:flex">
+        <div className="relative size-40 shrink-0 overflow-hidden rounded-xl bg-[#9B7C67]">
+          <Image src={item.image} alt={item.name} fill sizes="160px" className="object-cover" />
+        </div>
+        <div className="flex flex-1 flex-col justify-between gap-4 py-2 pr-1">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex flex-col gap-0.5">
+              <p className="font-mono text-xs font-medium uppercase leading-5 text-brand">
+                {item.category}
+              </p>
+              <h3 className="text-xl font-medium leading-[30px] text-ink">{item.name}</h3>
+              <p className="text-sm leading-5 text-ink/80">{item.description}</p>
+            </div>
+            <div className="flex shrink-0 flex-col items-end gap-1">
+              <span className="text-xl font-medium leading-tight text-ink">{plan.price}</span>
+              <span className="font-mono text-xs uppercase leading-4 text-ink/80">
+                {plan.period}
+              </span>
+            </div>
+          </div>
+          <div className="flex items-end justify-between gap-3">
+            <QtyStepper
+              qty={item.qty}
+              onDec={() => updateQty(item.id, -1)}
+              onInc={() => updateQty(item.id, 1)}
+              pill
+            />
+            <button
+              type="button"
+              onClick={() => removeItem(item.id)}
+              className="inline-flex items-center gap-2 border-b border-[#BA0A0A] pb-0.5 font-mono text-sm font-medium uppercase leading-5 text-[#BA0A0A] transition-opacity hover:opacity-70"
+            >
+              <Trash2 className="size-5" strokeWidth={1.5} aria-hidden />
+              Remove
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 
@@ -93,15 +163,19 @@ export function CartPageBody({
   return (
     <>
       {/* Cart */}
-      <section className="mx-auto flex w-full max-w-[1368px] flex-col gap-11 px-5 py-12 sm:px-9 sm:py-20">
+      <section className="mx-auto flex w-full max-w-[1368px] flex-col gap-10 px-5 py-12 sm:gap-11 sm:px-9 sm:py-20">
         <div className="flex flex-col gap-4">
-          <p className="font-mono text-sm font-medium uppercase tracking-[0.04em] text-brand">
-            {content.eyebrow}
+          <div className="flex flex-col gap-1 sm:gap-4">
+            <p className="font-mono text-sm font-medium uppercase tracking-[0.08em] text-brand sm:tracking-[0.04em]">
+              {content.eyebrow}
+            </p>
+            <h1 className="text-[48px] font-medium leading-[56px] tracking-[-0.03em] text-ink sm:text-[56px] sm:leading-[64px] sm:tracking-[-0.02em]">
+              {content.heading}
+            </h1>
+          </div>
+          <p className="max-w-[606px] text-base leading-[1.5] text-ink/80 sm:text-lg">
+            {content.subtext}
           </p>
-          <h1 className="text-5xl font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-[56px] sm:leading-[64px]">
-            {content.heading}
-          </h1>
-          <p className="max-w-[606px] text-lg leading-[1.5] text-ink/80">{content.subtext}</p>
         </div>
 
         {empty ? (
@@ -118,14 +192,14 @@ export function CartPageBody({
         ) : (
           <div className="flex flex-col gap-10 lg:flex-row">
             {/* Items */}
-            <div className="flex flex-1 flex-col gap-3.5">
+            <div className="flex flex-1 flex-col gap-3 sm:gap-3.5">
               {items.map((item) => (
                 <CartPageItem key={item.id} id={item.id} />
               ))}
             </div>
 
             {/* Order summary */}
-            <aside className="flex h-fit w-full flex-col gap-5 rounded-[20px] border border-ink/[0.12] bg-white p-5 lg:w-[448px] lg:shrink-0">
+            <aside className="flex h-fit w-full flex-col gap-3 rounded-[20px] border border-ink/[0.12] bg-white p-4 sm:gap-5 sm:p-5 lg:w-[448px] lg:shrink-0">
               <p className="font-mono text-sm font-medium uppercase tracking-[0.06em] text-brand">
                 {content.summaryTitle}
               </p>
