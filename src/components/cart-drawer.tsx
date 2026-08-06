@@ -406,55 +406,35 @@ export function CartDrawer({ content }: { content: CartContent }) {
           </button>
         </div>
 
-        {/* Middle — no internal scroll. Header + summary stay pinned; the cart
-            body is always fully visible and the upsell rail fills (and only on
-            very short screens gracefully clips) the remaining height. */}
-        <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-hidden">
-          {/* Cart items. Empty: fills the space (large empty card). Populated:
-              on mobile the line item stays fully visible (shrink-0) and the
-              upsell rail flexes instead; on desktop the list is the flex/scroll
-              region. */}
-          <div
-            className={
-              empty
-                ? "flex min-h-0 flex-1 flex-col overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-                : "flex shrink-0 flex-col sm:min-h-0 sm:flex-1 sm:overflow-y-auto sm:[scrollbar-width:none] sm:[&::-webkit-scrollbar]:hidden"
-            }
-          >
-            {empty ? (
-              <div className="grid min-h-[140px] flex-1 w-full place-items-center rounded-[18px] border border-ink/[0.08] bg-white">
-                <p className="text-xl font-medium leading-[30px] text-ink">{content.emptyLabel}</p>
-              </div>
-            ) : (
-              <>
-                <MobileLineItems content={content} />
-                <DesktopLineItems content={content} />
-              </>
-            )}
-          </div>
+        {/* Middle — the one scroll region. The header above and the summary /
+            checkout below stay pinned; the line item(s) and the upsells scroll
+            together as one block, so nothing clips at any screen height. */}
+        <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {/* Cart body — empty card grows to fill; line items are natural. */}
+          {empty ? (
+            <div className="grid min-h-[196px] w-full shrink-0 grow place-items-center rounded-[18px] border border-ink/[0.08] bg-white">
+              <p className="text-xl font-medium leading-[30px] text-ink">{content.emptyLabel}</p>
+            </div>
+          ) : (
+            <div className="shrink-0">
+              <MobileLineItems content={content} />
+              <DesktopLineItems content={content} />
+            </div>
+          )}
 
-          {/* You might like / Paired well with — a separate section, always
-              fully visible (never clipped), distinct from the cart list. */}
-          <div
-            className={`flex flex-col gap-2 sm:gap-5 ${
-              empty ? "shrink-0" : "min-h-0 flex-1 sm:flex-none"
-            }`}
-          >
-            <h3 className="shrink-0 text-xl font-medium leading-7 tracking-[-0.01em] text-ink">
+          {/* You might like / Paired well with — its own block, full height,
+              scrolls with the region above. */}
+          <div className="flex shrink-0 flex-col gap-2 sm:gap-5">
+            <h3 className="text-xl font-medium leading-7 tracking-[-0.01em] text-ink">
               <span className="sm:hidden">{content.pairedTitle}</span>
               <span className="hidden sm:inline">
                 {empty ? content.upsellTitle : content.pairedTitle}
               </span>
             </h3>
 
-            {/* Mobile: vertical compact rows. Empty state caps to ~2 rows;
-                populated fills the flexible rail. Either way it scrolls for
-                overflow so the summary never gets pushed off-screen. */}
-            <div
-              className={`flex flex-col gap-2 overflow-y-auto [scrollbar-width:none] sm:hidden [&::-webkit-scrollbar]:hidden ${
-                empty ? "max-h-[176px]" : "min-h-0 flex-1"
-              }`}
-            >
+            {/* Mobile: vertical compact rows (natural height; scroll along with
+                the whole region above rather than clipping). */}
+            <div className="flex flex-col gap-2 sm:hidden">
               {content.upsells.map((item, i) => (
                 <MobileUpsellRow key={i} item={item} />
               ))}
