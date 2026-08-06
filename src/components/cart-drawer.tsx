@@ -288,7 +288,7 @@ function InfoRow({
 }) {
   return (
     <div
-      className={`flex items-center justify-between gap-4 py-4 sm:py-5 ${
+      className={`flex items-center justify-between gap-4 py-3.5 sm:py-4 ${
         first ? "" : "border-t border-ink/[0.12]"
       }`}
     >
@@ -382,7 +382,7 @@ export function CartDrawer({ content }: { content: CartContent }) {
         role="dialog"
         aria-modal="true"
         aria-label={content.title}
-        className={`absolute right-0 top-0 flex h-full w-[calc(100%-20px)] max-w-[980px] flex-col gap-6 overflow-hidden rounded-l-[32px] bg-[#FCF8F1] px-4 py-8 shadow-[-24px_0_80px_rgba(29,29,27,0.18)] transition-transform duration-300 ease-out sm:w-full sm:gap-8 sm:rounded-none sm:p-10 ${
+        className={`absolute right-0 top-0 flex h-full w-[calc(100%-20px)] max-w-[980px] flex-col gap-5 overflow-hidden rounded-l-[32px] bg-[#FCF8F1] px-4 py-8 shadow-[-24px_0_80px_rgba(29,29,27,0.18)] transition-transform duration-300 ease-out sm:w-full sm:gap-6 sm:rounded-none sm:px-10 sm:py-8 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -409,11 +409,13 @@ export function CartDrawer({ content }: { content: CartContent }) {
         {/* Middle — no internal scroll. Header + summary stay pinned; the cart
             body is always fully visible and the upsell rail fills (and only on
             very short screens gracefully clips) the remaining height. */}
-        <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-hidden sm:gap-8">
-          {/* Cart body — line items or empty state (never clipped) */}
-          <div className="shrink-0">
+        <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-hidden sm:gap-6">
+          {/* Cart items — the flexible region. The added-to-cart list lives
+              here and scrolls only if it gets long; the empty-state card fills
+              the available height. */}
+          <div className="flex min-h-0 flex-1 flex-col overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {empty ? (
-              <div className="grid h-[196px] w-full place-items-center rounded-[18px] border border-ink/[0.08] bg-white">
+              <div className="grid min-h-[140px] flex-1 w-full place-items-center rounded-[18px] border border-ink/[0.08] bg-white">
                 <p className="text-xl font-medium leading-[30px] text-ink">{content.emptyLabel}</p>
               </div>
             ) : (
@@ -424,9 +426,9 @@ export function CartDrawer({ content }: { content: CartContent }) {
             )}
           </div>
 
-          {/* Upsells — fill the remaining space; the whole block (title
-              included) clips together on very short screens. */}
-          <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden sm:gap-5">
+          {/* You might like / Paired well with — a separate section, always
+              fully visible (never clipped), distinct from the cart list. */}
+          <div className="flex shrink-0 flex-col gap-2 sm:gap-5">
             <h3 className="text-xl font-medium leading-7 tracking-[-0.01em] text-ink">
               <span className="sm:hidden">{content.pairedTitle}</span>
               <span className="hidden sm:inline">
