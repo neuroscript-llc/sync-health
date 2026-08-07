@@ -63,14 +63,16 @@ export function ProductQuality({
 
   return (
     <section {...rest}>
-      <div className="mx-auto flex max-w-[1440px] flex-col gap-12 px-5 py-12 sm:gap-16 sm:px-9 sm:py-20">
+      {/* Mobile (Figma): white rounded card, no collage. sm+ resets to the
+          full desktop layout (collage beside the heading, larger type). */}
+      <div className="mx-auto flex max-w-[1440px] flex-col gap-10 rounded-2xl bg-white px-5 py-12 sm:gap-16 sm:rounded-none sm:bg-transparent sm:px-9 sm:py-20">
         {/* Row 1 — heading + photo collage */}
         <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
-          <h2 className="max-w-[615px] text-4xl font-medium leading-[1.15] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[56px] lg:leading-[64px]">
+          <h2 className="max-w-[615px] text-[48px] font-medium leading-[56px] tracking-[-0.03em] text-ink lg:text-[56px] lg:leading-[64px] lg:tracking-[-0.02em]">
             {heading}
           </h2>
 
-          <div className="relative aspect-[326/160] w-full max-w-[326px] shrink-0 self-center lg:self-start">
+          <div className="relative hidden aspect-[326/160] w-full max-w-[326px] shrink-0 self-center sm:block lg:self-start">
             {collage.map((src, i) => {
               const p = COLLAGE_POS[i];
               return (
@@ -101,12 +103,14 @@ export function ProductQuality({
         </div>
 
         {/* Row 2 — supporting copy + test results */}
-        <div className="flex flex-col gap-12 xl:flex-row xl:gap-16">
-          <div className="flex flex-col gap-6 xl:max-w-[615px] xl:flex-1">
-            <p className="text-2xl font-medium leading-[1.4] tracking-[-0.03em] text-ink/80">
+        <div className="flex flex-col gap-10 xl:flex-row xl:gap-16">
+          <div className="flex flex-col gap-4 sm:gap-6 xl:max-w-[615px] xl:flex-1">
+            <p className="text-xl font-medium leading-[28px] tracking-[-0.03em] text-ink/80 sm:text-2xl sm:leading-[1.4]">
               {lead}
             </p>
-            <p className="text-base leading-[1.5] text-ink/80">{body}</p>
+            <p className="text-sm leading-[1.4] text-ink/80 sm:text-base sm:leading-[1.5]">
+              {body}
+            </p>
           </div>
 
           <div className="flex flex-1 flex-col gap-4 sm:gap-6">

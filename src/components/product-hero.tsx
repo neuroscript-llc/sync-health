@@ -224,7 +224,10 @@ export function ProductHero({
             />
           </div>
 
-          <div className="flex gap-3">
+          {/* Thumbnails: fixed 64px squares (Figma), so they never balloon on
+              tablet widths. Only stretch to fill at xl, where the gallery is a
+              fixed 560px column. */}
+          <div className="flex justify-center gap-2 xl:justify-start xl:gap-3">
             {content.gallery.thumbnails.map((thumb, i) => {
               const active = i === activeThumb;
               return (
@@ -233,13 +236,13 @@ export function ProductHero({
                   type="button"
                   onClick={() => setActiveThumb(i)}
                   aria-label={`View image ${i + 1}`}
-                  className={`flex-1 rounded-2xl transition-opacity ${
+                  className={`box-border aspect-square min-w-0 max-w-[64px] flex-1 rounded-xl p-1 transition-opacity xl:max-w-none ${
                     active
-                      ? "border-2 border-brand p-1.5"
-                      : "border border-ink/20 p-1 opacity-60 hover:opacity-100"
+                      ? "border-2 border-brand"
+                      : "border border-ink/20 opacity-60 hover:opacity-100"
                   }`}
                 >
-                  <span className="block aspect-square w-full overflow-hidden rounded-xl">
+                  <span className="block size-full overflow-hidden rounded-lg">
                     <Image
                       src={thumb}
                       alt=""

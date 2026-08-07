@@ -426,8 +426,8 @@ export const quality: QualityContent = {
 };
 
 export const catalog: CatalogContent = {
-  eyebrow: "The catalog",
-  heading: "Peptides, prescribed\n& personalized.",
+  eyebrow: "Our formulatory",
+  heading: "The architecture of in sync.",
   toggle: { options: ["Single", "Advanced"], active: "Single" },
   products: [
     {
@@ -988,4 +988,175 @@ export const cartPage: CartPageContent = {
   emptyCtaHref: "/products/bpc-157",
   stackedEyebrow: "Often stacked with this",
   stackedHeading: "The architecture of in sync.",
+};
+
+export type CheckoutConsent = { title: string; body: string };
+export type CheckoutPayRow = {
+  id: string;
+  label: string;
+  /** Chip logo SVG. Self-contained (own 56×32 box) unless `boxed`. */
+  logo?: string;
+  /** Rendered logo width in px. */
+  logoW?: number;
+  /** Bare badge that must be centred inside a white 56×32 chip box. */
+  boxed?: boolean;
+};
+export type CheckoutFooterLink = { label: string; href: string };
+
+export type CheckoutContent = {
+  expressLabel: string;
+  orLabel: string;
+  contact: {
+    title: string;
+    signInLabel: string;
+    signInHref: string;
+    emailPlaceholder: string;
+    optInLabel: string;
+  };
+  delivery: {
+    title: string;
+    countryLabel: string;
+    countryValue: string;
+    firstName: string;
+    lastName: string;
+    company: string;
+    address: string;
+    address2: string;
+    zip: string;
+    city: string;
+    phone: string;
+  };
+  shipping: { title: string; empty: string };
+  consent: { title: string; subtitle: string; items: CheckoutConsent[] };
+  payment: {
+    title: string;
+    subtitle: string;
+    cardLabel: string;
+    logos: CartPaymentLogo[];
+    logosMore: string;
+    cardNumber: string;
+    expiry: string;
+    cvc: string;
+    nameOnCard: string;
+    billingSame: string;
+    altRows: CheckoutPayRow[];
+    saveTitle: string;
+    saveBody: string;
+    saveDismiss: string;
+  };
+  discountPlaceholder: string;
+  applyLabel: string;
+  summary: {
+    subscriptionLabel: string;
+    subtotalLabel: string;
+    reviewLabel: string;
+    reviewValue: string;
+    shippingLabel: string;
+    shippingValue: string;
+    totalLabel: string;
+    totalNote: string;
+    taxNote: string;
+  };
+  payNow: string;
+  payDisclaimer: string;
+  footerLinks: CheckoutFooterLink[];
+};
+
+/** Dedicated /checkout page. The order summary is driven by the live cart;
+    everything else is presentational copy mirroring Figma 1030-27314. */
+export const checkout: CheckoutContent = {
+  expressLabel: "Express checkout",
+  orLabel: "OR",
+  contact: {
+    title: "Contact",
+    signInLabel: "Sign in",
+    signInHref: "#",
+    emailPlaceholder: "you@example.com",
+    optInLabel: "Email me protocol updates and journal articles",
+  },
+  delivery: {
+    title: "Delivery",
+    countryLabel: "Country / Region",
+    countryValue: "United States",
+    firstName: "First name",
+    lastName: "Last name",
+    company: "Company (optional)",
+    address: "Address",
+    address2: "Apartment, suite, etc. (optional)",
+    zip: "ZIP code",
+    city: "City",
+    phone: "Phone",
+  },
+  shipping: {
+    title: "Shipping method",
+    empty: "Enter your shipping address to view available shipping methods.",
+  },
+  consent: {
+    title: "Medical review consent",
+    subtitle:
+      "Required before a clinician can review your intake and prescribe.",
+    items: [
+      {
+        title: "I consent to a telehealth consultation",
+        body: "A licensed US clinician will review my intake and may contact me for follow-up before prescribing.",
+      },
+      {
+        title: "My medical history is accurate and complete",
+        body: "Including current medications, allergies and conditions. Omissions can make a protocol unsafe.",
+      },
+      {
+        title: "I understand these are compounded medications",
+        body: "Compounded products are not FDA-approved and are prepared for me individually by a licensed pharmacy.",
+      },
+    ],
+  },
+  payment: {
+    title: "Payment",
+    subtitle:
+      "All transactions are secure and encrypted. Card details are handled by Bask — SYNC never sees your card number.",
+    cardLabel: "Credit card",
+    logos: [
+      { src: "/images/cart/mastercard.svg", alt: "Mastercard" },
+      { src: "/images/cart/maestro.svg", alt: "Maestro" },
+      { src: "/images/cart/visa.svg", alt: "Visa" },
+      { src: "/images/cart/unionpay.svg", alt: "UnionPay" },
+    ],
+    logosMore: "5+",
+    cardNumber: "Card number",
+    expiry: "Expiration date (MM / YY)",
+    cvc: "Security code",
+    nameOnCard: "Name on card",
+    billingSame: "Use shipping address as billing address",
+    altRows: [
+      { id: "paypal", label: "PayPal", logo: "/images/checkout/chip-paypal.svg", logoW: 56 },
+      { id: "klarna", label: "Klarna", logo: "/images/checkout/chip-klarna.svg", logoW: 24, boxed: true },
+      { id: "applepay", label: "Apple Pay", logo: "/images/checkout/chip-applepay.svg", logoW: 56 },
+    ],
+    saveTitle: "Save my information for a faster checkout",
+    saveBody:
+      "By continuing you agree to SYNC’s Telehealth Consent, Terms of Service and Privacy Policy.",
+    saveDismiss: "Not now",
+  },
+  discountPlaceholder: "Discount code",
+  applyLabel: "Apply",
+  summary: {
+    subscriptionLabel: "Subscription plan",
+    subtotalLabel: "Subtotal",
+    reviewLabel: "Clinician review",
+    reviewValue: "Included",
+    shippingLabel: "Shipping",
+    shippingValue: "Enter shipping address",
+    totalLabel: "Total",
+    totalNote: "Authorised today · charged on approval",
+    taxNote: "Including $0.00 in estimated tax",
+  },
+  payNow: "Pay now",
+  payDisclaimer:
+    "Submitting is a request for care, not a guarantee of a prescription. Your card is authorised now and charged only if a clinician approves your protocol.",
+  footerLinks: [
+    { label: "Refund policy", href: "#" },
+    { label: "Privacy policy", href: "#" },
+    { label: "Terms of service", href: "#" },
+    { label: "Contact", href: "#" },
+  ],
 };
