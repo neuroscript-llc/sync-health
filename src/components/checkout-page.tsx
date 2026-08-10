@@ -254,6 +254,8 @@ export function CheckoutPage({ content }: { content: CheckoutContent }) {
   const [consent, setConsent] = useState<boolean[]>([false, false, false]);
   const [billingSame, setBillingSame] = useState(true);
   const [pay, setPay] = useState("card");
+  const [summaryOpen, setSummaryOpen] = useState(false);
+  const { subtotal } = useCart();
 
   const toggleConsent = (i: number) =>
     setConsent((prev) => prev.map((c, j) => (j === i ? !c : c)));
@@ -263,11 +265,56 @@ export function CheckoutPage({ content }: { content: CheckoutContent }) {
   return (
     <div className="mx-auto flex min-h-screen max-w-[1440px] flex-col lg:grid lg:grid-cols-[1.4fr_1fr] lg:items-start">
       {/* ------------------------------------------------------------------ */}
+      {/*  Mobile header — logo bar + collapsible order-summary bar.          */}
+      {/*  Desktop shows the gradient aside instead (see below).              */}
+      {/* ------------------------------------------------------------------ */}
+      <div className="lg:hidden">
+        <div className="px-5 py-5">
+          <Link href="/" aria-label="Sync. home" className="w-fit">
+            <Image
+              src="/images/sync-logo.svg"
+              alt="Sync."
+              width={100}
+              height={26}
+              className="h-[26px] w-auto"
+            />
+          </Link>
+        </div>
+        <div className="border-y border-[#DCD7CD] bg-[#F4F2ED]">
+          <button
+            type="button"
+            onClick={() => setSummaryOpen((v) => !v)}
+            aria-expanded={summaryOpen}
+            className="flex w-full items-center gap-2 px-5 py-4"
+          >
+            <span className="font-mono text-base uppercase leading-6 text-ink">
+              {c.summary.barLabel}
+            </span>
+            <ChevronDown
+              className={`size-[18px] text-ink transition-transform ${
+                summaryOpen ? "rotate-180" : ""
+              }`}
+              strokeWidth={1.5}
+              aria-hidden
+            />
+            <span className="ml-auto text-xl font-medium leading-6 text-ink">
+              {subtotal}
+            </span>
+          </button>
+          {summaryOpen && (
+            <div className="border-t border-ink/[0.06] px-5 pb-6 pt-5">
+              <OrderSummary content={content} />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ------------------------------------------------------------------ */}
       {/*  Left — checkout form                                              */}
       {/* ------------------------------------------------------------------ */}
-      <div className="flex flex-col gap-10 px-5 py-12 sm:px-8 lg:px-12 lg:py-16 xl:px-20 2xl:px-[140px]">
-        {/* Logo */}
-        <Link href="/" aria-label="Sync. home" className="w-fit">
+      <div className="flex flex-col gap-6 px-5 pb-8 pt-6 sm:px-8 lg:gap-10 lg:px-12 lg:py-16 xl:px-20 2xl:px-[140px]">
+        {/* Logo — desktop only; mobile uses the logo bar above. */}
+        <Link href="/" aria-label="Sync. home" className="hidden w-fit lg:block">
           <Image
             src="/images/sync-logo.svg"
             alt="Sync."
@@ -277,17 +324,17 @@ export function CheckoutPage({ content }: { content: CheckoutContent }) {
           />
         </Link>
 
-        {/* Express checkout — Figma: white/Stripe, yellow/PayPal, dark/Google
-            Pay, three equal thirds. */}
+        {/* Express checkout — Figma mobile: Stripe full-width, then PayPal +
+            Google Pay share the second row. Collapses to three thirds ≥ sm. */}
         <div className="flex flex-col gap-3">
           <p className="text-center text-sm leading-5 text-ink/80">
             {c.expressLabel}
           </p>
-          <div className="flex items-stretch gap-3">
+          <div className="flex flex-wrap items-stretch gap-3">
             <button
               type="button"
               aria-label="Pay with Stripe"
-              className="flex h-12 flex-1 items-center justify-center rounded-lg border border-ink/[0.32] bg-white transition-opacity hover:opacity-90"
+              className="flex h-12 w-full items-center justify-center rounded-lg border border-ink/[0.32] bg-white transition-opacity hover:opacity-90 sm:w-auto sm:flex-1"
             >
               <Image
                 src="/images/checkout/stripe.svg"
@@ -571,7 +618,7 @@ export function CheckoutPage({ content }: { content: CheckoutContent }) {
       {/*  Right — order summary (gradient panel, sticky on desktop)         */}
       {/* ------------------------------------------------------------------ */}
       <aside
-        className="px-5 py-12 sm:px-8 lg:h-full lg:px-16 lg:py-16"
+        className="hidden lg:block lg:h-full lg:px-16 lg:py-16"
         style={{ background: SUMMARY_BG }}
       >
         <div className="lg:sticky lg:top-16">

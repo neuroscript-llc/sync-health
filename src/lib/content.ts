@@ -1047,6 +1047,7 @@ export type CheckoutContent = {
   discountPlaceholder: string;
   applyLabel: string;
   summary: {
+    barLabel: string;
     subscriptionLabel: string;
     subtotalLabel: string;
     reviewLabel: string;
@@ -1140,6 +1141,7 @@ export const checkout: CheckoutContent = {
   discountPlaceholder: "Discount code",
   applyLabel: "Apply",
   summary: {
+    barLabel: "Order summary",
     subscriptionLabel: "Subscription plan",
     subtotalLabel: "Subtotal",
     reviewLabel: "Clinician review",
