@@ -132,6 +132,41 @@ export type BlogContent = {
   ctaHref: string;
 };
 
+/** Article card on the Journal index. Adds an `excerpt` over the home `Article`. */
+export type JournalArticle = {
+  category: string;
+  title: string;
+  excerpt: string;
+  meta: string;
+  image: string;
+  href: string;
+};
+
+export type JournalContent = {
+  eyebrow: string;
+  heading: string;
+  subtext: string;
+  tabs: string[];
+  featured: {
+    eyebrow: string;
+    title: string;
+    excerpt: string;
+    meta: string;
+    image: string;
+    href: string;
+    readMoreLabel: string;
+  };
+  articles: JournalArticle[];
+  loadMoreLabel: string;
+  newsletter: {
+    eyebrow: string;
+    heading: string;
+    subtext: string;
+    placeholder: string;
+    ctaLabel: string;
+  };
+};
+
 export type FaqItem = {
   question: string;
   answer: string;
@@ -594,6 +629,93 @@ export const blog: BlogContent = {
   ],
   ctaLabel: "View all articles",
   ctaHref: "/learn",
+};
+
+/** /journal index — Figma 957-14210. Article cards are presentational; images
+    were pulled from Figma into /images/journal. */
+export const journal: JournalContent = {
+  eyebrow: "The Journal",
+  heading: "Physician-informed. Hype-free.",
+  subtext:
+    "What the research actually says about the compounds we prescribe — including where the evidence is thin. Written with our clinical team and reviewed before it goes up.",
+  tabs: ["All", "Science", "Weight", "Recovery", "Hormonal", "Routine", "Safety"],
+  featured: {
+    eyebrow: "Featured · Science",
+    title: "GLP-1s, explained without the hype: what to actually expect.",
+    excerpt:
+      "Appetite changes in week one. Meaningful body composition change takes far longer, and the first month is mostly about tolerating the dose. We walk through the realistic timeline, the side effects nobody warns you about, and the point at which a clinician should be adjusting rather than escalating.",
+    meta: "8 min read · Mar 2026",
+    image: "/images/journal/featured.png",
+    href: "#",
+    readMoreLabel: "Read more",
+  },
+  articles: [
+    {
+      category: "Science",
+      title: "The science behind compounded peptides & why sourcing matters.",
+      excerpt:
+        "Purity claims are easy to print on a label and hard to verify. Here is what third-party testing actually measures.",
+      meta: "8 min read · Mar 2026",
+      image: "/images/journal/science.png",
+      href: "#",
+    },
+    {
+      category: "Routine",
+      title: "Building a wellness routine that actually sticks past week three.",
+      excerpt:
+        "Adherence beats optimisation. The protocol you follow is better than the perfect one you abandon.",
+      meta: "8 min read · Mar 2026",
+      image: "/images/journal/featured.png",
+      href: "#",
+    },
+    {
+      category: "Routine",
+      title:
+        "BPC-157 and soft tissue: what the research supports, and what it doesn’t.",
+      excerpt:
+        "Strong preclinical signal, limited human trials. An honest read of where the evidence currently sits.",
+      meta: "8 min read · Mar 2026",
+      image: "/images/journal/bpc.png",
+      href: "#",
+    },
+    {
+      category: "Safety",
+      title: "Why “research grade” is a marketing term, not a standard.",
+      excerpt:
+        "Not-for-human-consumption labelling exists for a reason. What it means when you inject it anyway.",
+      meta: "8 min read · Mar 2026",
+      image: "/images/journal/featured.png",
+      href: "#",
+    },
+    {
+      category: "Hormonal",
+      title:
+        "Sermorelin vs. direct HGH: why your clinician may prefer the slower route.",
+      excerpt:
+        "Stimulating your own production behaves differently from replacing it. The difference matters more than the timeline.",
+      meta: "8 min read · Mar 2026",
+      image: "/images/journal/science.png",
+      href: "#",
+    },
+    {
+      category: "Weight",
+      title: "Dose escalation: the week most people get wrong.",
+      excerpt:
+        "Faster is not better, and the side effects that make people quit are usually a titration problem.",
+      meta: "8 min read · Mar 2026",
+      image: "/images/journal/weight.png",
+      href: "#",
+    },
+  ],
+  loadMoreLabel: "Load more articles",
+  newsletter: {
+    eyebrow: "The Sync Dispatch",
+    heading: "One email a month. No hype.",
+    subtext:
+      "New research, protocol notes from our clinical team, and the occasional correction when we get something wrong. Unsubscribe in one click.",
+    placeholder: "Enter email",
+    ctaLabel: "Subscribe",
+  },
 };
 
 export const faq: FaqContent = {
