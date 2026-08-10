@@ -958,6 +958,102 @@ export const termsOfService: LegalContent = {
   ],
 };
 
+/** /privacy — Figma 957-12009. Same LegalPage layout as Terms. */
+export const privacyPolicy: LegalContent = {
+  eyebrow: "Legal",
+  title: "Privacy Policy",
+  lastUpdated: "Last updated · 1 August 2026",
+  intro:
+    "What we collect, why we collect it, who sees it, and what we will never do with it. Your health information is handled under HIPAA and is not a product we sell.",
+  contentsLabel: "Contents",
+  clauses: [
+    {
+      number: "01",
+      title: "What this covers",
+      id: "what-this-covers",
+      body: "This policy covers sync.health, the patient dashboard, and our email and SMS communications. Your clinician and the dispensing pharmacy are separate covered entities with their own notices of privacy practices, which you receive when your care begins.",
+    },
+    {
+      number: "02",
+      title: "Information you give us",
+      id: "information-you-give",
+      body: "Account details such as your name, email, phone and shipping address. Intake information including your medical history, current medications, allergies, goals and prior compound use. Messages you send to your clinician or our care team.",
+    },
+    {
+      number: "03",
+      title: "Information collected automatically",
+      id: "information-automatic",
+      body: "Device type, browser, IP address, referring page and how you move through the site. We use this to understand what is broken and what is confusing, not to build advertising profiles.",
+    },
+    {
+      number: "04",
+      title: "Payment information",
+      id: "payment-information",
+      body: "Card details are entered directly into hosted fields operated by our payment processor. SYNC never receives, sees or stores your full card number. We retain only the last four digits, card brand and authorisation status so we can show you your order history.",
+    },
+    {
+      number: "05",
+      title: "How we use your information",
+      id: "how-we-use",
+      body: "To route your intake to a clinician licensed in your state, to let that clinician make a prescribing decision, to have a pharmacy fill and ship what is prescribed, to support you afterwards, and to run the business — fraud prevention, accounting and legal obligations.",
+    },
+    {
+      number: "06",
+      title: "HIPAA and protected health information",
+      id: "hipaa",
+      body: "Your intake, clinical messages and prescription records are protected health information. They are stored in HIPAA-compliant systems and are accessible only to you, your treating clinician, the dispensing pharmacy, and the small number of SYNC staff who need access to support your care.",
+    },
+    {
+      number: "07",
+      title: "Who we share with, and why",
+      id: "who-we-share",
+      body: "Treating clinicians and the pharmacies filling your prescription. The independent lab performing batch testing. Infrastructure, payment and shipping vendors bound by business associate agreements. Authorities where legally compelled. That is the list.",
+    },
+    {
+      number: "08",
+      title: "What we do not do",
+      id: "what-we-dont-do",
+      body: "We do not sell your health information. We do not share your intake, diagnoses, prescriptions or protocol details with advertisers, data brokers or social platforms. We do not use protected health information to target advertising to you.",
+    },
+    {
+      number: "09",
+      title: "Cookies and analytics",
+      id: "cookies-analytics",
+      body: "We use essential cookies to keep you logged in and analytics cookies to measure site performance. You can refuse non-essential cookies through the banner without losing access to any part of the service.",
+    },
+    {
+      number: "10",
+      title: "Your rights",
+      id: "your-rights",
+      body: "You can request a copy of your data, ask us to correct it, or ask us to delete your account. Residents of California, Colorado, Connecticut, Virginia and other states with comprehensive privacy laws have additional rights, including the right to opt out of sale or sharing — which is straightforward for us, because we do neither.",
+    },
+    {
+      number: "11",
+      title: "Retention",
+      id: "retention",
+      body: "Medical records are retained for the period required by the laws of the state in which your clinician is licensed, which is typically several years and is not something we or you can shorten. Non-clinical account data is deleted on request.",
+    },
+    {
+      number: "12",
+      title: "Security",
+      id: "security",
+      body: "Data is encrypted in transit and at rest, access is role-limited and logged, and we run regular reviews. No system is perfectly secure, and we will notify you promptly if a breach affects your information.",
+    },
+    {
+      number: "13",
+      title: "Children",
+      id: "children",
+      body: "SYNC is for adults 18 and over. We do not knowingly collect information from minors, and we delete it if we discover it.",
+    },
+    {
+      number: "14",
+      title: "Changes and contact",
+      id: "changes-contact",
+      body: "We will post updates here and email you if a change is material. Questions, requests and complaints go to privacy@sync.health.",
+    },
+  ],
+};
+
 export const faq: FaqContent = {
   eyebrow: "FAQ",
   heading: "Questions?\nAnswered.",
@@ -1519,7 +1615,7 @@ export const checkout: CheckoutContent = {
     "Submitting is a request for care, not a guarantee of a prescription. Your card is authorised now and charged only if a clinician approves your protocol.",
   footerLinks: [
     { label: "Refund policy", href: "#" },
-    { label: "Privacy policy", href: "#" },
+    { label: "Privacy policy", href: "/privacy" },
     { label: "Terms of service", href: "/terms" },
     { label: "Contact", href: "#" },
   ],
