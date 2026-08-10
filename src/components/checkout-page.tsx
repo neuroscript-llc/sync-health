@@ -105,10 +105,11 @@ function Radio({ checked }: { checked: boolean }) {
   );
 }
 
-/** 56×32 white chip holding a colour-on-white card-network logo. */
+/** 56×32 white chip holding a colour-on-white card-network logo. Narrower on
+    mobile (48px) so the credit-card row's logo strip fits at 390px. */
 function PayChip({ src, alt }: { src: string; alt: string }) {
   return (
-    <span className="grid h-8 w-14 shrink-0 place-items-center rounded-md border border-ink/[0.12] bg-white">
+    <span className="grid h-8 w-12 shrink-0 place-items-center rounded-md border border-ink/[0.12] bg-white sm:w-14">
       <Image src={src} alt={alt} width={34} height={20} className="h-5 w-auto object-contain" />
     </span>
   );
@@ -486,14 +487,20 @@ export function CheckoutPage({ content }: { content: CheckoutContent }) {
               className="flex w-full items-center gap-3 px-5 py-4"
             >
               <Radio checked={pay === "card"} />
-              <span className="text-base font-semibold leading-6 text-ink">
+              <span className="whitespace-nowrap text-base font-semibold leading-6 text-ink">
                 {c.payment.cardLabel}
               </span>
               <span className="ml-auto flex items-center gap-2">
-                {c.payment.logos.map((logo) => (
-                  <PayChip key={logo.alt} src={logo.src} alt={logo.alt} />
+                {/* Mobile shows the first two networks + 5·; ≥ sm shows all. */}
+                {c.payment.logos.map((logo, i) => (
+                  <span
+                    key={logo.alt}
+                    className={i >= 2 ? "hidden sm:inline-flex" : "inline-flex"}
+                  >
+                    <PayChip src={logo.src} alt={logo.alt} />
+                  </span>
                 ))}
-                <span className="grid h-8 w-14 shrink-0 place-items-center rounded-md bg-ink font-mono text-sm font-medium leading-5 tracking-[0.02em] text-white">
+                <span className="grid h-8 w-12 shrink-0 place-items-center rounded-md bg-ink font-mono text-sm font-medium leading-5 tracking-[0.02em] text-white sm:w-14">
                   {c.payment.logosMore}
                 </span>
               </span>
