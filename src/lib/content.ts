@@ -193,6 +193,22 @@ export type ArticleContent = {
   related: { eyebrow: string; heading: string; articles: JournalArticle[] };
 };
 
+export type LegalClause = {
+  number: string;
+  title: string;
+  id: string;
+  body: string;
+};
+
+export type LegalContent = {
+  eyebrow: string;
+  title: string;
+  lastUpdated: string;
+  intro: string;
+  contentsLabel: string;
+  clauses: LegalClause[];
+};
+
 export type FaqItem = {
   question: string;
   answer: string;
@@ -845,6 +861,103 @@ export const article: ArticleContent = {
   },
 };
 
+/** /terms — Figma 957-11899. Long-form legal doc: header + sticky TOC +
+    numbered clauses. Clause bodies are plain text; emails are auto-linked. */
+export const termsOfService: LegalContent = {
+  eyebrow: "Legal",
+  title: "Terms of Service",
+  lastUpdated: "Last updated · 1 August 2026",
+  intro:
+    "These terms govern your use of Sync health and the services offered through it. Please read them — particularly the sections on the telehealth relationship, compounded medications, and dispute resolution.",
+  contentsLabel: "Contents",
+  clauses: [
+    {
+      number: "01",
+      title: "Who we are",
+      id: "who-we-are",
+      body: "SYNC Health Inc. operates this website and the technology platform behind it. We are not a pharmacy and we are not a medical practice. Clinical decisions are made by independent, licensed US clinicians, and medications are prepared by independent licensed compounding pharmacies. When you use SYNC, you are entering into a relationship with those providers, facilitated by us.",
+    },
+    {
+      number: "02",
+      title: "Who can use SYNC",
+      id: "who-can-use",
+      body: "You must be at least 18 years old and physically located in a US state where our affiliated clinicians are licensed at the time of your consultation. You may not create an account on behalf of someone else, and you may not use another person’s account.",
+    },
+    {
+      number: "03",
+      title: "The telehealth relationship",
+      id: "telehealth-relationship",
+      body: "Submitting an intake is a request for a clinical consultation — it is not an order, and it does not guarantee that any medication will be prescribed. The reviewing clinician exercises independent medical judgement and may decline to prescribe, prescribe something different from what you expected, or request further information. Their decision is final.",
+    },
+    {
+      number: "04",
+      title: "This site is not medical advice",
+      id: "not-medical-advice",
+      body: "Articles, product descriptions, protocol categories and educational content on this site are general information. They are not a diagnosis, not a treatment recommendation, and not a substitute for a consultation. Never disregard professional medical advice because of something you read here.",
+    },
+    {
+      number: "05",
+      title: "Compounded medications",
+      id: "compounded-medications",
+      body: "Medications dispensed through SYNC are compounded for an individual patient by a licensed pharmacy. Compounded medications are not FDA-approved, and the FDA does not evaluate them for safety, efficacy or quality. The pharmacies we work with are FDA-registered and operate under cGMP standards, and batches are third-party tested — but that is a different thing from FDA approval and we do not represent it otherwise.",
+    },
+    {
+      number: "06",
+      title: "Accurate information",
+      id: "accurate-information",
+      body: "Your clinician can only be as safe as the information you give them. You agree that the medical history, medications, allergies and conditions you disclose are accurate and complete, and that you will update them when they change. Withholding information can make a protocol unsafe.",
+    },
+    {
+      number: "07",
+      title: "Orders, authorisation and billing",
+      id: "orders-billing",
+      body: "When you submit an order, your payment method is authorized but not charged. Funds are captured only if and when a clinician approves your protocol. If no prescription is issued, the authorization is released in full. Prices are shown in USD and may change, though changes never apply to a cycle already paid for.",
+    },
+    {
+      number: "08",
+      title: "Plans, renewals and cancellation",
+      id: "plans-cancellation",
+      body: "Multi-month plans renew automatically at the interval shown at checkout until cancelled. You may cancel or pause from your dashboard at any time before the next cycle is processed. Cancelling stops future cycles; it does not retroactively refund a cycle already dispensed.",
+    },
+    {
+      number: "09",
+      title: "Things you agree not to do",
+      id: "prohibited-conduct",
+      body: "Do not resell, share, or transfer any medication dispensed to you. Do not use SYNC to obtain medication for another person. Do not scrape, reverse-engineer or interfere with the platform. Accounts used for any of these are closed without refund of the current cycle.",
+    },
+    {
+      number: "10",
+      title: "Intellectual property",
+      id: "intellectual-property",
+      body: "The SYNC name, logo, site design, written content and photography belong to SYNC Health Inc. You may not reproduce them commercially without written permission.",
+    },
+    {
+      number: "11",
+      title: "Disclaimers and limitation of liability",
+      id: "disclaimers-liability",
+      body: "The platform is provided on an “as is” basis. To the fullest extent permitted by law, SYNC Health Inc. disclaims implied warranties and limits its aggregate liability to the amount you paid us in the twelve months preceding the claim. Nothing here limits liability that cannot be limited under applicable law, and nothing here limits the independent professional liability of your treating clinician or the dispensing pharmacy.",
+    },
+    {
+      number: "12",
+      title: "Disputes",
+      id: "disputes",
+      body: "This section should set out governing law, venue, and whether disputes are resolved by binding arbitration with a class-action waiver, together with any opt-out window. The wording, the opt-out mechanics and the enforceability of the waiver vary by state and must be drafted by your attorney rather than adapted from a template.",
+    },
+    {
+      number: "13",
+      title: "Changes to these terms",
+      id: "changes",
+      body: "We may update these terms. If a change is material, we will notify you by email or in-app before it takes effect. Continuing to use SYNC after that point means you accept the updated terms.",
+    },
+    {
+      number: "14",
+      title: "Contact",
+      id: "contact",
+      body: "Questions about these terms can go to legal@sync.health, or to SYNC Health Inc. at the mailing address listed in the footer.",
+    },
+  ],
+};
+
 export const faq: FaqContent = {
   eyebrow: "FAQ",
   heading: "Questions?\nAnswered.",
@@ -1407,7 +1520,7 @@ export const checkout: CheckoutContent = {
   footerLinks: [
     { label: "Refund policy", href: "#" },
     { label: "Privacy policy", href: "#" },
-    { label: "Terms of service", href: "#" },
+    { label: "Terms of service", href: "/terms" },
     { label: "Contact", href: "#" },
   ],
 };
