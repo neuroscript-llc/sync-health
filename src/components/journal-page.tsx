@@ -77,7 +77,7 @@ function FeaturedCard({ featured }: { featured: JournalContent["featured"] }) {
   );
 }
 
-function ArticleCard({ article }: { article: JournalArticle }) {
+export function ArticleCard({ article }: { article: JournalArticle }) {
   return (
     <Link href={article.href} className="group flex flex-col gap-4">
       <div className="relative h-[220px] overflow-hidden rounded-3xl bg-[#EAECEC] sm:h-[300px] lg:h-[318px]">

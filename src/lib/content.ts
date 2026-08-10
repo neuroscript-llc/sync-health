@@ -167,6 +167,30 @@ export type JournalContent = {
   };
 };
 
+/** A block in the article prose. `h2` carries an `id` for TOC anchoring. */
+export type ArticleProseBlock =
+  | { type: "lead"; text: string }
+  | { type: "h2"; text: string; id: string }
+  | { type: "p"; text: string }
+  | { type: "quote"; text: string };
+
+export type ArticleContent = {
+  journalLabel: string;
+  category: string;
+  title: string;
+  dek: string;
+  author: { label: string; name: string; avatar: string };
+  published: { label: string; value: string };
+  readTime: { label: string; value: string };
+  cover: string;
+  tocLabel: string;
+  toc: { label: string; id: string }[];
+  prose: ArticleProseBlock[];
+  disclaimer: { label: string; text: string };
+  reviewer: { label: string; name: string; note: string; avatar: string };
+  related: { eyebrow: string; heading: string; articles: JournalArticle[] };
+};
+
 export type FaqItem = {
   question: string;
   answer: string;
@@ -646,7 +670,7 @@ export const journal: JournalContent = {
       "Appetite changes in week one. Meaningful body composition change takes far longer, and the first month is mostly about tolerating the dose. We walk through the realistic timeline, the side effects nobody warns you about, and the point at which a clinician should be adjusting rather than escalating.",
     meta: "8 min read · Mar 2026",
     image: "/images/journal/featured.png",
-    href: "#",
+    href: "/journal/glp-1s-explained",
     readMoreLabel: "Read more",
   },
   articles: [
@@ -657,7 +681,7 @@ export const journal: JournalContent = {
         "Purity claims are easy to print on a label and hard to verify. Here is what third-party testing actually measures.",
       meta: "8 min read · Mar 2026",
       image: "/images/journal/science.png",
-      href: "#",
+      href: "/journal/compounded-peptides",
     },
     {
       category: "Routine",
@@ -666,7 +690,7 @@ export const journal: JournalContent = {
         "Adherence beats optimisation. The protocol you follow is better than the perfect one you abandon.",
       meta: "8 min read · Mar 2026",
       image: "/images/journal/featured.png",
-      href: "#",
+      href: "/journal/wellness-routine",
     },
     {
       category: "Routine",
@@ -676,7 +700,7 @@ export const journal: JournalContent = {
         "Strong preclinical signal, limited human trials. An honest read of where the evidence currently sits.",
       meta: "8 min read · Mar 2026",
       image: "/images/journal/bpc.png",
-      href: "#",
+      href: "/journal/bpc-157-soft-tissue",
     },
     {
       category: "Safety",
@@ -685,7 +709,7 @@ export const journal: JournalContent = {
         "Not-for-human-consumption labelling exists for a reason. What it means when you inject it anyway.",
       meta: "8 min read · Mar 2026",
       image: "/images/journal/featured.png",
-      href: "#",
+      href: "/journal/research-grade",
     },
     {
       category: "Hormonal",
@@ -695,7 +719,7 @@ export const journal: JournalContent = {
         "Stimulating your own production behaves differently from replacing it. The difference matters more than the timeline.",
       meta: "8 min read · Mar 2026",
       image: "/images/journal/science.png",
-      href: "#",
+      href: "/journal/sermorelin-vs-hgh",
     },
     {
       category: "Weight",
@@ -704,7 +728,7 @@ export const journal: JournalContent = {
         "Faster is not better, and the side effects that make people quit are usually a titration problem.",
       meta: "8 min read · Mar 2026",
       image: "/images/journal/weight.png",
-      href: "#",
+      href: "/journal/dose-escalation",
     },
   ],
   loadMoreLabel: "Load more articles",
@@ -715,6 +739,106 @@ export const journal: JournalContent = {
       "New research, protocol notes from our clinical team, and the occasional correction when we get something wrong. Unsubscribe in one click.",
     placeholder: "Enter email",
     ctaLabel: "Subscribe",
+  },
+};
+
+/** /journal/[slug] article detail — Figma 957-15469. Presentational; the
+    [slug] route renders this one article for now (like /products/[slug]). */
+export const article: ArticleContent = {
+  journalLabel: "The Journal",
+  category: "Science",
+  title:
+    "The science behind compounded peptides and why sourcing matters more than the molecule.",
+  dek: "Two vials can contain the same peptide and be completely different products. The difference is everything that happened before it reached you.",
+  author: {
+    label: "Written by",
+    name: "Jane Doe",
+    avatar: "/images/journal/avatar.png",
+  },
+  published: { label: "Published on", value: "22 July 2026" },
+  readTime: { label: "Reading time", value: "6 min" },
+  cover: "/images/journal/science.png",
+  tocLabel: "In this article",
+  toc: [
+    { label: "What a peptide actually is", id: "peptide-basics" },
+    { label: "Why the source changes the product", id: "why-source" },
+    { label: "What third-party testing measures", id: "testing" },
+    { label: "Compounded vs. research-grade", id: "compounded-vs-research" },
+    { label: "What this means for your protocol", id: "your-protocol" },
+  ],
+  prose: [
+    {
+      type: "lead",
+      text: "A peptide is a short chain of amino acids — the same building blocks that make up proteins, just fewer of them. That definition is where most explanations stop, and it is also where most of the confusion begins. Because if the molecule is simple and well characterised, why does it matter enormously where you get it?",
+    },
+    { type: "h2", text: "What a peptide actually is", id: "peptide-basics" },
+    {
+      type: "p",
+      text: "Chains of roughly two to fifty amino acids are generally called peptides; beyond that, you are talking about a protein. Your body makes thousands of them and uses them as signals — instructions that tell tissue to repair, glands to release something, or appetite to rise or fall. Insulin is a peptide. So is the GLP-1 your gut releases after you eat.",
+    },
+    {
+      type: "p",
+      text: "Therapeutic peptides work by borrowing that vocabulary. Rather than introducing something foreign, most of the compounds prescribed through platforms like SYNC are either identical to a signal your body already uses or a close analogue designed to last longer before it breaks down. That is why they tend to be dose-sensitive and why the same compound can behave differently in two people.",
+    },
+    { type: "h2", text: "Why the source changes the product", id: "why-source" },
+    {
+      type: "p",
+      text: "Here is the part that gets skipped. The peptide sequence tells you what a molecule is supposed to be. It tells you nothing about what is actually in the vial you are holding. Synthesis is a chemical process with failure modes: truncated sequences where a chain stopped early, deletion sequences missing an amino acid in the middle, residual solvents from purification, bacterial endotoxins from a non-sterile fill.",
+    },
+    {
+      type: "quote",
+      text: "A purity number on a label is a claim. A certificate of analysis from a lab that has no stake in selling you the vial is evidence. Those are not the same thing.",
+    },
+    {
+      type: "h2",
+      text: "What third-party testing actually measures",
+      id: "testing",
+    },
+    {
+      type: "p",
+      text: "Four assays do most of the work. Potency confirms the vial contains the stated amount of active compound within a defined tolerance. Purity identifies how much of the content is the intended sequence versus synthesis by-products. Sterility confirms nothing is growing in it. Endotoxin testing looks for bacterial fragments that can trigger fever and systemic reactions even when the product is technically sterile.",
+    },
+    {
+      type: "p",
+      text: "None of these are exotic. They are standard for anything intended for injection into a human being. What is notable is how much of the peptide market skips them entirely — which is legal, because those products are sold labelled for research use and not for human consumption. The label is not decoration. It is the reason no testing was required.",
+    },
+    {
+      type: "h2",
+      text: "Compounded versus research-grade",
+      id: "compounded-vs-research",
+    },
+    {
+      type: "p",
+      text: "A compounded medication is prepared for a named patient by a licensed pharmacy against a valid prescription, under cGMP conditions, with the pharmacy accountable to a state board. A research chemical is sold to anyone, for stated laboratory use, with no such accountability. The molecule may be nominally identical. The chain of custody, the testing burden and the recourse if something is wrong are not.",
+    },
+    {
+      type: "p",
+      text: "It is worth being precise about what compounding is not: compounded medications are not FDA-approved, and the FDA does not evaluate them for safety or efficacy the way it does a commercial drug. What you get instead is a licensed pharmacy, a prescribing clinician who is legally responsible for the decision, and batch testing you can actually look at.",
+    },
+    {
+      type: "h2",
+      text: "What this means for your protocol",
+      id: "your-protocol",
+    },
+    {
+      type: "p",
+      text: "Practically: ask where it was compounded, ask whether the batch was third-party tested, and ask to see the results. A provider who cannot answer those three questions is not offering you a different price point — they are offering you a different risk profile, and usually without saying so.",
+    },
+  ],
+  disclaimer: {
+    label: "Medical disclaimer",
+    text: "This article is general education, not medical advice, and it is not a recommendation to take any compound mentioned. Peptide therapy is not appropriate for everyone, and some compounds are contraindicated with common medications and conditions. Talk to a licensed clinician about your own situation before starting anything.",
+  },
+  reviewer: {
+    label: "Clinically reviewed by",
+    name: "[Reviewing clinician name, credentials]",
+    note: "Placeholder — replace with the actual reviewing provider. Attributing clinical review to a named, licensed individual is what makes this line meaningful.",
+    avatar: "/images/journal/avatar.png",
+  },
+  related: {
+    eyebrow: "Keep reading",
+    heading: "Related from the journal.",
+    articles: journal.articles.slice(0, 3),
   },
 };
 
