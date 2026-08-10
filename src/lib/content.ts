@@ -1129,7 +1129,7 @@ export const checkout: CheckoutContent = {
     billingSame: "Use shipping address as billing address",
     altRows: [
       { id: "paypal", label: "PayPal", logo: "/images/checkout/chip-paypal.svg", logoW: 56 },
-      { id: "klarna", label: "Klarna", logo: "/images/checkout/chip-klarna.svg", logoW: 24, boxed: true },
+      { id: "klarna", label: "Klarna", logo: "/images/checkout/chip-klarna.svg", logoW: 40, boxed: true },
       { id: "applepay", label: "Apple Pay", logo: "/images/checkout/chip-applepay.svg", logoW: 56 },
     ],
     saveTitle: "Save my information for a faster checkout",

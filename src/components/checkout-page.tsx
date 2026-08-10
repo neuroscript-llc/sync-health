@@ -501,9 +501,9 @@ export function CheckoutPage({ content }: { content: CheckoutContent }) {
                       <Image
                         src={row.logo}
                         alt={row.label}
-                        width={row.logoW ?? 24}
-                        height={12}
-                        className="h-auto w-6 object-contain"
+                        width={row.logoW ?? 40}
+                        height={16}
+                        className="h-auto w-10 object-contain"
                       />
                     </span>
                   ) : (
