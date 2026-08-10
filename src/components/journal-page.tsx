@@ -109,24 +109,26 @@ function Newsletter({
   newsletter: JournalContent["newsletter"];
 }) {
   return (
-    <section className="relative isolate overflow-hidden bg-white px-5 py-16 sm:px-9 sm:py-24">
+    <section className="relative bg-white px-5 py-16 sm:px-9 sm:py-24">
       {/* Warm radial wash (Figma 957-14248): white core → pink → coral, fading
-          to transparent so it melts into the surrounding white. Blurred +
-          multiply-blended; `isolate` keeps the blend inside this section. */}
+          to transparent. Rendered before the content and left UNCLIPPED, so it
+          bleeds past the section's top edge into the white above and reads as
+          one continuous wash (no section seam). Colours fade to transparent, so
+          no blend mode is needed over white; the dark footer below covers any
+          downward bleed and the page-level overflow-clip contains it sideways. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[280%] w-[185%] max-w-none opacity-75 blur-[60px] mix-blend-multiply"
+        className="pointer-events-none absolute inset-x-[-15%] -top-40 bottom-[-12%] blur-[70px]"
         style={{
-          transform: "translate(-50%, -28%)",
           background:
-            "radial-gradient(50% 50% at 50% 50%, #FFFFFF 12%, #FF4E98 46%, #FF563F 50%, rgba(255, 229, 229, 0) 75%)",
+            "radial-gradient(62% 56% at 50% 56%, #FFFFFF 10%, #FF4E98 44%, #FF563F 50%, rgba(255, 232, 232, 0) 78%)",
         }}
       />
       {/* Soft cream bloom drifting in from the left. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-[12%] top-1/2 -z-10 h-[130%] w-[48%] -translate-y-1/2 rounded-full blur-[80px]"
-        style={{ background: "rgba(242, 236, 226, 0.81)" }}
+        className="pointer-events-none absolute -left-[10%] top-1/3 h-[130%] w-[45%] -translate-y-1/4 rounded-full blur-[90px]"
+        style={{ background: "rgba(242, 236, 226, 0.7)" }}
       />
 
       <div className="relative z-10 mx-auto flex max-w-[720px] flex-col items-center gap-8 sm:gap-10">
