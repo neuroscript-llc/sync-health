@@ -52,28 +52,38 @@ export function ArticlePage({ content }: { content: ArticleContent }) {
 
   return (
     <>
-      {/* Header */}
-      <section className="flex flex-col items-center gap-10 px-5 py-14 sm:px-9 sm:py-20">
-        <div className="mx-auto flex w-full max-w-[1368px] flex-col items-center gap-5">
+      {/* Header — left-aligned on mobile (Figma), centred ≥ sm */}
+      <section className="flex flex-col gap-6 px-5 py-12 sm:items-center sm:gap-10 sm:px-9 sm:py-20">
+        <div className="mx-auto flex w-full max-w-[1368px] flex-col items-start gap-6 sm:items-center sm:gap-5">
           {/* Breadcrumb */}
-          <p className="flex items-center gap-2 font-mono text-sm tracking-[0.06em]">
-            <Link href="/journal" className="text-ink/80 transition-colors hover:text-ink">
+          <p className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.04em] sm:text-sm sm:tracking-[0.06em]">
+            <Link
+              href="/journal"
+              className="text-ink/50 transition-colors hover:text-ink sm:text-ink/80"
+            >
               {a.journalLabel}
             </Link>
-            <span className="text-ink/40">/</span>
-            <span className="font-medium text-brand">{a.category}</span>
+            <span className="text-ink/50 sm:text-ink/40">/</span>
+            <span className="text-ink/50 sm:font-medium sm:text-brand">
+              {a.category}
+            </span>
           </p>
 
-          <h1 className="max-w-[920px] text-center text-[32px] font-medium leading-[1.1] tracking-[-0.02em] text-ink sm:text-5xl sm:leading-[1.14] lg:text-[56px] lg:leading-[64px]">
+          <h1 className="text-[34px] font-medium leading-[44px] tracking-[-0.03em] text-ink sm:max-w-[920px] sm:text-center sm:text-5xl sm:leading-[1.14] sm:tracking-[-0.02em] lg:text-[56px] lg:leading-[64px]">
             {a.title}
           </h1>
 
-          <p className="max-w-[760px] text-center text-base leading-[1.5] text-ink/80 sm:text-lg">
+          <p className="text-base leading-[1.5] text-ink/80 sm:max-w-[760px] sm:text-center sm:text-lg">
             {a.dek}
           </p>
 
-          {/* Author / date / read time */}
-          <div className="mt-2 flex flex-wrap items-start justify-center gap-x-14 gap-y-6">
+          {/* Mobile: single coral meta line */}
+          <p className="font-mono text-xs uppercase tracking-[0.04em] text-brand sm:hidden">
+            {a.metaLine}
+          </p>
+
+          {/* Desktop: author / date / read time */}
+          <div className="mt-2 hidden flex-wrap items-start justify-center gap-x-14 gap-y-6 sm:flex">
             <Meta label={a.author.label}>
               <span className="flex items-center gap-3">
                 <Avatar src={a.author.avatar} name={a.author.name} size={40} />
@@ -97,7 +107,7 @@ export function ArticlePage({ content }: { content: ArticleContent }) {
 
         {/* Cover */}
         <div className="mx-auto w-full max-w-[1368px]">
-          <div className="h-[220px] overflow-hidden rounded-3xl bg-[#EAECEC] sm:h-[420px] lg:h-[540px]">
+          <div className="h-[240px] overflow-hidden rounded-[32px] bg-[#EAECEC] sm:h-[420px] sm:rounded-3xl lg:h-[540px]">
             <img src={a.cover} alt="" className="h-full w-full object-cover" />
           </div>
         </div>

@@ -182,6 +182,8 @@ export type ArticleContent = {
   author: { label: string; name: string; avatar: string };
   published: { label: string; value: string };
   readTime: { label: string; value: string };
+  /** Single coral meta line used on mobile in place of the author columns. */
+  metaLine: string;
   cover: string;
   tocLabel: string;
   toc: { label: string; id: string }[];
@@ -757,6 +759,7 @@ export const article: ArticleContent = {
   },
   published: { label: "Published on", value: "22 July 2026" },
   readTime: { label: "Reading time", value: "6 min" },
+  metaLine: "Clinically reviewed · 6 min read · April 2026",
   cover: "/images/journal/science.png",
   tocLabel: "In this article",
   toc: [
