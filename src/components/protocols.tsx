@@ -2,50 +2,80 @@ import Link from "next/link";
 import { ArrowIcon } from "@/components/arrow-icon";
 import type { ProtocolCard, ProtocolsContent } from "@/lib/content";
 
-const PEACH_BG =
-  "linear-gradient(180deg, #F6C6A0 0%, #F3D4BB 52%, #F1ECDE 100%)";
-const FEATURED_PILL =
-  "linear-gradient(90deg, #BE4415 0%, #E0842F 46%, rgba(240,240,230,0) 100%)";
-// Figma "GRADIENT 2.png" (node Frame 36) — the gradient sphere used for the
-// category dots, centre-cropped and optimised from the source asset.
-const DOT = "url(/images/protocols/dot-gradient.png) center/cover no-repeat";
+// Per-category theme: the dot / pill-fill colour and the card image background
+// gradient (a pastel tint of the colour fading into cream). Keyed by category
+// name; unknown categories fall back to Recovery.
+// `dark` = the fill is dark enough that the label must turn white on hover;
+// otherwise the label stays ink (dark) — both keep AA contrast on the fill.
+type CatStyle = { color: string; bg: string; dark: boolean };
+const CATEGORY: Record<string, CatStyle> = {
+  Recovery: {
+    color: "#DC5B24",
+    bg: "linear-gradient(180deg,#F6C6A0 0%,#F3D4BB 52%,#F1ECDE 100%)",
+    dark: true,
+  },
+  Performance: {
+    color: "#2F8FD4",
+    bg: "linear-gradient(180deg,#B9DBF0 0%,#DCEAF0 52%,#F1ECDE 100%)",
+    dark: true,
+  },
+  Metabolic: {
+    color: "#E68A2B",
+    bg: "linear-gradient(180deg,#F6D3A6 0%,#F4DCC0 52%,#F1ECDE 100%)",
+    dark: false,
+  },
+  "Skin & Longevity": {
+    color: "#45B562",
+    bg: "linear-gradient(180deg,#C6E7AC 0%,#D9EBC8 52%,#F1ECDE 100%)",
+    dark: false,
+  },
+  Cognitive: {
+    color: "#74C13F",
+    bg: "linear-gradient(180deg,#C9E9A6 0%,#DBEDC6 52%,#F1ECDE 100%)",
+    dark: false,
+  },
+  "Hormonal Health": {
+    color: "#F05DA0",
+    bg: "linear-gradient(180deg,#F8B4D3 0%,#F6CBDD 52%,#F1ECDE 100%)",
+    dark: true,
+  },
+};
+const catStyle = (category: string): CatStyle =>
+  CATEGORY[category] ?? CATEGORY.Recovery;
+
 const CARD_BG =
   "linear-gradient(180deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%)";
 
-// One pill, two states. Resting: outlined ring, dot + centred dark label.
-// Hover: the gradient fades in (opacity — cheap), the ring fades out, the dot
-// collapses and the label turns white and slides to the left. The slide is a
-// flex-grow spacer so it adapts to any label width without measuring.
+// Resting: outlined ring, category-coloured dot + left-aligned dark label.
+// Hover: the dot scales up from its own centre to flood the pill with the
+// category colour (a smooth circular fill), and the label turns white.
 function CategoryPill({ card }: { card: ProtocolCard }) {
+  const { color, dark } = catStyle(card.category);
   return (
     <div className="group/pill relative flex h-[54px] w-full items-center overflow-hidden rounded-full ring-1 ring-inset ring-ink/15 transition duration-300 group-hover/pill:ring-transparent">
-      {/* Gradient fill — fades in on hover. */}
+      {/* Full-cover fill, clipped to a small circle at the dot position; the
+          circle grows to flood the pill on hover — the dot "fills" the
+          background. The clipped fill IS the resting dot. */}
       <span
         aria-hidden
-        className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover/pill:opacity-100"
-        style={{ background: FEATURED_PILL }}
+        className="absolute inset-0 [clip-path:circle(10px_at_26px_50%)] transition-[clip-path] duration-[600ms] ease-out group-hover/pill:[clip-path:circle(150%_at_26px_50%)]"
+        style={{ background: color }}
       />
-      <span className="relative flex h-full w-full items-center px-6">
-        {/* Left spacer collapses on hover → label slides from centre to left. */}
-        <span
-          aria-hidden
-          className="grow transition-[flex-grow] duration-300 group-hover/pill:grow-0"
-        />
-        <span
-          aria-hidden
-          className="mr-3 size-5 shrink-0 rounded-full transition-all duration-300 group-hover/pill:mr-0 group-hover/pill:w-0 group-hover/pill:opacity-0"
-          style={{ background: DOT }}
-        />
-        <span className="whitespace-nowrap font-mono text-xl font-medium uppercase tracking-[-0.02em] text-ink transition-colors duration-300 group-hover/pill:text-white">
-          {card.category}
-        </span>
-        <span aria-hidden className="grow" />
+      {/* Label — left-aligned, padded clear of the dot. Turns white only when
+          the fill is dark enough; otherwise stays ink (both AA on the fill). */}
+      <span
+        className={`relative z-10 whitespace-nowrap pl-[52px] pr-6 font-mono text-xl font-medium uppercase tracking-[-0.02em] transition-colors duration-300 ${
+          dark ? "text-ink group-hover/pill:text-white" : "text-ink"
+        }`}
+      >
+        {card.category}
       </span>
     </div>
   );
 }
 
 function ProtocolCardEl({ card }: { card: ProtocolCard }) {
+  const { color, bg } = catStyle(card.category);
   return (
     <article
       className="flex w-[286px] shrink-0 snap-start flex-col gap-5 rounded-[32px] p-1 pb-1.5 sm:w-full sm:max-w-[calc(50%-12px)] sm:rounded-[48px] sm:p-2 sm:pb-2.5 lg:max-w-[380px]"
@@ -53,7 +83,7 @@ function ProtocolCardEl({ card }: { card: ProtocolCard }) {
     >
       <div
         className="relative aspect-[3/2] w-full overflow-hidden rounded-[28px] sm:rounded-[40px]"
-        style={{ background: PEACH_BG }}
+        style={{ background: bg }}
       >
         <div
           className="absolute inset-0"
@@ -74,7 +104,7 @@ function ProtocolCardEl({ card }: { card: ProtocolCard }) {
           </h3>
           <span
             className="size-2 shrink-0 rounded-full"
-            style={{ background: DOT }}
+            style={{ background: color }}
             aria-hidden
           />
         </div>
