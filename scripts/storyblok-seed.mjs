@@ -30,10 +30,10 @@ export const seed = {
   trustBar: {
     eyebrow: "Trusted & certified",
     logos: [
-      { image: "/images/certs/hipaa.png", alt: "HIPAA — We Protect Your Privacy", width: 149, height: 64 },
-      { image: "/images/certs/cert2.png", alt: "Certified", width: 60, height: 56 },
-      { image: "/images/certs/fda.png", alt: "FDA registered", width: 60, height: 56 },
-      { image: "/images/certs/legitscript.svg", alt: "LegitScript Certified", width: 169, height: 52 },
+      { image: "/images/certs/hipaa.png", alt: "HIPAA — We Protect Your Privacy", width: "149", height: "64" },
+      { image: "/images/certs/cert2.png", alt: "Certified", width: "60", height: "56" },
+      { image: "/images/certs/fda.png", alt: "FDA registered", width: "60", height: "56" },
+      { image: "/images/certs/legitscript.svg", alt: "LegitScript Certified", width: "169", height: "52" },
     ],
   },
 

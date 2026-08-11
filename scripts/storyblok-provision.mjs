@@ -18,6 +18,18 @@ import { fileURLToPath } from "node:url";
 import StoryblokClient from "storyblok-js-client";
 import { components } from "./storyblok-schema.mjs";
 import { seed } from "./storyblok-seed.mjs";
+// Imported straight from the app's content model (Node strip-types) so seeded
+// CMS content always mirrors content.ts — no duplication.
+import {
+  termsOfService,
+  privacyPolicy,
+  journal,
+  article,
+  checkout,
+  cartPage,
+  cart,
+  bpc157Product,
+} from "../src/lib/content.ts";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PUBLIC_DIR = path.join(ROOT, "public");
@@ -348,29 +360,305 @@ function buildBody() {
   ];
 }
 
-async function seedHome() {
-  const content = blk("page", { body: buildBody() });
-
-  const list = (await Storyblok.get(`${base}/stories`, { per_page: 100 })).data
-    .stories;
-  const existing = list.find((st) => st.slug === "home");
-
-  const story = {
-    name: "Home",
-    slug: "home",
-    is_startpage: true,
-    content,
-  };
-
+/* --------------------------- story upsert ------------------------------- */
+// Fetch the story list once and reuse it across upserts.
+let _storyList = null;
+async function upsertStory(name, slug, content) {
+  if (!_storyList) {
+    _storyList = (
+      await Storyblok.get(`${base}/stories`, { per_page: 100 })
+    ).data.stories;
+  }
+  const existing = _storyList.find((st) => st.slug === slug);
+  // NB: pages are fetched by slug (cdn/stories/<slug>), not by startpage.
+  // Storyblok rejects is_startpage on a root (parent_id 0) story, so we omit it.
+  const story = { name, slug, content };
   if (existing) {
     await Storyblok.put(`${base}/stories/${existing.id}`, { story, publish: 1 });
-    console.log(`✔ Home story updated & published (id ${existing.id})\n`);
+    console.log(`  ✔ ${name} (/${slug}) updated & published`);
   } else {
     const res = await Storyblok.post(`${base}/stories`, { story, publish: 1 });
-    console.log(
-      `✔ Home story created & published (id ${res.data.story.id})\n`,
-    );
+    _storyList.push({ id: res.data.story.id, slug });
+    console.log(`  ✔ ${name} (/${slug}) created & published`);
   }
+}
+
+/* --------------------------- page builders ------------------------------ */
+// Each builder maps a content.ts object → the matching root blok. Field names
+// mirror content.ts so the app's storyblok-map readers line up.
+function buildLegal(c) {
+  return blk("legal_page", {
+    eyebrow: c.eyebrow,
+    title: c.title,
+    lastUpdated: c.lastUpdated,
+    intro: c.intro,
+    contentsLabel: c.contentsLabel,
+    clauses: c.clauses.map((cl) =>
+      blk("legal_clause", {
+        number: cl.number,
+        title: cl.title,
+        id: cl.id,
+        body: cl.body,
+      }),
+    ),
+  });
+}
+
+function buildJournal(c) {
+  const article = (a) =>
+    blk("journal_article", {
+      category: a.category,
+      title: a.title,
+      excerpt: a.excerpt,
+      meta: a.meta,
+      image: a.image,
+      href: a.href,
+    });
+  return blk("journal_page", {
+    eyebrow: c.eyebrow,
+    heading: c.heading,
+    subtext: c.subtext,
+    tabs: c.tabs.map((t) => blk("text_item", { text: t })),
+    featured: [
+      blk("journal_featured", {
+        eyebrow: c.featured.eyebrow,
+        title: c.featured.title,
+        excerpt: c.featured.excerpt,
+        meta: c.featured.meta,
+        image: c.featured.image,
+        href: c.featured.href,
+        readMoreLabel: c.featured.readMoreLabel,
+      }),
+    ],
+    articles: c.articles.map(article),
+    loadMoreLabel: c.loadMoreLabel,
+    newsletter: [
+      blk("journal_newsletter", {
+        eyebrow: c.newsletter.eyebrow,
+        heading: c.newsletter.heading,
+        subtext: c.newsletter.subtext,
+        placeholder: c.newsletter.placeholder,
+        ctaLabel: c.newsletter.ctaLabel,
+      }),
+    ],
+  });
+}
+
+const journalArticleBlok = (a) =>
+  blk("journal_article", {
+    category: a.category,
+    title: a.title,
+    excerpt: a.excerpt,
+    meta: a.meta,
+    image: a.image,
+    href: a.href,
+  });
+
+function buildArticle(c) {
+  return blk("article_page", {
+    journalLabel: c.journalLabel,
+    category: c.category,
+    title: c.title,
+    dek: c.dek,
+    authorLabel: c.author.label,
+    authorName: c.author.name,
+    authorAvatar: c.author.avatar,
+    publishedLabel: c.published.label,
+    publishedValue: c.published.value,
+    readTimeLabel: c.readTime.label,
+    readTimeValue: c.readTime.value,
+    metaLine: c.metaLine,
+    cover: c.cover,
+    tocLabel: c.tocLabel,
+    toc: c.toc.map((t) => blk("article_toc", { label: t.label, id: t.id })),
+    prose: c.prose.map((b) =>
+      blk("article_prose", { type: b.type, text: b.text, id: b.id ?? "" }),
+    ),
+    disclaimerLabel: c.disclaimer.label,
+    disclaimerText: c.disclaimer.text,
+    reviewerLabel: c.reviewer.label,
+    reviewerName: c.reviewer.name,
+    reviewerNote: c.reviewer.note,
+    reviewerAvatar: c.reviewer.avatar,
+    relatedEyebrow: c.related.eyebrow,
+    relatedHeading: c.related.heading,
+    relatedArticles: c.related.articles.map(journalArticleBlok),
+  });
+}
+
+function buildCheckout(c) {
+  const p = c.payment;
+  return blk("checkout_page", {
+    expressLabel: c.expressLabel,
+    orLabel: c.orLabel,
+    contact: [blk("checkout_contact", { ...c.contact })],
+    delivery: [blk("checkout_delivery", { ...c.delivery })],
+    shipping: [blk("checkout_shipping", { ...c.shipping })],
+    consent: [
+      blk("checkout_consent", {
+        title: c.consent.title,
+        subtitle: c.consent.subtitle,
+        items: c.consent.items.map((i) =>
+          blk("checkout_consent_item", { title: i.title, body: i.body }),
+        ),
+      }),
+    ],
+    payment: [
+      blk("checkout_payment", {
+        title: p.title,
+        subtitle: p.subtitle,
+        cardLabel: p.cardLabel,
+        logos: p.logos.map((l) =>
+          blk("checkout_card_logo", { src: l.src, alt: l.alt }),
+        ),
+        logosMore: p.logosMore,
+        cardNumber: p.cardNumber,
+        expiry: p.expiry,
+        cvc: p.cvc,
+        nameOnCard: p.nameOnCard,
+        billingSame: p.billingSame,
+        altRows: p.altRows.map((r) =>
+          blk("checkout_pay_row", {
+            id: r.id,
+            label: r.label,
+            logo: r.logo ?? "",
+            logoW: r.logoW != null ? String(r.logoW) : "",
+            boxed: !!r.boxed,
+          }),
+        ),
+        saveTitle: p.saveTitle,
+        saveBody: p.saveBody,
+        saveDismiss: p.saveDismiss,
+      }),
+    ],
+    discountPlaceholder: c.discountPlaceholder,
+    applyLabel: c.applyLabel,
+    summary: [blk("checkout_summary", { ...c.summary })],
+    payNow: c.payNow,
+    payDisclaimer: c.payDisclaimer,
+    footerLinks: c.footerLinks.map((l) =>
+      blk("footer_link", { label: l.label, href: l.href, muted: false }),
+    ),
+  });
+}
+
+function buildCartPage(c) {
+  return blk("cart_page", { ...c });
+}
+
+function buildCartDrawer(c) {
+  return blk("cart_drawer", {
+    ...c,
+    upsells: c.upsells.map((u) => blk("cart_upsell", { ...u })),
+    paymentLogos: c.paymentLogos.map((l) =>
+      blk("checkout_card_logo", { src: l.src, alt: l.alt }),
+    ),
+  });
+}
+
+const textItem = (t) => blk("text_item", { text: t });
+
+function buildProduct(c) {
+  return blk("product_page", {
+    slug: c.slug,
+    eyebrow: c.eyebrow,
+    name: c.name,
+    description: c.description,
+    tagline: c.tagline,
+    galleryMain: c.gallery.main,
+    galleryThumbnails: c.gallery.thumbnails.map(textItem),
+    trust: c.trust.map((t) =>
+      blk("product_trust", { icon: t.icon, label: t.label }),
+    ),
+    methodLabel: c.methodLabel,
+    methods: c.methods.map((m) =>
+      blk("product_method", { image: m.image, alt: m.alt }),
+    ),
+    priceAmount: c.price.amount,
+    pricePeriod: c.price.period,
+    planLabel: c.planLabel,
+    plans: c.plans.map((p) =>
+      blk("product_plan", {
+        label: p.label,
+        price: p.price,
+        period: p.period,
+        badgeText: p.badge?.text ?? "",
+        badgeVariant: p.badge?.variant ?? "",
+        save: p.save ?? "",
+      }),
+    ),
+    ctaLabel: c.cta.label,
+    ctaHref: c.cta.href,
+    ctaNote: c.cta.note,
+    accordion: c.accordion.map((a) =>
+      blk("product_accordion", { title: a.title, body: a.body ?? "" }),
+    ),
+    safetyLabel: c.safetyLabel,
+    safetyHref: c.safetyHref,
+    whyHeading: c.why.heading,
+    whyFeatures: c.why.features.map((f) =>
+      blk("product_why_feature", {
+        icon: f.icon,
+        title: f.title,
+        description: f.description,
+      }),
+    ),
+    qualityTest: [
+      blk("product_quality", {
+        heading: c.qualityTest.heading,
+        collage: c.qualityTest.collage.map(textItem),
+        lead: c.qualityTest.lead,
+        body: c.qualityTest.body,
+        tests: c.qualityTest.tests.map((t) =>
+          blk("product_quality_test", {
+            name: t.name,
+            status: t.status,
+            description: t.description,
+          }),
+        ),
+      }),
+    ],
+    howItWorks: [
+      blk("product_how_it_works", {
+        eyebrow: c.howItWorks.eyebrow,
+        heading: c.howItWorks.heading,
+        subtext: c.howItWorks.subtext,
+        cardImage: c.howItWorks.cardImage,
+        steps: c.howItWorks.steps.map((s) =>
+          blk("step", {
+            number: s.number,
+            title: s.title,
+            description: s.description,
+          }),
+        ),
+        ctaLabel: c.howItWorks.ctaLabel,
+        ctaHref: c.howItWorks.ctaHref,
+      }),
+    ],
+  });
+}
+
+async function seedHome() {
+  await upsertStory("Home", "home", blk("page", { body: buildBody() }));
+}
+
+async function seedPages() {
+  await upsertStory("Terms of Service", "terms", buildLegal(termsOfService));
+  await upsertStory("Privacy Policy", "privacy", buildLegal(privacyPolicy));
+  await upsertStory("Journal", "journal", buildJournal(journal));
+  await upsertStory(
+    "Article — Compounded peptides",
+    "article-compounded-peptides",
+    buildArticle(article),
+  );
+  await upsertStory("Checkout", "checkout", buildCheckout(checkout));
+  await upsertStory("Cart", "cart", buildCartPage(cartPage));
+  await upsertStory("Cart drawer", "cart-drawer", buildCartDrawer(cart));
+  await upsertStory(
+    "Product — BPC-157",
+    "product-bpc-157",
+    buildProduct(bpc157Product),
+  );
 }
 
 /* --------------------------- run ---------------------------------------- */
@@ -378,11 +666,20 @@ async function main() {
   console.log(`\nProvisioning Storyblok space ${SPACE_ID} (${REGION})…\n`);
   console.log("→ Syncing components");
   await syncComponents();
-  console.log("→ Uploading images");
-  await uploadAll();
-  console.log("→ Seeding Home story");
-  await seedHome();
-  console.log("✅ Done. Open the Visual Editor on the Home story to edit.\n");
+  // Home uses uploaded Storyblok assets; the other pages store image paths as
+  // text, so SKIP_ASSETS skips both the upload and the Home reseed for fast
+  // iteration on the page stories.
+  if (process.env.SKIP_ASSETS) {
+    console.log("→ Skipping images + Home reseed (SKIP_ASSETS set)");
+  } else {
+    console.log("→ Uploading images");
+    await uploadAll();
+    console.log("→ Seeding Home story");
+    await seedHome();
+  }
+  console.log("→ Seeding pages");
+  await seedPages();
+  console.log("\n✅ Done. Open the Visual Editor to edit any page.\n");
 }
 
 main().catch((err) => {

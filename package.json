@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "storyblok:provision": "node scripts/storyblok-provision.mjs"
+    "storyblok:provision": "node --experimental-strip-types scripts/storyblok-provision.mjs"
   },
   "dependencies": {
     "@storyblok/react": "^7.2.2",
