@@ -369,13 +369,13 @@ export const siteHeader: SiteHeaderContent = {
     "Most protocol reviews completed within 1–2 hours.",
   ],
   navLinks: [
-    { label: "Protocols", href: "/protocols", hasDropdown: true },
-    { label: "Learn", href: "/learn", hasDropdown: true },
+    { label: "Protocols", href: "/products/bpc-157", hasDropdown: true },
+    { label: "Learn", href: "/journal", hasDropdown: true },
   ],
   loginLabel: "Login",
   loginHref: "/login",
   ctaLabel: "Start Your Protocol",
-  ctaHref: "/start",
+  ctaHref: "/products/bpc-157",
 };
 
 export const trustBar: TrustBarContent = {
@@ -1117,7 +1117,7 @@ export const footer: FooterContent = {
     {
       links: [
         { label: "About us", href: "/about" },
-        { label: "Blog", href: "/blog" },
+        { label: "Blog", href: "/journal" },
         { label: "How it works", href: "/how-it-works" },
         { label: "FAQs", href: "/faqs" },
         { label: "Contact", href: "/contact" },

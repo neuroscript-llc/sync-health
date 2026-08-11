@@ -70,7 +70,7 @@ function NavMegaMenu({
             ))}
           </div>
           <Link
-            href="/start"
+            href="/products/bpc-157"
             className="group/cta inline-flex items-center gap-2 self-start rounded-full bg-brand py-4 pl-6 pr-5 text-xl text-white"
           >
             Start Your Protocol
@@ -80,7 +80,7 @@ function NavMegaMenu({
 
         {/* Right: featured product card */}
         <Link
-          href="/protocols/bpc-157"
+          href="/products/bpc-157"
           className="group/card flex w-[256px] flex-col gap-3 rounded-2xl bg-white p-2 shadow-[0_10px_40px_rgba(29,29,27,0.10)]"
         >
           <div className="aspect-square w-full overflow-hidden rounded-lg">

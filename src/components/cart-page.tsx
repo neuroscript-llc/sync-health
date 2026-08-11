@@ -214,12 +214,12 @@ export function CartPageBody({
                 <span className="text-xl font-bold leading-7 text-ink">{subtotal}</span>
               </div>
               <div className="flex flex-col gap-2">
-                <button
-                  type="button"
-                  className="flex w-full items-center justify-center rounded-full bg-ink px-5 py-3 font-mono text-base uppercase leading-6 text-white transition-opacity hover:opacity-90"
+                <Link
+                  href="/checkout"
+                  className="flex w-full items-center justify-center rounded-full bg-ink px-5 py-3 text-center font-mono text-base uppercase leading-6 text-white transition-opacity hover:opacity-90"
                 >
                   {content.checkoutLabel}
-                </button>
+                </Link>
                 <p className="text-center font-mono text-xs uppercase leading-4 tracking-[0.02em] text-ink/80">
                   {content.trustLine}
                 </p>

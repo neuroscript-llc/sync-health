@@ -36,7 +36,7 @@ function PaymentLogos({
 
 /** Desktop line items — thumb + info (name / plan / qty) + price / remove. */
 function DesktopLineItems({ content }: { content: CartContent }) {
-  const { items, updateQty, removeItem } = useCart();
+  const { items, updateQty, removeItem, close } = useCart();
   return (
     <div className="hidden flex-col gap-2 sm:flex">
       {items.map((item) => {
@@ -536,13 +536,23 @@ export function CartDrawer({ content }: { content: CartContent }) {
           )}
 
           <div className={`mt-2 flex-col items-center gap-3 sm:gap-5 ${empty ? "flex sm:hidden" : "flex"}`}>
-            <button
-              type="button"
-              disabled={empty}
-              className="flex w-full items-center justify-center rounded-full bg-ink px-6 py-4 font-mono text-base uppercase leading-6 text-white transition-opacity hover:opacity-90 disabled:opacity-40 sm:py-5 sm:text-xl"
-            >
-              {content.checkoutLabel}
-            </button>
+            {empty ? (
+              <button
+                type="button"
+                disabled
+                className="flex w-full items-center justify-center rounded-full bg-ink px-6 py-4 font-mono text-base uppercase leading-6 text-white opacity-40 sm:py-5 sm:text-xl"
+              >
+                {content.checkoutLabel}
+              </button>
+            ) : (
+              <Link
+                href="/checkout"
+                onClick={close}
+                className="flex w-full items-center justify-center rounded-full bg-ink px-6 py-4 text-center font-mono text-base uppercase leading-6 text-white transition-opacity hover:opacity-90 sm:py-5 sm:text-xl"
+              >
+                {content.checkoutLabel}
+              </Link>
+            )}
             <PaymentLogos
               logos={content.paymentLogos}
               more={content.paymentMore}
