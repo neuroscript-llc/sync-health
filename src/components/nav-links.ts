@@ -4,13 +4,13 @@ export const LEARN_LINKS = [
   { label: "Blog", href: "/journal" },
 ];
 
-// Category links resolve to the live product page for now (one product built).
+// Each category links to a representative live product page.
 export const PROTOCOL_LINKS = [
   { label: "Recovery", href: "/products/bpc-157" },
-  { label: "Performance", href: "/products/bpc-157" },
-  { label: "Metabolic", href: "/products/bpc-157" },
-  { label: "Skin & Longevity", href: "/products/bpc-157" },
-  { label: "Hormonal Health", href: "/products/bpc-157" },
+  { label: "Performance", href: "/products/sermorelin" },
+  { label: "Metabolic", href: "/products/mots-c" },
+  { label: "Skin & Longevity", href: "/products/ghk-cu" },
+  { label: "Hormonal Health", href: "/products/pt-141" },
 ];
 
 /** Resolve a top-level nav label to its mega-menu group, if any. */

@@ -28,7 +28,7 @@ import {
   checkout,
   cartPage,
   cart,
-  bpc157Product,
+  allProducts,
 } from "../src/lib/content.ts";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -666,11 +666,9 @@ async function seedPages() {
   await upsertStory("Checkout", "checkout", buildCheckout(checkout));
   await upsertStory("Cart", "cart", buildCartPage(cartPage));
   await upsertStory("Cart drawer", "cart-drawer", buildCartDrawer(cart));
-  await upsertStory(
-    "Product — BPC-157",
-    "product-bpc-157",
-    buildProduct(bpc157Product),
-  );
+  for (const p of allProducts) {
+    await upsertStory(`Product — ${p.name}`, `product-${p.slug}`, buildProduct(p));
+  }
 }
 
 /* --------------------------- run ---------------------------------------- */

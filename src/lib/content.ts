@@ -537,15 +537,15 @@ export const catalog: CatalogContent = {
       description: "Dual-action weight management, once weekly.",
       image: "/images/catalog/vial-bpc157.png",
       ctaLabel: "Start your protocol",
-      ctaHref: "/products/bpc-157",
+      ctaHref: "/products/tirzepatide",
     },
     {
-      category: "Hormonal",
+      category: "Performance",
       name: "Sermorelin",
       description: "Growth-hormone support, recovery and sleep.",
       image: "/images/catalog/vial-recovery.png",
       ctaLabel: "Start your protocol",
-      ctaHref: "/products/bpc-157",
+      ctaHref: "/products/sermorelin",
     },
     {
       category: "Skin",
@@ -553,7 +553,7 @@ export const catalog: CatalogContent = {
       description: "Skin, hair and collagen renewal.",
       image: "/images/catalog/vial-bpc157.png",
       ctaLabel: "Start your protocol",
-      ctaHref: "/products/bpc-157",
+      ctaHref: "/products/ghk-cu",
     },
   ],
   ctaLabel: "Shop all",
@@ -1373,6 +1373,700 @@ export const bpc157Product: ProductContent = {
   },
 };
 
+/* --- Remaining compound PDPs (copy from the client's review doc) -----------
+   Locked/shared sections (trust, quality panel, locked FAQ answers) are
+   factored into constants; each compound supplies only its variable copy.
+   NOTE: pricing and vial imagery are PLACEHOLDERS — the doc marks both
+   "pending" for every compound, and they are CMS-editable. */
+
+const PDP_GALLERY: ProductContent["gallery"] = {
+  main: "/images/pdp/hero-main.png",
+  thumbnails: [
+    "/images/pdp/thumb-color.png",
+    "/images/pdp/thumb-grey.png",
+    "/images/pdp/thumb-grey.png",
+    "/images/pdp/thumb-grey.png",
+    "/images/pdp/thumb-grey.png",
+    "/images/pdp/thumb-grey.png",
+  ],
+};
+
+const PDP_TRUST: ProductTrust[] = [
+  { icon: "/images/pdp/check.svg", label: "Physician-supervised" },
+  { icon: "/images/pdp/check.svg", label: "Licensed US compounding pharmacy" },
+  { icon: "/images/pdp/check.svg", label: "Third-party tested" },
+  { icon: "/images/pdp/check.svg", label: "Prescription-only" },
+];
+
+const PDP_METHODS: ProductMethod[] = [
+  { image: "/images/pdp/method-1.png", alt: "Subcutaneous injection" },
+  { image: "/images/pdp/method-2.png", alt: "Nasal spray" },
+  { image: "/images/pdp/method-3.png", alt: "Oral capsules" },
+];
+
+// Placeholder pricing — every compound below is "$[TBC]" in the doc.
+const PDP_PRICE = { amount: "$225.00", period: "/month" };
+const PDP_PLANS: ProductPlan[] = [
+  { label: "Monthly", price: "$225.00", period: "/month" },
+  {
+    label: "3-Month",
+    price: "$189.00",
+    period: "/month",
+    badge: { text: "Clinically recommended", variant: "recommended" },
+    save: "Save $108",
+  },
+  {
+    label: "6-Month",
+    price: "$166.00",
+    period: "/month",
+    badge: { text: "Best Value", variant: "best" },
+    save: "Save $354",
+  },
+];
+
+const PDP_CTA = {
+  label: "Start your protocol",
+  href: "/start",
+  note: "Charged only after your protocol is approved. Cancel anytime.",
+};
+
+// LOCKED — reused verbatim as the fourth accordion on every PDP.
+const PDP_QUALITY_ACCORDION: ProductAccordionItem = {
+  title: "How SYNC ensures quality",
+  body: "Every SYNC protocol is compounded to prescription at a licensed US 503A/503B pharmacy and clinician-reviewed before it ships. Full third-party batch testing details are in the Quality panel below.",
+};
+
+// LOCKED — the quality panel is identical across every PDP.
+const PDP_QUALITY: ProductQualityContent = {
+  heading: "Tested every batch. Independently.",
+  collage: [
+    "/images/pdp/quality-a.png",
+    "/images/pdp/quality-b.png",
+    "/images/pdp/quality-a.png",
+  ],
+  lead: "Every SYNC protocol is compounded at a licensed US 503A/503B pharmacy and third-party tested — every batch, against four pharmacopoeia standards.",
+  body: "If a batch doesn't pass all four, it doesn't ship.",
+  tests: [
+    {
+      name: "Potency",
+      status: "Passed",
+      description:
+        "Confirms the vial contains what the label says — active ingredient within ±10% of prescribed concentration.",
+    },
+    {
+      name: "Sterility",
+      status: "Passed",
+      description:
+        "Tested against USP 797 to confirm the compound is free from bacterial or fungal contamination.",
+    },
+    {
+      name: "pH balance",
+      status: "Passed",
+      description:
+        "Balanced to minimise irritation at the injection site and remain compatible with the body.",
+    },
+    {
+      name: "Endotoxins",
+      status: "Passed",
+      description:
+        "Tested against USP 85 to confirm bacterial endotoxin levels are within safe limits — protecting against fever and adverse reactions.",
+    },
+  ],
+};
+
+const PDP_WHY_ICONS = [
+  "/images/pdp/icon-cellular.svg",
+  "/images/pdp/icon-tissue.svg",
+  "/images/pdp/icon-optimized.svg",
+  "/images/pdp/icon-research.svg",
+];
+
+// LOCKED FAQ answers reused verbatim across PDPs.
+const FAQ_PAUSE: FaqItem = {
+  question: "What happens if I need to pause, change, or cancel?",
+  answer:
+    "Any time, from your account. If your goals change, message us and we'll adjust your protocol with you. No calls, no retention scripts, no penalty for pausing between cycles.",
+};
+const FAQ_RUNOUT: FaqItem = {
+  question: "What if I run out mid-cycle?",
+  answer:
+    "Message us and we'll expedite a replacement — most reorders ship the same day. Your subscription is timed so this shouldn't happen, but if life gets in the way, we've got you.",
+};
+const FAQ_INSURANCE: FaqItem = {
+  question: "Do you take insurance, HSA, or FSA?",
+  answer:
+    "No insurance — SYNC is cash-pay, which lets us build every protocol around your body rather than around what an insurer will approve. HSA and FSA support is rolling out soon through our payment partner, and we'll email you when it goes live.",
+};
+
+/** Build a full ProductContent from a compound's variable copy, folding in the
+    shared/locked sections and placeholder pricing/imagery. */
+function makeProduct(p: {
+  slug: string;
+  eyebrow: string;
+  name: string;
+  description: string;
+  tagline: string;
+  methodLabel?: string;
+  accordion: ProductAccordionItem[];
+  benefits: { title: string; description: string }[];
+  faqItems: FaqItem[];
+}): ProductContent {
+  return {
+    slug: p.slug,
+    eyebrow: p.eyebrow,
+    name: p.name,
+    description: p.description,
+    tagline: p.tagline,
+    gallery: PDP_GALLERY,
+    trust: PDP_TRUST,
+    methodLabel: p.methodLabel ?? "Injection method",
+    methods: PDP_METHODS,
+    price: PDP_PRICE,
+    planLabel: "Select a plan",
+    plans: PDP_PLANS,
+    cta: PDP_CTA,
+    accordion: [...p.accordion, PDP_QUALITY_ACCORDION],
+    safetyLabel: "Important Safety Information",
+    safetyHref: `/important-safety-information/${p.slug}`,
+    why: {
+      heading: `Why ${p.name}`,
+      features: p.benefits.map((b, i) => ({
+        icon: PDP_WHY_ICONS[i % PDP_WHY_ICONS.length],
+        title: b.title,
+        description: b.description,
+      })),
+    },
+    qualityTest: PDP_QUALITY,
+    howItWorks,
+    faq: {
+      eyebrow: "FAQ",
+      heading: "Everything worth asking.",
+      subtext: "Protocols, prescriptions, and what happens after you order.",
+      ctaLabel: "Contact our care team",
+      ctaHref: "/contact",
+      items: p.faqItems,
+    },
+  };
+}
+
+export const sermorelinProduct: ProductContent = makeProduct({
+  slug: "sermorelin",
+  eyebrow: "Performance",
+  name: "Sermorelin",
+  description:
+    "Sermorelin is a peptide modelled on GHRH — the brain's signal to release growth hormone — prompting the body to produce its own rather than replacing it. In protocol, it's used to support what changes as GH output declines through midlife: sleep quality, training recovery, and body composition.",
+  tagline: "Sleep, recovery and lean composition.",
+  accordion: [
+    {
+      title: "What it is",
+      body: "Sermorelin is a synthetic version of GHRH (growth hormone releasing hormone), the signal the brain sends to the pituitary to prompt GH release. Rather than adding hormone from outside, it works upstream: signalling the body to produce its own, in the natural pulsatile rhythm the endocrine system is built for. That's why it's the peptide most often chosen when the goal is supporting the system, not overriding it.",
+    },
+    {
+      title: "How it's used",
+      body: "Sermorelin is typically administered as a subcutaneous injection before bed — timing that aligns with the body's natural overnight GH release. Your clinician sets your exact dose, cycle length, and any titration schedule based on your intake, and it's often prescribed in longer cycles than shorter-acting peptides. Everything you need to reconstitute and inject is included, with instructions in your care portal.",
+    },
+    {
+      title: "What's in the vial",
+      body: "Pharmaceutical-grade Sermorelin acetate, compounded to your prescription at a licensed US 503A/503B pharmacy. Supplied as a lyophilised powder for reconstitution with bacteriostatic water, refrigerated after mixing, and used within the stability window your clinician confirms.",
+    },
+  ],
+  benefits: [
+    { title: "Improves sleep quality", description: "Supports deeper, more restorative sleep." },
+    { title: "Speeds recovery", description: "Supports faster recovery between sessions and after training." },
+    { title: "Supports lean composition", description: "Supports lean body composition and healthy body weight." },
+    { title: "Restores energy", description: "Supports everyday energy, drive, and vitality." },
+  ],
+  faqItems: [
+    {
+      question: "How is Sermorelin different from HGH?",
+      answer:
+        "HGH is a direct injection of synthetic growth hormone into the body. Sermorelin doesn't add hormone — it signals your pituitary to release its own, in the natural pulsatile rhythm your endocrine system is built for. That means the response is gradual rather than dramatic, and the body retains its own feedback control over how much GH it releases. It's the reason clinicians often reach for Sermorelin as the more considered option for supporting GH — particularly when the goal is long-term rather than a short performance push.",
+    },
+    {
+      question: "Is Sermorelin FDA-approved?",
+      answer:
+        "Sermorelin was previously FDA-approved as a branded medication (Geref) and remains widely used today in compounded form under physician supervision. No compounded medication carries FDA approval — but every SYNC protocol is prepared at a licensed US 503A/503B pharmacy under FDA-registered oversight and state pharmacy law. Your clinician reviews whether treatment is appropriate for you before anything ships.",
+    },
+    {
+      question: "Who is Sermorelin prescribed for — and can I take it if I'm on other therapies or medication?",
+      answer:
+        "Sermorelin is typically prescribed for adults noticing the sleep, recovery, and body composition shifts that come with declining GH output — usually from the mid-30s onward, in men and women. It's commonly run alongside other hormone therapies, peptide protocols, or ongoing medication — share what you're currently on in your intake and your clinician builds around it, not against it. It's not appropriate for pregnancy, active cancer, acute critical illness, or generally for anyone under 25 with naturally normal GH ranges. Sometimes your clinician's call is that Sermorelin isn't right for you — if so, they'll tell you why and no charge is made.",
+    },
+    {
+      question: "What are the common side effects?",
+      answer:
+        "Most people tolerate Sermorelin well. The most common reactions are transient — mild redness or swelling at the injection site, occasional flushing, or a warm sensation that passes within an hour. Some people notice mild water retention or tingling in the hands during the first weeks, which typically settles as your body adjusts. Rare reactions are covered in your Important Safety Information, and your clinician reviews your full profile before prescribing. Anything concerning while on protocol — you message us and we adjust.",
+    },
+    {
+      question: "How will I know it's working, and when?",
+      answer:
+        "Sermorelin works gradually — it's supporting your body's own GH production, not adding it, so the response builds over cycles rather than in the first week. Most people notice sleep quality changes in the first three to four weeks. Recovery and body composition changes tend to land in months two and three. Some cycles need dose adjustments, which your clinician makes at monthly check-ins.",
+    },
+    FAQ_PAUSE,
+    FAQ_RUNOUT,
+    FAQ_INSURANCE,
+  ],
+});
+
+export const nadProduct: ProductContent = makeProduct({
+  slug: "nad",
+  eyebrow: "Skin & Longevity",
+  name: "NAD+",
+  description:
+    "NAD+ is a coenzyme every cell in the body needs to convert food into usable energy. As levels decline with age, NAD+ protocols are used to support the systems most affected — cellular energy, mental clarity, recovery, and the biological processes tied to healthy aging.",
+  tagline: "Cellular energy, focus and healthy aging.",
+  accordion: [
+    {
+      title: "What it is",
+      body: "NAD+ (nicotinamide adenine dinucleotide) is one of the most fundamental molecules in human biology — present in every cell, and central to how energy is produced, DNA is repaired, and cellular stress is managed. It's not stored or supplemented like a vitamin; the body produces it continuously, and levels fall as production slows with age. Injected NAD+ is studied for how it supports the pathways most affected as those levels decline.",
+    },
+    {
+      title: "How it's used",
+      body: "NAD+ is typically administered as a subcutaneous injection, most often in the morning, over cycles set by your clinician. Your dose and schedule are built around your intake — some protocols start lower and titrate up over the first weeks.",
+    },
+    {
+      title: "What's in the vial",
+      body: "Pharmaceutical-grade NAD+, compounded to your prescription at a licensed US 503A/503B pharmacy. Supplied as a sterile solution or lyophilised powder, refrigerated, and used within the stability window your clinician confirms.",
+    },
+  ],
+  benefits: [
+    { title: "Restores energy", description: "Supports cellular energy production and reduces fatigue." },
+    { title: "Sharpens focus", description: "Supports mental clarity, cognitive performance, and focus." },
+    { title: "Speeds recovery", description: "Supports recovery from physical and mental stress." },
+    { title: "Supports healthy aging", description: "Supports DNA repair and cellular regeneration — central pathways for long-term resilience." },
+  ],
+  faqItems: [
+    {
+      question: "What does NAD+ actually do?",
+      answer:
+        "NAD+ is a coenzyme every cell in your body uses to convert food into energy, repair DNA, and manage cellular stress. As levels decline with age, those processes slow — which is why energy, focus, and recovery tend to shift. Supplementing NAD+ is used to restore what your cells rely on to function.",
+    },
+    {
+      question: "Can NAD+ actually slow down aging?",
+      answer:
+        "NAD+ plays a role in some of the biological processes tied to aging — DNA repair, mitochondrial function, and cellular resilience. Research supports its role in maintaining those systems, but \"reversing\" aging is overstated by the wider market. What's honest: NAD+ is used to support the systems most affected by aging, and most people notice that as sustained energy, clearer focus, and better recovery — not dramatic transformation.",
+    },
+    {
+      question: "Is subcutaneous NAD+ injection as effective as IV?",
+      answer:
+        "IV NAD+ is delivered directly into the bloodstream — fast, but sessions can take 60–90 minutes and often come with intense flushing or chest pressure. Subcutaneous NAD+ delivers more gradually, with a gentler side effect profile and consistent, at-home cycles. For most people looking to sustain NAD+ levels over time, subcutaneous is the more practical route.",
+    },
+    {
+      question: "Is NAD+ FDA-approved?",
+      answer:
+        "NAD+ itself is a naturally occurring coenzyme, not a drug. The compounded NAD+ used in injections is prepared to your prescription at a licensed US 503A/503B pharmacy under FDA-registered oversight. Compounded medications don't carry FDA approval — your clinician reviews whether it's appropriate for you before anything ships.",
+    },
+    {
+      question: "Who is NAD+ prescribed for — and can I take it with other therapies?",
+      answer:
+        "NAD+ is typically prescribed for adults noticing energy, focus, or recovery shifts — usually from midlife onward, in men and women. It's commonly run alongside peptides, hormone therapies, or other protocols; share whatever you're currently on in your intake. It's not appropriate during pregnancy, active cancer, or certain chemotherapy regimens without specialist input.",
+    },
+    {
+      question: "What are the common side effects?",
+      answer:
+        "Most people tolerate subcutaneous NAD+ well. Common reactions during injection are transient — flushing, warmth, mild chest pressure, or tingling that passes within a few minutes. Injecting slowly and staying hydrated reduces most of these. Rare reactions are covered in your Important Safety Information.",
+    },
+    {
+      question: "How will I know it's working, and when?",
+      answer:
+        "NAD+ works cumulatively. Most people notice energy and mental clarity changes within three to four weeks; recovery and longer-term effects build over months two and three. Your clinician checks in monthly and adjusts if you're not seeing what you should be.",
+    },
+    FAQ_PAUSE,
+  ],
+});
+
+export const pt141Product: ProductContent = makeProduct({
+  slug: "pt-141",
+  eyebrow: "Hormonal Health",
+  name: "PT-141",
+  description:
+    "PT-141 is a peptide studied for how it supports sexual desire — acting on the brain's pathways for arousal and emotional response, independent of hormonal systems. It's used in protocols for men and women where desire has quieted despite everything else being in place.",
+  tagline: "Sexual desire and arousal support.",
+  accordion: [
+    {
+      title: "What it is",
+      body: "PT-141, also known as bremelanotide, is a synthetic melanocortin peptide — a class of compounds that acts on receptors in the brain involved in sexual response. Rather than affecting blood flow or hormone levels, it works in the central nervous system, on the pathways that shape sexual desire itself. It's used in men and women whose desire has quieted, particularly when other approaches haven't been the answer.",
+    },
+    {
+      title: "How it's used",
+      body: "PT-141 is typically administered as a subcutaneous injection taken as needed, roughly 30 to 60 minutes before intimacy — not on a daily cycle like most SYNC protocols. Your clinician sets your dose and how often it can be used based on your intake, and adjusts if you're not seeing what you should be.",
+    },
+    {
+      title: "What's in the vial",
+      body: "Pharmaceutical-grade PT-141 (bremelanotide), compounded to your prescription at a licensed US 503A/503B pharmacy. Supplied as a sterile solution, refrigerated, and used within the stability window your clinician confirms.",
+    },
+  ],
+  benefits: [
+    { title: "Restored desire", description: "Supports sexual desire and the wanting to be intimate." },
+    { title: "Faster responsiveness", description: "Supports the body's arousal response and time to arousal." },
+    { title: "Non-hormonal support", description: "Acts on the nervous system rather than hormones or blood flow." },
+    { title: "Emotional connection", description: "Supports the psychological side of intimacy and confidence with your partner." },
+  ],
+  faqItems: [
+    {
+      question: "How is PT-141 different from Viagra or Cialis?",
+      answer:
+        "Viagra and Cialis work on blood flow — they help the physical mechanics of arousal once desire is already there. PT-141 works differently: it acts on the central nervous system pathways involved in desire itself. It's used when the mechanics aren't the issue — when the wanting has quieted. Some people use PT-141 alongside vascular support like Viagra, but they answer different problems.",
+    },
+    {
+      question: "Is PT-141 FDA-approved?",
+      answer:
+        "A version of PT-141 (marketed as Vyleesi) is FDA-approved as a prescription treatment for hypoactive sexual desire — the compound itself has been through FDA review, human trials, and clinical use. Compounded PT-141, like all compounded medications, isn't itself FDA-approved and is prepared to your prescription at a licensed US 503A/503B pharmacy under FDA-registered oversight. Your clinician reviews whether treatment is appropriate for you before anything ships.",
+    },
+    {
+      question: "Who is PT-141 prescribed for — and can I take it if I'm on other therapies?",
+      answer:
+        "PT-141 is prescribed for adults noticing that sexual desire has quieted despite otherwise being in good health — in both men and women, typically from the mid-30s onward. It's commonly prescribed alongside TRT, HRT, ED medications, or other protocols; share whatever you're currently on in your intake. It's not appropriate for pregnancy, uncontrolled high blood pressure, or a history of cardiovascular events. Sometimes your clinician's call is that PT-141 isn't right for you — if so, they'll tell you why and no charge is made.",
+    },
+    {
+      question: "What are the common side effects?",
+      answer:
+        "The most common reactions are transient — mild nausea, flushing, and occasional headache, usually within an hour or two of the injection. Some people notice gradual darkening of the skin, gums, or freckles with repeated use over time. This risk is reduced with less frequent use, which is why the clinical protocol limits monthly doses and why your clinician calibrates how often you use it. PT-141 can also cause a mild temporary rise in blood pressure, which is why your clinician reviews your cardiovascular history before prescribing. Anything concerning — you message us and we adjust.",
+    },
+    {
+      question: "How fast does it work, and how long does the effect last?",
+      answer:
+        "PT-141 is typically taken 30 to 60 minutes before intimacy. Effects generally last several hours, though this varies by dose and individual response. It's not a daily medication — you use it when you plan to, not on a schedule. Your clinician sets how frequently it can be used based on your intake and how you respond.",
+    },
+    {
+      question: "What if I'm not sure this is right for me?",
+      answer:
+        "Say so in your intake. If your clinician thinks another approach fits better — a different peptide, working on sleep or hormones first, or a period of watchful waiting — they'll tell you. Sometimes the honest call is that PT-141 isn't the answer, and if so, no charge is made.",
+    },
+    {
+      question: "How will I know it's working?",
+      answer:
+        "The primary shift most people notice is desire returning — thinking about intimacy without needing a specific trigger, initiating more, feeling responsive. For most people this becomes clear within the first few uses. If it's not working after a fair trial, your clinician adjusts dose or reassesses whether PT-141 is the right compound.",
+    },
+    FAQ_PAUSE,
+  ],
+});
+
+export const ghkCuProduct: ProductContent = makeProduct({
+  slug: "ghk-cu",
+  eyebrow: "Skin & Longevity",
+  name: "GHK-Cu",
+  description:
+    "GHK-Cu is a naturally occurring copper peptide the body produces in abundance early in life and less over time. It's one of the most studied peptides for skin, hair, and tissue renewal — used to support collagen production, inflammation regulation, and the cellular repair processes that shape how the surface actually looks.",
+  tagline: "Skin, hair and tissue renewal.",
+  methodLabel: "Injection or topical",
+  accordion: [
+    {
+      title: "What it is",
+      body: "GHK-Cu is a small copper-binding peptide made up of three amino acids and a copper ion — a molecule the body already produces to signal repair and renewal in skin, hair, and connective tissue. It's studied for how it activates the cellular pathways behind collagen synthesis, wound healing, and the body's inflammatory response — and how those pathways slow as natural GHK-Cu levels decline with age. It's one of the most researched copper peptides in the world, which is why it's foundational to both skin/longevity and recovery protocols.",
+    },
+    {
+      title: "How it's used",
+      body: "GHK-Cu is used two ways depending on what your protocol is targeting. Subcutaneous injection is used when the goal is systemic — supporting hair, connective tissue, or overall skin renewal from the inside. Topical application is used when the goal is localised skin work — targeting specific areas for elasticity, texture, or scar/wound support. Your clinician confirms which route (or both) is right for you based on your intake, and sets the strength and cadence to match.",
+    },
+    {
+      title: "What's in the vial",
+      body: "Injection: Pharmaceutical-grade GHK-Cu, compounded to your prescription at a licensed US 503A/503B pharmacy, supplied as a lyophilised powder for reconstitution with bacteriostatic water. Topical: GHK-Cu formulated for skin application at compound-appropriate concentration, in a delivery base built for absorption. Both are refrigerated after preparation and used within the stability window your clinician confirms.",
+    },
+  ],
+  benefits: [
+    { title: "Firmer skin", description: "Supports collagen production, elasticity, and skin texture." },
+    { title: "Healthier hair", description: "Supports follicle health and hair growth." },
+    { title: "Tissue regeneration", description: "Supports wound healing and the body's response to inflammation." },
+    { title: "Supports healthy aging", description: "Supports the cellular processes behind long-term skin and tissue resilience." },
+  ],
+  faqItems: [
+    {
+      question: "What's the difference between compounded GHK-Cu and an over-the-counter copper peptide serum?",
+      answer:
+        "OTC serums contain GHK-Cu at concentrations low enough to be sold cosmetically — usually well under what's used clinically, and formulated for gentle daily topical use. Compounded GHK-Cu is prepared to your prescription at pharmaceutical-grade concentration, either as a subcutaneous injection for systemic effects (hair, connective tissue, whole-skin renewal) or as a topical at a strength your clinician sets for your case. It's a different product doing a different job.",
+    },
+    {
+      question: "Is GHK-Cu FDA-approved?",
+      answer:
+        "GHK-Cu is a naturally occurring copper peptide the body already produces — it's not itself a drug. As a compounded medication, it's prepared to your prescription at a licensed US 503A/503B pharmacy under FDA-registered oversight. Compounded medications aren't themselves FDA-approved, but GHK-Cu has decades of clinical research behind it and is widely used in prescribing dermatology and regenerative medicine. Your clinician reviews whether it's appropriate for you before anything ships.",
+    },
+    {
+      question: "Who is GHK-Cu prescribed for — and can I use it with my existing skincare or other therapies?",
+      answer:
+        "GHK-Cu is prescribed for adults noticing the changes in skin, hair, or tissue that come with declining natural GHK-Cu levels — in men and women, typically from midlife onward. It's commonly used alongside standard skincare (including retinoids and vitamin C), hair treatments, and other peptide protocols — share whatever you're currently on in your intake. It's not appropriate for pregnancy, active cancer, or Wilson's disease. Sometimes your clinician's call is that GHK-Cu isn't right for you — if so, they'll tell you why and no charge is made.",
+    },
+    {
+      question: "What are the common side effects?",
+      answer:
+        "Most people tolerate GHK-Cu well. Topical application can cause mild redness, tingling, or dryness at the application site, which usually settles within the first weeks. Injection can cause mild soreness or bruising at the injection site. Very rarely, prolonged high-dose use has been associated with copper accumulation — which is why your clinician calibrates the dose and how often you use it, and reviews long-term protocols at each check-in. Anything concerning — you message us and we adjust.",
+    },
+    {
+      question: "How long until I see results?",
+      answer:
+        "Skin changes tend to be the first — texture and tone often begin shifting between weeks four and six, with fuller changes building over months two and three. Hair timelines are longer — shed usually settles first, and visible growth builds from month three onward. Recovery and wound support tend to shift faster, often within weeks. Your clinician sets your protocol length based on what you're targeting.",
+    },
+    FAQ_PAUSE,
+    {
+      question: "What's included when it ships?",
+      answer:
+        "For injection protocols: your prescribed vial, sterile syringes, bacteriostatic water for reconstitution, alcohol swabs, and a sharps disposal option. For topical protocols: your prescribed formulation in a delivery base built for absorption. Full instructions are included and reviewed in your care portal. Everything ships discreetly and temperature-controlled where required.",
+    },
+    FAQ_INSURANCE,
+  ],
+});
+
+export const semaglutideProduct: ProductContent = makeProduct({
+  slug: "semaglutide",
+  eyebrow: "Weight",
+  name: "Compounded Semaglutide",
+  description:
+    "Compounded Semaglutide is a GLP-1 medication formulated to support weight management and metabolic health — mirroring a hormone the body produces to regulate hunger, fullness, and blood sugar. It's the most established GLP-1 in the category, used in protocol for people whose metabolic signalling has drifted, supporting the systems that shape appetite, eating patterns, and the mental noise around food.",
+  tagline: "Appetite, weight and metabolic support.",
+  accordion: [
+    {
+      title: "What it is",
+      body: "Semaglutide is a GLP-1 receptor agonist — a synthetic version of a naturally occurring hormone (GLP-1) that the gut releases after eating to signal fullness, slow digestion, and regulate blood sugar. It works by mimicking that signalling for longer than the body's own GLP-1 does, which is why it changes both what appetite feels like and how the body handles food. It's the most studied GLP-1 medication in the world and remains one of the foundational compounds in modern weight management.",
+    },
+    {
+      title: "How it's used",
+      body: "Semaglutide is administered as a once-weekly subcutaneous injection, typically taken on the same day each week. Protocols usually start at a low dose and titrate up gradually over the first weeks — your clinician sets the starting dose, the pace of increase, and where your protocol ultimately settles. For some patients, that means a microdose that provides metabolic support without the fuller weight-loss effect; for others, it means titrating to a standard weight-management dose.",
+    },
+    {
+      title: "What's in the vial",
+      body: "Pharmaceutical-grade Semaglutide, compounded to your prescription at a licensed US 503A/503B pharmacy. Supplied as a sterile solution, refrigerated, and used within the stability window your clinician confirms.",
+    },
+  ],
+  benefits: [
+    { title: "Appetite regulation", description: "Supports appetite control and a stronger sense of fullness." },
+    { title: "Sustainable weight management", description: "Supports gradual weight loss and long-term weight maintenance." },
+    { title: "Reduced cravings", description: "Supports a calmer mental relationship with hunger and eating." },
+    { title: "Metabolic support", description: "Supports blood sugar regulation and insulin sensitivity." },
+  ],
+  faqItems: [
+    {
+      question: "How is Compounded Semaglutide different from Tirzepatide?",
+      answer:
+        "Both are GLP-1 medications for weight management. Semaglutide activates one receptor (GLP-1). Tirzepatide activates two (GLP-1 and GIP), which often produces stronger effects but also more pronounced side effects during titration. Semaglutide is the more established compound and often the starting point in a protocol. Your clinician recommends the right one based on your goals, medical history, and how your body is likely to respond.",
+    },
+    {
+      question: "Is Compounded Semaglutide the same as Ozempic or Wegovy?",
+      answer:
+        "The active ingredient is the same — semaglutide. Compounded Semaglutide is prepared to your prescription at a licensed US 503A/503B pharmacy, which lets your clinician personalise your dose and titration in ways branded medications can't. Compounded medications aren't FDA-approved, but the underlying compound has been studied extensively and used in clinical practice for years.",
+    },
+    {
+      question: "Who is Compounded Semaglutide prescribed for — and can I take it with other therapies?",
+      answer:
+        "Compounded Semaglutide is prescribed for adults working on weight management or metabolic health, in men and women. It's commonly paired with peptides that support recovery, metabolic function, and lean muscle preservation during weight loss — protocols like these help manage the side effect load and support better long-term outcomes. Share whatever you're currently on in your intake, including diabetes medications, thyroid medication, or previous GLP-1 use. It's not appropriate for pregnancy, personal or family history of medullary thyroid cancer, MEN syndrome type 2, or active pancreatitis.",
+    },
+    {
+      question: "What are the common side effects?",
+      answer:
+        "The most common side effects are gastrointestinal — nausea, mild vomiting, constipation, or heartburn — usually most pronounced in the first weeks and after each dose increase. They typically ease as your body adjusts. Slower titration reduces most of these, which is why your clinician sets the pace based on your intake. Rare but serious effects are covered in your Important Safety Information. Anything concerning while on protocol — you message us and we adjust.",
+    },
+    {
+      question: "What happens when I stop taking Semaglutide?",
+      answer:
+        "Appetite regulation returns to baseline over time, and without other habits or supports in place, weight regain is common. This is why we treat Semaglutide as a tool inside a broader protocol — building habits during treatment, tapering deliberately, and staying in touch even after you stop. Long-term maintenance is a lot more likely with a structured off-ramp than without one.",
+    },
+    FAQ_PAUSE,
+    FAQ_RUNOUT,
+    FAQ_INSURANCE,
+  ],
+});
+
+export const tirzepatideProduct: ProductContent = makeProduct({
+  slug: "tirzepatide",
+  eyebrow: "Weight",
+  name: "Compounded Tirzepatide",
+  description:
+    "Compounded Tirzepatide is a dual-action medication that engages both GLP-1 and GIP — two of the body's own appetite and metabolic signalling pathways — to support fullness, glucose response, and how the body regulates energy. It's used in protocol for people whose clinical picture calls for dual-pathway support, whether from the outset or when a single-pathway approach hasn't matched the goal.",
+  tagline: "Dual-pathway weight and metabolic support.",
+  accordion: [
+    {
+      title: "What it is",
+      body: "Tirzepatide is a synthetic peptide that acts on two of the body's own appetite and metabolic hormones — GLP-1 (glucagon-like peptide-1) and GIP (glucose-dependent insulinotropic polypeptide). Both are released after eating and work together to signal fullness, regulate blood sugar, and influence how the body stores and uses energy. Engaging both pathways at once is what distinguishes tirzepatide from GLP-1-only medications.",
+    },
+    {
+      title: "How it's used",
+      body: "Tirzepatide is administered as a once-weekly subcutaneous injection, typically taken on the same day each week. Protocols usually start at a low dose and titrate up gradually over the first weeks — your clinician sets the starting dose, the pace of increase, and where your protocol ultimately settles. For some patients, that means a microdose that provides metabolic support without the fuller weight-loss effect; for others, it means titrating to a standard weight-management dose.",
+    },
+    {
+      title: "What's in the vial",
+      body: "Pharmaceutical-grade tirzepatide, compounded at a licensed US 503A pharmacy in the concentration your clinician prescribes. Buffers and diluent are standard for injectable peptide preparations. Every batch is third-party tested — full potency, sterility, pH, and endotoxin results in the Quality panel below.",
+    },
+  ],
+  benefits: [
+    { title: "Appetite regulation", description: "Supports fullness through both the GLP-1 and GIP pathways at once." },
+    { title: "Weight management", description: "Supports gradual weight loss and long-term maintenance." },
+    { title: "Steadier blood sugar", description: "Supports post-meal glucose response and insulin sensitivity." },
+    { title: "Muscle preservation", description: "Supports fat loss with attention to preserving lean tissue." },
+  ],
+  faqItems: [
+    {
+      question: "How is Compounded Tirzepatide different from Semaglutide?",
+      answer:
+        "Both are GLP-1 medications for weight management. Semaglutide engages one receptor (GLP-1). Tirzepatide engages two (GLP-1 and GIP), which often produces stronger effects along with a more pronounced side effect curve during titration. Semaglutide is the more established compound and often the starting point in a protocol. Tirzepatide is chosen when the clinical picture calls for dual-pathway support from the outset, or when a single-pathway approach hasn't matched the goal. Your clinician recommends the right one based on your goals, medical history, and how your body is likely to respond.",
+    },
+    {
+      question: "Is Compounded Tirzepatide the same as Mounjaro or Zepbound?",
+      answer:
+        "The active ingredient is the same — tirzepatide. Compounded Tirzepatide is prepared to your prescription at a licensed US 503A/503B pharmacy, which lets your clinician set the exact dose and titration pace for your body — including microdose starting points and step-up increments that aren't available in commercial fixed-dose pens. Compounded medications aren't FDA-approved. The underlying compound has been studied extensively and is prescribed daily in clinical practice.",
+    },
+    {
+      question: "Who is Compounded Tirzepatide prescribed for — and can I take it with other therapies?",
+      answer:
+        "Compounded Tirzepatide is prescribed for adults working on weight management or metabolic health, in men and women. It's commonly paired with peptides that support recovery, metabolic function, and lean muscle preservation during weight loss — protocols like these help manage the side effect load and support better long-term outcomes. Share whatever you're currently on in your intake, including diabetes medications, thyroid medication, or previous GLP-1 use. It's not appropriate for pregnancy, personal or family history of medullary thyroid cancer, MEN syndrome type 2, or active pancreatitis.",
+    },
+    {
+      question: "What are the common side effects?",
+      answer:
+        "The most common side effects are gastrointestinal — nausea, mild vomiting, constipation, heartburn, or belching — usually most pronounced in the first weeks and after each dose increase. They typically ease as your body adjusts. Slower titration reduces most of these, which is why your clinician sets the pace based on your intake. Rare but serious effects are covered in your Important Safety Information. Anything concerning while on protocol — you message us and we adjust.",
+    },
+    {
+      question: "What happens when I stop taking Tirzepatide?",
+      answer:
+        "Appetite regulation returns to baseline over time, and without other habits or supports in place, weight regain is common. Trial data suggests most people who stop without a plan regain a significant portion of their loss within a year. This is why we treat Tirzepatide as a tool inside a broader protocol — building habits during treatment, tapering deliberately, and staying in touch even after you stop. Long-term maintenance is a lot more likely with a structured off-ramp than without one.",
+    },
+    FAQ_PAUSE,
+    FAQ_RUNOUT,
+    FAQ_INSURANCE,
+  ],
+});
+
+export const dsipProduct: ProductContent = makeProduct({
+  slug: "dsip",
+  eyebrow: "Recovery",
+  name: "DSIP",
+  description:
+    "DSIP is a neuropeptide that acts on the pathways governing deep sleep — supporting slow-wave recovery, cortisol regulation, and nervous system reset. It's used in protocol for people who sleep enough hours but wake unrestored, and for those who want recovery support without sedation.",
+  tagline: "Deep sleep and overnight recovery.",
+  accordion: [
+    {
+      title: "What it is",
+      body: "DSIP (Delta Sleep-Inducing Peptide) is a naturally occurring neuropeptide first identified in the 1970s for its role in triggering slow-wave sleep — the deep, delta-wave phase where the body does most of its physical repair and neurological consolidation. It acts on the brain's sleep-regulation and stress-response pathways, and unlike sedatives, it doesn't force sleep — it signals for it.",
+    },
+    {
+      title: "How it's used",
+      body: "DSIP is administered as a subcutaneous injection, typically taken 30 to 60 minutes before bed. Most protocols run cyclically — several nights on, a night or two off — to preserve the body's response over time. Your clinician sets the timing, the cycle, and the length of protocol based on your intake.",
+    },
+    {
+      title: "What's in the vial",
+      body: "Pharmaceutical-grade DSIP, compounded at a licensed US 503A pharmacy in the concentration your clinician prescribes. Buffers and diluent are standard for injectable peptide preparations. Every batch is third-party tested — full potency, sterility, pH, and endotoxin results in the Quality panel below.",
+    },
+  ],
+  benefits: [
+    { title: "Promotes deep sleep", description: "Signals slow-wave (delta) sleep and deeper overnight recovery." },
+    { title: "Enhances recovery", description: "Supports muscle and tissue repair during deep sleep." },
+    { title: "Regulates cortisol", description: "Supports steadier stress hormone rhythms through the night." },
+    { title: "Calms the nervous system", description: "Supports the shift from stress state to rest and recovery." },
+  ],
+  faqItems: [
+    {
+      question: "How is DSIP different from melatonin or other OTC sleep aids?",
+      answer:
+        "Melatonin and most OTC sleep aids work on sleep onset — helping you fall asleep. DSIP works on sleep architecture — specifically slow-wave (delta) sleep, the deep phase where the body does most of its physical and neurological recovery. The two do different jobs. Falling asleep fine but waking unrestored is a different clinical picture than not being able to fall asleep, and DSIP is protocolled for the first case.",
+    },
+    {
+      question: "How does DSIP compare to prescription sleep medications like Ambien or trazodone?",
+      answer:
+        "Prescription sleep medications work by sedation — they suppress the nervous system to bring on sleep. DSIP isn't a sedative. It signals the pathways that trigger slow-wave sleep, without forcing the system into unconsciousness. That's why users typically report waking without the grogginess or next-day cognitive drag that comes with sedative sleep aids. It's also why DSIP is used in protocol as a longer-term recovery approach rather than an as-needed prescription.",
+    },
+    {
+      question: "Who is DSIP prescribed for — and can I take it with other therapies?",
+      answer:
+        "DSIP is prescribed for adults working on sleep quality, recovery, and stress regulation. It's commonly paired with peptides that support systemic recovery — including Sermorelin, where DSIP works on sleep architecture directly and Sermorelin supports the growth hormone pulse that runs during deep sleep. Share whatever you're currently on in your intake, including sleep medications, SSRIs, or anti-anxiety medications. It's not appropriate for pregnancy, active seizure disorders, or in combination with prescription sedatives without clinician review.",
+    },
+    {
+      question: "What are the common side effects?",
+      answer:
+        "DSIP has a small side effect profile — most users report none. Some people notice vivid dreams during the first week, mild headache, or a warm sensation at the injection site that resolves quickly. Effects typically ease as your body adjusts. Rare but serious effects are covered in your Important Safety Information. Anything concerning while on protocol — you message us and we adjust.",
+    },
+    {
+      question: "What happens when I stop taking DSIP?",
+      answer:
+        "DSIP doesn't create dependence or withdrawal — it doesn't override the sleep system, it supports it. Sleep quality returns to your baseline when you stop, without the rebound insomnia that can come with prescription sedatives. This is one of the reasons DSIP works well inside a broader recovery protocol — you can taper, pause, or cycle it without losing ground, and use it seasonally or during high-stress periods without long-term commitment.",
+    },
+    FAQ_PAUSE,
+    FAQ_RUNOUT,
+    FAQ_INSURANCE,
+  ],
+});
+
+export const motsCProduct: ProductContent = makeProduct({
+  slug: "mots-c",
+  eyebrow: "Metabolic",
+  name: "MOTS-C",
+  description:
+    "MOTS-C is a mitochondrial peptide that acts on the systems governing how the body produces and uses energy — supporting insulin sensitivity, exercise capacity, and metabolic function at the cellular level. It's used in protocol for people focused on metabolic health, athletic performance, and long-term energy regulation.",
+  tagline: "Metabolic health and cellular energy.",
+  accordion: [
+    {
+      title: "What it is",
+      body: "MOTS-C is a peptide encoded within mitochondrial DNA — one of a small class of molecules the mitochondria produce and release to signal across the body's metabolic system. It acts on muscle, liver, and fat tissue to influence how cells respond to insulin, how energy is used during exercise, and how the body maintains metabolic balance under stress. Research into its role in metabolic health and athletic performance is ongoing.",
+    },
+    {
+      title: "How it's used",
+      body: "MOTS-C is administered as a subcutaneous injection, typically two to three times per week. Most protocols run in defined cycles — often 8 to 12 weeks — with your clinician setting the exact dose, frequency, and cycle length based on your intake and goals. It's commonly used alongside training and structured lifestyle inputs, since MOTS-C's mechanism responds to physical demand.",
+    },
+    {
+      title: "What's in the vial",
+      body: "Pharmaceutical-grade MOTS-C, compounded at a licensed US 503A pharmacy in the concentration your clinician prescribes. Buffers and diluent are standard for injectable peptide preparations. Every batch is third-party tested — full potency, sterility, pH, and endotoxin results in the Quality panel below.",
+    },
+  ],
+  benefits: [
+    { title: "Improves insulin sensitivity", description: "Helps skeletal muscle absorb glucose more efficiently, supporting blood sugar balance." },
+    { title: "Enhances exercise capacity", description: "Mimics the metabolic effects of exercise to support endurance, stamina, and how muscle uses energy." },
+    { title: "Regulates metabolism", description: "Acts as a metabolic switch — shifting the body toward burning fat for fuel rather than storing it." },
+    { title: "Protects mitochondrial function", description: "Promotes mitochondrial biogenesis to sustain cellular energy production over time." },
+  ],
+  faqItems: [
+    {
+      question: "How is MOTS-C different from NAD+?",
+      answer:
+        "Both work at the mitochondrial level, but they do different jobs. NAD+ is a coenzyme the body uses to produce cellular energy — supplementing it raises the raw material your cells work with. MOTS-C is a signaling peptide that changes how cells use energy — it activates the metabolic pathways that improve insulin sensitivity, fat oxidation, and mitochondrial biogenesis. NAD+ tops up the supply; MOTS-C tunes the system. Some patients run both, staggered — your clinician recommends which one, and in what sequence, based on your goals and labs.",
+    },
+    {
+      question: "How does MOTS-C compare to NMN or other longevity supplements?",
+      answer:
+        "NMN and NR are precursors — the body converts them into NAD+, which then feeds cellular energy production. MOTS-C works one layer above that: it's a peptide that signals cells to become more metabolically efficient in the first place. The two categories aren't interchangeable. Precursor supplements raise the fuel available; MOTS-C changes how the engine runs. MOTS-C is also prescribed and clinician-supervised, with dosing, cycling, and lab-tracking built in — not the same category as an OTC longevity supplement.",
+    },
+    {
+      question: "Who is MOTS-C prescribed for — and can I take it with other therapies?",
+      answer:
+        "MOTS-C is prescribed for adults working on metabolic health, insulin sensitivity, athletic performance, or long-term energy regulation. It's commonly paired with peptides that support recovery and mitochondrial function — including NAD+, where MOTS-C tunes metabolic signaling and NAD+ supports the raw energy supply cells draw from. Share whatever you're currently on in your intake, including diabetes medications, thyroid medication, or existing peptide protocols. It's not appropriate for pregnancy, active cancer, or in combination with insulin without clinician review.",
+    },
+    {
+      question: "What are the common side effects?",
+      answer:
+        "MOTS-C has a small side effect profile. The most commonly reported effect is injection site reaction — brief stinging, redness, or occasional swelling that resolves within an hour or two. Some patients notice a mild energy shift or warmth for the first hour after injection. Effects typically ease over the first few cycles as your body adjusts. Rare but serious effects are covered in your Important Safety Information. Anything concerning while on protocol — you message us and we adjust.",
+    },
+    {
+      question: "What happens when I stop taking MOTS-C?",
+      answer:
+        "MOTS-C doesn't create dependence — the pathways it activates return to their pre-protocol state gradually over the weeks following your last cycle. Some of the metabolic improvements built during protocol persist longer if paired with continued training and structured lifestyle inputs, since MOTS-C's effect is amplified by physical demand. This is why we treat it as a cyclical protocol tied to real-world work — not a standalone intervention. Cycling on and off through the year is a common approach.",
+    },
+    FAQ_PAUSE,
+    FAQ_RUNOUT,
+    FAQ_INSURANCE,
+  ],
+});
+
+/** Every product page, keyed by slug. Unknown slugs fall back to BPC-157. */
+export const productsBySlug: Record<string, ProductContent> = {
+  "bpc-157": bpc157Product,
+  sermorelin: sermorelinProduct,
+  nad: nadProduct,
+  "pt-141": pt141Product,
+  "ghk-cu": ghkCuProduct,
+  semaglutide: semaglutideProduct,
+  tirzepatide: tirzepatideProduct,
+  dsip: dsipProduct,
+  "mots-c": motsCProduct,
+};
+
+export const allProducts: ProductContent[] = [
+  bpc157Product,
+  sermorelinProduct,
+  nadProduct,
+  pt141Product,
+  ghkCuProduct,
+  semaglutideProduct,
+  tirzepatideProduct,
+  dsipProduct,
+  motsCProduct,
+];
+
 export type CartUpsell = {
   category: string;
   name: string;
@@ -1437,15 +2131,15 @@ export const cart: CartContent = {
       description: "Dual-action weight management, once weekly.",
       image: "/images/catalog/vial-bpc157.png",
       price: "$129.00",
-      href: "/products/bpc-157",
+      href: "/products/tirzepatide",
     },
     {
-      category: "Hormonal",
+      category: "Performance",
       name: "Sermorelin",
       description: "Growth-hormone support, recovery and sleep.",
       image: "/images/catalog/vial-recovery.png",
       price: "$99.00",
-      href: "/products/bpc-157",
+      href: "/products/sermorelin",
     },
     {
       category: "Skin",
@@ -1453,7 +2147,7 @@ export const cart: CartContent = {
       description: "Skin, hair and collagen renewal.",
       image: "/images/catalog/vial-bpc157.png",
       price: "$79.00",
-      href: "/products/bpc-157",
+      href: "/products/ghk-cu",
     },
   ],
   shippingLabel: "Shipping",

@@ -14,6 +14,7 @@ import { Footer } from "@/components/footer";
 import {
   siteHeader,
   bpc157Product,
+  productsBySlug,
   testimonials,
   catalog,
   blog,
@@ -25,10 +26,15 @@ import { mapProduct } from "@/lib/storyblok-map";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "BPC-157 — Sync.",
-  description: bpc157Product.description,
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const p = productsBySlug[slug] ?? bpc157Product;
+  return { title: `${p.name} — Sync.`, description: p.description };
+}
 
 export default async function ProductPage({
   params,
@@ -40,10 +46,10 @@ export default async function ProductPage({
   const { slug } = await params;
   const sp = await searchParams;
   const { isEnabled } = await draftMode();
-  // One product built so far; unknown slugs fall back to BPC-157 content.
+  // Per-slug content.ts fallback; unknown slugs fall back to BPC-157.
   const product = mapProduct(
     await getStoryContent(`product-${slug}`, resolveVersion(sp, isEnabled)),
-    bpc157Product,
+    productsBySlug[slug] ?? bpc157Product,
   );
 
   return (
