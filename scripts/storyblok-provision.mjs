@@ -365,7 +365,7 @@ function buildBody() {
 /* --------------------------- story upsert ------------------------------- */
 // Fetch the story list once and reuse it across upserts.
 let _storyList = null;
-async function upsertStory(name, slug, content) {
+async function upsertStory(name, slug, content, realPath) {
   if (!_storyList) {
     _storyList = (
       await Storyblok.get(`${base}/stories`, { per_page: 100 })
@@ -374,7 +374,11 @@ async function upsertStory(name, slug, content) {
   const existing = _storyList.find((st) => st.slug === slug);
   // NB: pages are fetched by slug (cdn/stories/<slug>), not by startpage.
   // Storyblok rejects is_startpage on a root (parent_id 0) story, so we omit it.
+  // `path` is the "Real path" override that tells the Visual Editor which
+  // front-end URL to preview for this story, so the client sees the actual page
+  // when editing. (`real_path` in the API is read-only/computed.)
   const story = { name, slug, content };
+  if (realPath) story.path = realPath;
   if (existing) {
     await Storyblok.put(`${base}/stories/${existing.id}`, { story, publish: 1 });
     console.log(`  ✔ ${name} (/${slug}) updated & published`);
@@ -651,23 +655,29 @@ function buildProduct(c) {
 }
 
 async function seedHome() {
-  await upsertStory("Home", "home", blk("page", { body: buildBody() }));
+  await upsertStory("Home", "home", blk("page", { body: buildBody() }), "/");
 }
 
 async function seedPages() {
-  await upsertStory("Terms of Service", "terms", buildLegal(termsOfService));
-  await upsertStory("Privacy Policy", "privacy", buildLegal(privacyPolicy));
-  await upsertStory("Journal", "journal", buildJournal(journal));
+  await upsertStory("Terms of Service", "terms", buildLegal(termsOfService), "/terms");
+  await upsertStory("Privacy Policy", "privacy", buildLegal(privacyPolicy), "/privacy");
+  await upsertStory("Journal", "journal", buildJournal(journal), "/journal");
   await upsertStory(
     "Article — Compounded peptides",
     "article-compounded-peptides",
     buildArticle(article),
+    "/journal/compounded-peptides",
   );
-  await upsertStory("Checkout", "checkout", buildCheckout(checkout));
-  await upsertStory("Cart", "cart", buildCartPage(cartPage));
-  await upsertStory("Cart drawer", "cart-drawer", buildCartDrawer(cart));
+  await upsertStory("Checkout", "checkout", buildCheckout(checkout), "/checkout");
+  await upsertStory("Cart", "cart", buildCartPage(cartPage), "/cart");
+  await upsertStory("Cart drawer", "cart-drawer", buildCartDrawer(cart), "/");
   for (const p of allProducts) {
-    await upsertStory(`Product — ${p.name}`, `product-${p.slug}`, buildProduct(p));
+    await upsertStory(
+      `Product — ${p.name}`,
+      `product-${p.slug}`,
+      buildProduct(p),
+      `/products/${p.slug}`,
+    );
   }
 }
 

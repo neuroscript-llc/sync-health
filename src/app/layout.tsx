@@ -3,6 +3,7 @@ import { draftMode } from "next/headers";
 import "./globals.css";
 import { satoshi, sourceCode, manrope } from "./fonts";
 import StoryblokProvider from "@/components/storyblok-provider";
+import { StoryblokLivePreview } from "@/components/storyblok-live";
 import { CartProvider } from "@/components/cart-provider";
 import { cart } from "@/lib/content";
 import { getStoryContent } from "@/lib/storyblok";
@@ -34,6 +35,7 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col font-sans">
         <StoryblokProvider>
+          <StoryblokLivePreview />
           <CartProvider content={drawer}>{children}</CartProvider>
         </StoryblokProvider>
       </body>
