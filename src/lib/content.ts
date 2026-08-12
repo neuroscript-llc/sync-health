@@ -1191,11 +1191,11 @@ export const bpc157Product: ProductContent = {
     main: "/images/pdp/hero-main.png",
     thumbnails: [
       "/images/pdp/thumb-color.png",
-      "/images/pdp/thumb-grey.png",
-      "/images/pdp/thumb-grey.png",
-      "/images/pdp/thumb-grey.png",
-      "/images/pdp/thumb-grey.png",
-      "/images/pdp/thumb-grey.png",
+      "/images/pdp/thumb-color.png",
+      "/images/pdp/thumb-color.png",
+      "/images/pdp/thumb-color.png",
+      "/images/pdp/thumb-color.png",
+      "/images/pdp/thumb-color.png",
     ],
   },
   trust: [
@@ -1383,11 +1383,11 @@ const PDP_GALLERY: ProductContent["gallery"] = {
   main: "/images/pdp/hero-main.png",
   thumbnails: [
     "/images/pdp/thumb-color.png",
-    "/images/pdp/thumb-grey.png",
-    "/images/pdp/thumb-grey.png",
-    "/images/pdp/thumb-grey.png",
-    "/images/pdp/thumb-grey.png",
-    "/images/pdp/thumb-grey.png",
+    "/images/pdp/thumb-color.png",
+    "/images/pdp/thumb-color.png",
+    "/images/pdp/thumb-color.png",
+    "/images/pdp/thumb-color.png",
+    "/images/pdp/thumb-color.png",
   ],
 };
 
