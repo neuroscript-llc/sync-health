@@ -7,7 +7,7 @@ export function Quality({
   ...rest
 }: { content: QualityContent } & Omit<React.ComponentPropsWithoutRef<"section">, "content">) {
   return (
-    <section className="px-6 py-20 sm:px-9" style={{ background: SECTION_BG }} {...rest}>
+    <section className="px-6 py-12 sm:px-9" style={{ background: SECTION_BG }} {...rest}>
       <div className="mx-auto flex max-w-[1368px] flex-col gap-16">
         {/* Header */}
         <div className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-end">

@@ -53,7 +53,7 @@ export function ArticlePage({ content }: { content: ArticleContent }) {
   return (
     <>
       {/* Header — left-aligned on mobile (Figma), centred ≥ sm */}
-      <section className="flex flex-col gap-6 px-5 py-12 sm:items-center sm:gap-10 sm:px-9 sm:py-20">
+      <section className="flex flex-col gap-6 px-5 py-12 sm:items-center sm:gap-10 sm:px-9 sm:py-12">
         <div className="mx-auto flex w-full max-w-[1368px] flex-col items-start gap-6 sm:items-center sm:gap-5">
           {/* Breadcrumb */}
           <p className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.04em] sm:text-sm sm:tracking-[0.06em]">
@@ -114,7 +114,7 @@ export function ArticlePage({ content }: { content: ArticleContent }) {
       </section>
 
       {/* Body: sticky TOC + prose */}
-      <section className="px-5 pb-16 sm:px-9 sm:pb-20">
+      <section className="px-5 pb-12 sm:px-9 sm:pb-12">
         <div className="mx-auto flex max-w-[1040px] flex-col gap-8 lg:flex-row lg:gap-20">
           {/* Table of contents — desktop only (Figma mobile omits it) */}
           <aside className="hidden lg:block lg:w-[200px] lg:shrink-0">
@@ -207,7 +207,7 @@ export function ArticlePage({ content }: { content: ArticleContent }) {
       </section>
 
       {/* Related */}
-      <section className="px-5 py-16 sm:px-9 sm:py-20">
+      <section className="px-5 py-12 sm:px-9 sm:py-12">
         <div className="mx-auto flex max-w-[1368px] flex-col gap-10 sm:gap-12">
           <div className="flex flex-col gap-3 sm:gap-4">
             <p className="font-mono text-sm font-medium uppercase tracking-[0.06em] text-brand">

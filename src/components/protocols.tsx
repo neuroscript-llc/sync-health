@@ -148,7 +148,7 @@ export function Protocols({
   ...rest
 }: { content: ProtocolsContent } & Omit<React.ComponentPropsWithoutRef<"section">, "content">) {
   return (
-    <section className="bg-cream px-5 py-12 sm:px-9 sm:py-20" {...rest}>
+    <section className="bg-cream px-5 py-12 sm:px-9 sm:py-12" {...rest}>
       <div className="mx-auto flex max-w-[1200px] flex-col items-start gap-10 sm:items-center sm:gap-11">
         {/* Header */}
         <div className="flex flex-col items-start gap-4 text-left sm:items-center sm:text-center">

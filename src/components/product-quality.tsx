@@ -65,7 +65,7 @@ export function ProductQuality({
     <section {...rest}>
       {/* Mobile (Figma): white rounded card, no collage. sm+ resets to the
           full desktop layout (collage beside the heading, larger type). */}
-      <div className="mx-auto flex max-w-[1440px] flex-col gap-10 rounded-2xl bg-white px-5 py-12 sm:gap-16 sm:rounded-none sm:bg-transparent sm:px-9 sm:py-20">
+      <div className="mx-auto flex max-w-[1440px] flex-col gap-10 rounded-2xl bg-white px-5 py-12 sm:gap-16 sm:rounded-none sm:bg-transparent sm:px-9 sm:py-12">
         {/* Row 1 — heading + photo collage */}
         <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
           <h2 className="max-w-[615px] text-[48px] font-medium leading-[56px] tracking-[-0.03em] text-ink lg:text-[56px] lg:leading-[64px] lg:tracking-[-0.02em]">

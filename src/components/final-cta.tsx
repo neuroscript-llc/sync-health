@@ -9,7 +9,7 @@ export function FinalCta({
     // The coral mesh glow bleeds down from here into the footer below (they read
     // as one backdrop). overflow-x-clip kills the gradient's horizontal bleed
     // without cutting the vertical flow into the footer.
-    <section className="relative overflow-x-clip bg-white px-5 py-12 sm:px-9 sm:py-20" {...rest}>
+    <section className="relative overflow-x-clip bg-white px-5 py-12 sm:px-9 sm:py-12" {...rest}>
       {/* Coral mesh — the elliptical glow centred behind the CTA content so it
           reads as a halo around it (rather than pooling down in the footer). */}
       <div

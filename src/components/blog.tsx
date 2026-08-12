@@ -55,7 +55,7 @@ export function Blog({
   };
 
   return (
-    <section className="bg-white px-5 py-12 sm:px-9 sm:py-20" {...rest}>
+    <section className="bg-white px-5 py-12 sm:px-9 sm:py-12" {...rest}>
       <div className="mx-auto flex max-w-[1368px] flex-col gap-10">
         {/* Header */}
         <div className="flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-end">

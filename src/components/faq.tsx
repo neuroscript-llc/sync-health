@@ -73,7 +73,7 @@ export function Faq({
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section className="bg-white px-5 py-12 sm:px-9 sm:py-20" {...rest}>
+    <section className="bg-white px-5 py-12 sm:px-9 sm:py-12" {...rest}>
       <div className="mx-auto flex max-w-[1368px] flex-col justify-between gap-10 lg:flex-row lg:gap-16">
         {/* Left column */}
         <div className="flex w-full max-w-[396px] flex-col gap-4 lg:gap-[18px]">

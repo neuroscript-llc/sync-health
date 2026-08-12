@@ -94,7 +94,7 @@ export function ProductWhy({
 
   return (
     <section {...rest}>
-      <div className="mx-auto flex max-w-[1440px] flex-col items-start gap-10 py-12 xl:items-center xl:gap-16 xl:px-9 xl:py-20">
+      <div className="mx-auto flex max-w-[1440px] flex-col items-start gap-10 py-12 xl:items-center xl:gap-16 xl:px-9 xl:py-12">
         <h2 className="self-stretch px-5 text-[48px] font-medium leading-[56px] tracking-[-0.03em] text-ink xl:px-0 xl:text-center xl:text-[56px] xl:leading-[64px] xl:tracking-[-0.02em]">
           {heading}
         </h2>

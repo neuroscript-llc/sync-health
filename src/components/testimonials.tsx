@@ -131,7 +131,7 @@ export function Testimonials({
   }, []);
 
   return (
-    <section className="relative px-5 py-12 sm:px-9 sm:py-20" {...rest}>
+    <section className="relative px-5 py-12 sm:px-9 sm:py-12" {...rest}>
       <div className="relative z-10 mx-auto flex max-w-[1360px] flex-col items-center gap-12 sm:gap-20">
         {/* Header */}
         <div className="flex w-full max-w-[710px] flex-col items-start gap-4 text-left sm:items-center sm:text-center">

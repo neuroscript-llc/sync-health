@@ -109,7 +109,7 @@ function Newsletter({
   newsletter: JournalContent["newsletter"];
 }) {
   return (
-    <section className="relative bg-white px-5 py-16 sm:px-9 sm:py-24">
+    <section className="relative bg-white px-5 py-12 sm:px-9 sm:py-12">
       {/* Warm radial wash (Figma 957-14248): white core → pink → coral, fading
           to transparent. Rendered before the content and left UNCLIPPED, so it
           bleeds past the section's top edge into the white above and reads as
@@ -183,7 +183,7 @@ export function JournalPage({ content }: { content: JournalContent }) {
 
   return (
     <>
-      <section className="px-5 py-16 sm:px-9 sm:py-20">
+      <section className="px-5 py-12 sm:px-9 sm:py-12">
         <div className="mx-auto flex max-w-[1368px] flex-col gap-10 sm:gap-12">
           {/* Header */}
           <div className="flex flex-col gap-6 sm:gap-[18px]">
@@ -220,7 +220,7 @@ export function JournalPage({ content }: { content: JournalContent }) {
                 ))}
               </div>
             ) : (
-              <p className="py-16 text-center text-base text-ink/60">
+              <p className="py-12 text-center text-base text-ink/60">
                 No articles in this topic yet.
               </p>
             )}

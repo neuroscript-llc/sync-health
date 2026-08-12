@@ -163,7 +163,7 @@ export function CartPageBody({
   return (
     <>
       {/* Cart */}
-      <section className="mx-auto flex w-full max-w-[1368px] flex-col gap-10 px-5 py-12 sm:gap-11 sm:px-9 sm:py-20">
+      <section className="mx-auto flex w-full max-w-[1368px] flex-col gap-10 px-5 py-12 sm:gap-11 sm:px-9 sm:py-12">
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1 sm:gap-4">
             <p className="font-mono text-sm font-medium uppercase tracking-[0.08em] text-brand sm:tracking-[0.04em]">
@@ -230,7 +230,7 @@ export function CartPageBody({
       </section>
 
       {/* Often stacked with this */}
-      <section className="mx-auto flex w-full max-w-[1368px] flex-col gap-7 px-5 py-12 sm:px-9 sm:py-20">
+      <section className="mx-auto flex w-full max-w-[1368px] flex-col gap-7 px-5 py-12 sm:px-9 sm:py-12">
         <div className="flex flex-col gap-4">
           <p className="font-mono text-sm font-medium uppercase tracking-[0.04em] text-brand">
             {content.stackedEyebrow}

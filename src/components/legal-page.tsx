@@ -26,7 +26,7 @@ export function LegalPage({ content }: { content: LegalContent }) {
   const c = content;
 
   return (
-    <section className="px-5 py-14 sm:px-9 sm:py-20">
+    <section className="px-5 py-14 sm:px-9 sm:py-12">
       <div className="mx-auto flex max-w-[1368px] flex-col gap-10 sm:gap-12">
         {/* Header */}
         <div className="flex flex-col gap-4">

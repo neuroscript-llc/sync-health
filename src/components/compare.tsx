@@ -39,7 +39,7 @@ export function Compare({
 }: { content: CompareContent } & Omit<React.ComponentPropsWithoutRef<"section">, "content">) {
   return (
     <section
-      className="relative overflow-x-clip px-5 py-12 sm:px-9 sm:py-20"
+      className="relative overflow-x-clip px-5 py-12 sm:px-9 sm:py-12"
       style={{ background: SECTION_BG }}
       {...rest}
     >

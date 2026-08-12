@@ -122,7 +122,7 @@ export function Catalog({
   };
 
   return (
-    <section className="bg-white px-5 py-12 sm:px-9 sm:py-20" {...rest}>
+    <section className="bg-white px-5 py-12 sm:px-9 sm:py-12" {...rest}>
       <div className="mx-auto flex max-w-[1368px] flex-col items-center gap-10 sm:gap-11">
         {/* Header */}
         <div className="flex w-full flex-col items-start justify-between gap-8 sm:flex-row sm:items-end">
