@@ -182,9 +182,26 @@ body {
   animation-play-state: paused;
 }
 
+/* Gently floating vial — used in the "Why <compound>" PDP section. */
+@keyframes vial-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-16px) rotate(1deg);
+  }
+}
+
+.animate-vial-float {
+  animation: vial-float 6s ease-in-out infinite;
+  will-change: transform;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
-  .animate-marquee-slow {
+  .animate-marquee-slow,
+  .animate-vial-float {
     animation: none;
   }
 }

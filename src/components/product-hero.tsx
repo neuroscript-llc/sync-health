@@ -56,16 +56,10 @@ function PlanRadio({ active }: { active: boolean }) {
   );
 }
 
-/** Small pill: SAVE badge (green) or the recommended / best-value tag. */
+/** Slim single-line tag: recommended / best-value. */
 function PlanBadge({ badge }: { badge: NonNullable<ProductPlan["badge"]> }) {
   return (
-    <span
-      className={`inline-flex shrink-0 items-center rounded-md px-2 py-1 font-mono text-xs font-medium uppercase leading-4 tracking-[-0.04em] ${
-        badge.variant === "best"
-          ? "bg-brand text-white"
-          : "border border-ink bg-white text-ink"
-      }`}
-    >
+    <span className="inline-flex shrink-0 items-center whitespace-nowrap rounded-full bg-brand px-2.5 py-1 font-mono text-[10px] font-semibold uppercase leading-none tracking-[0.03em] text-white">
       {badge.text}
     </span>
   );
@@ -187,7 +181,13 @@ export function ProductHero({
 >) {
   const [activeThumb, setActiveThumb] = useState(0);
   const [activeMethod, setActiveMethod] = useState(0);
-  const [activePlan, setActivePlan] = useState(0);
+  // Pre-select the clinically-recommended plan (3-Month), falling back to first.
+  const recommendedPlan = content.plans.findIndex(
+    (p) => p.badge?.variant === "recommended",
+  );
+  const [activePlan, setActivePlan] = useState(
+    recommendedPlan >= 0 ? recommendedPlan : 0,
+  );
   const [openItem, setOpenItem] = useState<number | null>(null);
   const { addItem } = useCart();
 
@@ -359,19 +359,19 @@ export function ProductHero({
                     active ? "bg-brand" : "border border-ink/20"
                   }`}
                 >
-                  {plan.badge && (
-                    <span
-                      className={`absolute right-3 top-3 z-10 rounded-md px-2 py-1 font-mono text-xs font-medium uppercase leading-4 tracking-[-0.04em] ${
-                        plan.badge.variant === "best"
-                          ? active
-                            ? "bg-white text-brand"
-                            : "bg-brand text-white"
-                          : "border border-ink bg-white text-ink"
-                      }`}
-                    >
-                      {plan.badge.text}
-                    </span>
-                  )}
+                  {/* recommended / best tag — its own line; the reserved slot
+                      keeps the radios aligned across all cards */}
+                  <span className="flex min-h-[22px] w-full items-center">
+                    {plan.badge && (
+                      <span
+                        className={`whitespace-nowrap rounded-full px-2 py-1 font-mono text-[10px] font-semibold uppercase leading-none tracking-[0.03em] ${
+                          active ? "bg-white text-brand" : "bg-brand text-white"
+                        }`}
+                      >
+                        {plan.badge.text}
+                      </span>
+                    )}
+                  </span>
                   <Radio active={active} />
                   <span className="flex flex-col gap-1.5">
                     <span className="flex flex-col gap-[3px]">

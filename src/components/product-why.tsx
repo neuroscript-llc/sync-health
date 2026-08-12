@@ -94,7 +94,11 @@ export function ProductWhy({
 
   return (
     <section {...rest}>
-      <div className="mx-auto flex max-w-[1440px] flex-col items-start gap-10 py-12 xl:items-center xl:gap-16 xl:px-9 xl:py-12">
+      {/* The whole "Why" section sits ~3% smaller than the rest of the page. */}
+      <div
+        className="mx-auto flex max-w-[1440px] flex-col items-start gap-10 py-12 xl:items-center xl:gap-16 xl:px-9 xl:py-12"
+        style={{ zoom: 0.97 }}
+      >
         <h2 className="self-stretch px-5 text-[48px] font-medium leading-[56px] tracking-[-0.03em] text-ink xl:px-0 xl:text-center xl:text-[56px] xl:leading-[64px] xl:tracking-[-0.02em]">
           {heading}
         </h2>
@@ -134,20 +138,19 @@ export function ProductWhy({
             />
           ))}
 
-          {/* Central vial */}
-          <Image
-            src="/images/pdp/why-vial.png"
-            alt={content.name}
-            width={1267}
-            height={1212}
+          {/* Central vial — gently floats between the cradling hands */}
+          <div
             className="absolute z-20"
-            style={{
-              left: 21.46,
-              top: 119.56,
-              width: 633.26,
-              height: 605.62,
-            }}
-          />
+            style={{ left: 21.46, top: 119.56, width: 633.26, height: 605.62 }}
+          >
+            <Image
+              src="/images/pdp/why-vial.png"
+              alt={content.name}
+              width={1267}
+              height={1212}
+              className="animate-vial-float h-full w-full"
+            />
+          </div>
         </div>
 
         {/* Mobile: card carousel over the vial / blurred-hands backdrop.
@@ -171,13 +174,15 @@ export function ProductWhy({
             height={458}
             className="pointer-events-none absolute left-[-2.9%] top-[51.5%] z-0 w-[91.4%] blur-[3px]"
           />
-          <Image
-            src="/images/pdp/why-vial.png"
-            alt={content.name}
-            width={1267}
-            height={1212}
-            className="absolute left-1/2 top-[10.5%] z-[1] w-[91.4%] -translate-x-1/2"
-          />
+          <div className="absolute left-1/2 top-[10.5%] z-[1] w-[91.4%] -translate-x-1/2">
+            <Image
+              src="/images/pdp/why-vial.png"
+              alt={content.name}
+              width={1267}
+              height={1212}
+              className="animate-vial-float w-full"
+            />
+          </div>
 
           {/* Blurred neighbouring cards peeking in from the sides */}
           <MobileWhyCard
