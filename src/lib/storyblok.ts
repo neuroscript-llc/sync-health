@@ -44,7 +44,12 @@ export async function getStoryContent(
   if (!isStoryblokConfigured()) return null;
   try {
     const client = getStoryblok();
-    const { data } = await client.get(`cdn/stories/${slug}`, { version });
+    // `cv: Date.now()` busts the CDN cache-version so published edits go live
+    // immediately (pages are force-dynamic, so freshness over edge caching).
+    const { data } = await client.get(`cdn/stories/${slug}`, {
+      version,
+      cv: Date.now(),
+    });
     return (data?.story?.content ?? null) as Record<string, unknown> | null;
   } catch (err) {
     console.error(`[storyblok] failed to load story "${slug}":`, err);

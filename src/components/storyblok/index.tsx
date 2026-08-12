@@ -132,6 +132,8 @@ export function ProtocolsBlok({ blok }: { blok: SbBlokData }) {
           description: str(c.description),
           category: str(c.category),
           featured: bool(c.featured),
+          color: str(c.color) || undefined,
+          bgColor: str(c.bgColor) || undefined,
         })),
         ctaLabel: str(blok.ctaLabel),
         ctaHref: str(blok.ctaHref),

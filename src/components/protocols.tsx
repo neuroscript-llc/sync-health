@@ -2,46 +2,59 @@ import Link from "next/link";
 import { ArrowIcon } from "@/components/arrow-icon";
 import type { ProtocolCard, ProtocolsContent } from "@/lib/content";
 
-// Per-category theme: the dot / pill-fill colour and the card image background
-// gradient (a pastel tint of the colour fading into cream). Keyed by category
-// name; unknown categories fall back to Recovery.
-// `dark` = the fill is dark enough that the label must turn white on hover;
-// otherwise the label stays ink (dark) — both keep AA contrast on the fill.
-type CatStyle = { color: string; bg: string; dark: boolean };
-const CATEGORY: Record<string, CatStyle> = {
-  Recovery: {
-    color: "#DC5B24",
-    bg: "linear-gradient(180deg,#F6C6A0 0%,#F3D4BB 52%,#F1ECDE 100%)",
-    dark: true,
-  },
-  Performance: {
-    color: "#2F8FD4",
-    bg: "linear-gradient(180deg,#B9DBF0 0%,#DCEAF0 52%,#F1ECDE 100%)",
-    dark: true,
-  },
-  Metabolic: {
-    color: "#E68A2B",
-    bg: "linear-gradient(180deg,#F6D3A6 0%,#F4DCC0 52%,#F1ECDE 100%)",
-    dark: false,
-  },
-  "Skin & Longevity": {
-    color: "#45B562",
-    bg: "linear-gradient(180deg,#C6E7AC 0%,#D9EBC8 52%,#F1ECDE 100%)",
-    dark: false,
-  },
-  Cognitive: {
-    color: "#74C13F",
-    bg: "linear-gradient(180deg,#C9E9A6 0%,#DBEDC6 52%,#F1ECDE 100%)",
-    dark: false,
-  },
-  "Hormonal Health": {
-    color: "#F05DA0",
-    bg: "linear-gradient(180deg,#F8B4D3 0%,#F6CBDD 52%,#F1ECDE 100%)",
-    dark: true,
-  },
+// Built-in per-category palette — the default dot/fill colour and image
+// background top tint. Each card can override both from Storyblok (color /
+// bgColor); this map is the fallback keyed by category name.
+const DEFAULTS: Record<string, { color: string; bgColor: string }> = {
+  Recovery: { color: "#DC5B24", bgColor: "#F6C6A0" },
+  Performance: { color: "#037FBD", bgColor: "#B9DBF0" },
+  Metabolic: { color: "#E68A2B", bgColor: "#F6D3A6" },
+  "Skin & Longevity": { color: "#45B562", bgColor: "#C6E7AC" },
+  Cognitive: { color: "#74C13F", bgColor: "#C9E9A6" },
+  "Hormonal Health": { color: "#F05DA0", bgColor: "#F8B4D3" },
 };
-const catStyle = (category: string): CatStyle =>
-  CATEGORY[category] ?? CATEGORY.Recovery;
+
+/** `#rgb`/`#rrggbb` → `rgba(r,g,b,a)`. */
+function hexToRgba(hex: string, a: number): string {
+  const h = hex.replace("#", "");
+  const f =
+    h.length === 3
+      ? h.split("").map((c) => c + c).join("")
+      : (h + "000000").slice(0, 6);
+  const n = parseInt(f, 16);
+  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
+}
+
+/** True when white text has more contrast on `hex` than dark ink — so any
+    custom colour keeps an accessible hover label. */
+function preferWhite(hex: string): boolean {
+  const h = hex.replace("#", "");
+  const f =
+    h.length === 3
+      ? h.split("").map((c) => c + c).join("")
+      : (h + "000000").slice(0, 6);
+  const ch = (i: number) => parseInt(f.slice(i, i + 2), 16) / 255;
+  const lin = (c: number) =>
+    c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  const L = 0.2126 * lin(ch(0)) + 0.7152 * lin(ch(2)) + 0.0722 * lin(ch(4));
+  const contrastWhite = 1.05 / (L + 0.05);
+  const contrastInk = (L + 0.05) / (0.0113 + 0.05); // ink ≈ #1d1d1b
+  return contrastWhite >= contrastInk;
+}
+
+/** Resolve a card's theme: its own color/bgColor, else the category default. */
+function theme(card: ProtocolCard) {
+  const d = DEFAULTS[card.category] ?? DEFAULTS.Recovery;
+  const color = card.color || d.color;
+  const bgColor = card.bgColor || d.bgColor;
+  return {
+    color,
+    bg: `linear-gradient(180deg, ${bgColor} 0%, #F1ECDE 100%)`,
+    // Figma dot: solid at top fading to 20% alpha at the bottom.
+    dotBg: `linear-gradient(180deg, ${color} 30%, ${hexToRgba(color, 0.2)} 100%)`,
+    whiteText: preferWhite(color),
+  };
+}
 
 const CARD_BG =
   "linear-gradient(180deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%)";
@@ -50,22 +63,28 @@ const CARD_BG =
 // Hover: the dot scales up from its own centre to flood the pill with the
 // category colour (a smooth circular fill), and the label turns white.
 function CategoryPill({ card }: { card: ProtocolCard }) {
-  const { color, dark } = catStyle(card.category);
+  const { color, dotBg, whiteText } = theme(card);
   return (
     <div className="group/pill relative flex h-[54px] w-full items-center overflow-hidden rounded-full ring-1 ring-inset ring-ink/15 transition duration-300 group-hover/pill:ring-transparent">
-      {/* Full-cover fill, clipped to a small circle at the dot position; the
-          circle grows to flood the pill on hover — the dot "fills" the
-          background. The clipped fill IS the resting dot. */}
+      {/* Solid fill — a circle at the dot position that grows to flood the pill
+          on hover (the dot "fills" the background). Hidden at rest. */}
       <span
         aria-hidden
-        className="absolute inset-0 [clip-path:circle(10px_at_26px_50%)] transition-[clip-path] duration-[600ms] ease-out group-hover/pill:[clip-path:circle(150%_at_26px_50%)]"
+        className="absolute inset-0 [clip-path:circle(0px_at_26px_50%)] transition-[clip-path] duration-[600ms] ease-out group-hover/pill:[clip-path:circle(150%_at_26px_50%)]"
         style={{ background: color }}
+      />
+      {/* Resting dot — the exact Figma gradient sphere; fades as the fill
+          grows over it. */}
+      <span
+        aria-hidden
+        className="absolute left-[26px] top-1/2 size-5 -translate-x-1/2 -translate-y-1/2 rounded-full transition-opacity duration-300 group-hover/pill:opacity-0"
+        style={{ background: dotBg }}
       />
       {/* Label — left-aligned, padded clear of the dot. Turns white only when
           the fill is dark enough; otherwise stays ink (both AA on the fill). */}
       <span
         className={`relative z-10 whitespace-nowrap pl-[52px] pr-6 font-mono text-xl font-medium uppercase tracking-[-0.02em] transition-colors duration-300 ${
-          dark ? "text-ink group-hover/pill:text-white" : "text-ink"
+          whiteText ? "text-ink group-hover/pill:text-white" : "text-ink"
         }`}
       >
         {card.category}
@@ -75,7 +94,7 @@ function CategoryPill({ card }: { card: ProtocolCard }) {
 }
 
 function ProtocolCardEl({ card }: { card: ProtocolCard }) {
-  const { color, bg } = catStyle(card.category);
+  const { dotBg, bg } = theme(card);
   return (
     <article
       className="flex w-[286px] shrink-0 snap-start flex-col gap-5 rounded-[32px] p-1 pb-1.5 sm:w-full sm:max-w-[calc(50%-12px)] sm:rounded-[48px] sm:p-2 sm:pb-2.5 lg:max-w-[380px]"
@@ -104,7 +123,7 @@ function ProtocolCardEl({ card }: { card: ProtocolCard }) {
           </h3>
           <span
             className="size-2 shrink-0 rounded-full"
-            style={{ background: color }}
+            style={{ background: dotBg }}
             aria-hidden
           />
         </div>

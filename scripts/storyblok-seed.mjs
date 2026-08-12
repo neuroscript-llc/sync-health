@@ -58,11 +58,11 @@ export const seed = {
     subtext:
       "Whether you know exactly what you want or need help finding the right protocol, browse by what you're working toward.",
     cards: [
-      { image: "/images/protocols/recovery.png", description: "A short intake maps your goals, lifestyle and history to a protocol matched to you — never a one-size-fits-all stack.", category: "Recovery", featured: true },
-      { image: "/images/step-glow.png", description: "A physician personally reviews every intake and prescribes only what's right for you, before anything ships.", category: "Performance", featured: false },
-      { image: "/images/protocols/metabolic.png", description: "Pre-sorted daily packs arrive at your door. Check-ins every 3–6 months evolve your protocol as your body changes.", category: "Metabolic", featured: false },
-      { image: "/images/step-glow.png", description: "Tailored workout routines that align with your fitness level and personal goals, helping you reach your desired results.", category: "Skin & Longevity", featured: false },
-      { image: "/images/step-glow.png", description: "Tailored workout routines that align with your fitness level and personal goals, helping you reach your desired results.", category: "Hormonal Health", featured: false },
+      { image: "/images/protocols/recovery.png", description: "A short intake maps your goals, lifestyle and history to a protocol matched to you — never a one-size-fits-all stack.", category: "Recovery", featured: true, color: "#DC5B24", bgColor: "#F6C6A0" },
+      { image: "/images/step-glow.png", description: "A physician personally reviews every intake and prescribes only what's right for you, before anything ships.", category: "Performance", featured: false, color: "#037FBD", bgColor: "#B9DBF0" },
+      { image: "/images/protocols/metabolic.png", description: "Pre-sorted daily packs arrive at your door. Check-ins every 3–6 months evolve your protocol as your body changes.", category: "Metabolic", featured: false, color: "#E68A2B", bgColor: "#F6D3A6" },
+      { image: "/images/step-glow.png", description: "Tailored workout routines that align with your fitness level and personal goals, helping you reach your desired results.", category: "Skin & Longevity", featured: false, color: "#45B562", bgColor: "#C6E7AC" },
+      { image: "/images/step-glow.png", description: "Tailored workout routines that align with your fitness level and personal goals, helping you reach your desired results.", category: "Hormonal Health", featured: false, color: "#F05DA0", bgColor: "#F8B4D3" },
     ],
     ctaLabel: "Shop all",
     ctaHref: "/shop",

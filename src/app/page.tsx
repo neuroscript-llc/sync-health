@@ -12,7 +12,11 @@ async function fetchHome(
 ): Promise<ISbStoryData | null> {
   try {
     const client = getStoryblok();
-    const { data } = await client.get("cdn/stories/home", { version });
+    // cv bust → published edits appear live (see getStoryContent).
+    const { data } = await client.get("cdn/stories/home", {
+      version,
+      cv: Date.now(),
+    });
     return data?.story ?? null;
   } catch (err) {
     console.error("[storyblok] failed to load home story:", err);

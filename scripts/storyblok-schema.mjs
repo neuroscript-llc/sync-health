@@ -79,6 +79,8 @@ export const components = [
     category: text(),
     description: textarea(),
     featured: boolean(),
+    color: text(), // dot / pill-fill colour, e.g. #DC5B24
+    bgColor: text(), // image-background top tint, e.g. #F6C6A0
   })),
   comp("quality_feature", "Quality feature", () => ({
     icon: asset(),

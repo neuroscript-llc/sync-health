@@ -230,6 +230,8 @@ function buildBody() {
           category: c.category,
           description: c.description,
           featured: c.featured,
+          color: c.color ?? "",
+          bgColor: c.bgColor ?? "",
         }),
       ),
       ctaLabel: s.protocols.ctaLabel,

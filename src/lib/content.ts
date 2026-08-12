@@ -41,6 +41,10 @@ export type ProtocolCard = {
   category: string;
   /** Recovery is the highlighted/active category (filled pill). */
   featured?: boolean;
+  /** Dot / pill-fill colour (hex). Falls back to a per-category default. */
+  color?: string;
+  /** Card image-background top tint (hex), fades to cream. */
+  bgColor?: string;
 };
 
 export type ProtocolsContent = {
@@ -440,30 +444,40 @@ export const protocols: ProtocolsContent = {
         "A short intake maps your goals, lifestyle and history to a protocol matched to you — never a one-size-fits-all stack.",
       category: "Recovery",
       featured: true,
+      color: "#DC5B24",
+      bgColor: "#F6C6A0",
     },
     {
       image: "/images/step-glow.png",
       description:
         "A physician personally reviews every intake and prescribes only what's right for you, before anything ships.",
       category: "Performance",
+      color: "#037FBD",
+      bgColor: "#B9DBF0",
     },
     {
       image: "/images/protocols/metabolic.png",
       description:
         "Pre-sorted daily packs arrive at your door. Check-ins every 3–6 months evolve your protocol as your body changes.",
       category: "Metabolic",
+      color: "#E68A2B",
+      bgColor: "#F6D3A6",
     },
     {
       image: "/images/step-glow.png",
       description:
         "Tailored workout routines that align with your fitness level and personal goals, helping you reach your desired results.",
       category: "Skin & Longevity",
+      color: "#45B562",
+      bgColor: "#C6E7AC",
     },
     {
       image: "/images/step-glow.png",
       description:
         "Tailored workout routines that align with your fitness level and personal goals, helping you reach your desired results.",
       category: "Hormonal Health",
+      color: "#F05DA0",
+      bgColor: "#F8B4D3",
     },
   ],
   ctaLabel: "Shop all",
