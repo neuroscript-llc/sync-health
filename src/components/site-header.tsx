@@ -120,7 +120,7 @@ export function SiteHeader({ content }: { content: SiteHeaderContent }) {
     <header className="relative z-20 flex w-full flex-col items-center gap-2">
       <Ticker messages={content.tickerMessages} />
 
-      <nav className="flex w-full max-w-[980px] items-center gap-2 rounded-full bg-white/60 py-3 pl-3 pr-2 backdrop-blur-md sm:gap-3 sm:pl-8 sm:pr-3">
+      <nav className="flex w-full max-w-[980px] items-center gap-2 rounded-full bg-white/60 py-3 pl-5 pr-3 backdrop-blur-md sm:gap-3 sm:pl-8 sm:pr-3">
         <Link href="/" className="shrink-0" aria-label="Sync. home">
           <Image
             src="/images/sync-logo.svg"
