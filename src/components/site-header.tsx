@@ -210,7 +210,7 @@ export function SiteHeader({ content }: { content: SiteHeaderContent }) {
 
           <Link
             href={content.ctaHref}
-            className="group flex shrink-0 items-center gap-1.5 rounded-full bg-brand py-2.5 pl-4 pr-3 text-sm font-medium text-brand-foreground sm:gap-2 sm:py-3 sm:pl-5 sm:pr-4 sm:text-base"
+            className="group hidden shrink-0 items-center gap-1.5 rounded-full bg-brand py-2.5 pl-4 pr-3 text-sm font-medium text-brand-foreground sm:flex sm:gap-2 sm:py-3 sm:pl-5 sm:pr-4 sm:text-base"
           >
             <span className="whitespace-nowrap">{content.ctaLabel}</span>
             <ArrowIcon className="size-5 shrink-0 transition-transform duration-200 group-hover:-rotate-45" />
