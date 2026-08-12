@@ -366,7 +366,7 @@ export function CartDrawer({ content }: { content: CartContent }) {
   return (
     <div
       aria-hidden={!isOpen}
-      className={`fixed inset-0 z-[60] ${isOpen ? "" : "pointer-events-none"}`}
+      className={`overlay-viewport fixed inset-0 z-[60] ${isOpen ? "" : "pointer-events-none"}`}
     >
       {/* Scrim */}
       <div

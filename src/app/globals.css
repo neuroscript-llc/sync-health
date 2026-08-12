@@ -81,6 +81,10 @@
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
 
+  /* Global UI scale — one knob shrinks the whole site uniformly. See the
+     `body { zoom }` rule below. 1 = original size; lower = more compact. */
+  --app-scale: 0.9;
+
   /* Sync. brand palette */
   --brand: #d03516;
   --brand-foreground: #ffffff;
@@ -129,6 +133,32 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+
+/* ── Global proportional down-scale ─────────────────────────────────────────
+   Client feedback: the site "looked zoomed in" — fonts, images and spacing felt
+   too large everywhere. The styling is a ~50/50 mix of hardcoded px and rem
+   utilities, so shrinking theme tokens alone would scale the small text but
+   leave the big px headings/images full-size (worse, not smaller). Instead we
+   shrink the whole UI uniformly with one lever: `zoom`. Unlike `transform:
+   scale`, zoom reflows layout (no leftover gaps/scrollbars), and media queries
+   still evaluate the real viewport — so the responsive design is unchanged, the
+   page just renders at --app-scale. Tune the single number in :root above. */
+body {
+  zoom: var(--app-scale);
+}
+
+/* Sections meant to fill the screen must account for the zoom-out, or they'd
+   leave a blank strip below the fold. */
+.min-h-screen {
+  min-height: calc(100vh / var(--app-scale));
+}
+
+/* Full-screen fixed overlays (cart drawer, mobile menu) are sized against the
+   viewport; counter the zoom so they still cover it edge-to-edge. */
+.overlay-viewport {
+  width: calc(100vw / var(--app-scale));
+  height: calc(100vh / var(--app-scale));
 }
 
 @keyframes marquee {

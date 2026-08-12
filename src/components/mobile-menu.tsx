@@ -50,7 +50,7 @@ export function MobileMenu({ content }: { content: SiteHeaderContent }) {
       {open &&
         mounted &&
         createPortal(
-          <div className="fixed inset-0 z-[60] flex flex-col bg-cream md:hidden">
+          <div className="overlay-viewport fixed inset-0 z-[60] flex flex-col bg-cream md:hidden">
           {/* Top bar */}
           <div className="flex items-center justify-between px-5 py-4">
             <Link href="/" aria-label="Sync. home" onClick={close}>
