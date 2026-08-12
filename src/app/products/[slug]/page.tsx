@@ -17,7 +17,6 @@ import {
   testimonials,
   catalog,
   blog,
-  faq,
   finalCta,
   footer,
 } from "@/lib/content";
@@ -59,7 +58,7 @@ export default async function ProductPage({
       <Testimonials content={testimonials} />
       <Catalog content={catalog} />
       <Blog content={blog} />
-      <Faq content={faq} />
+      <Faq content={product.faq} />
       <FinalCta content={finalCta} />
       <Footer content={footer} />
     </main>

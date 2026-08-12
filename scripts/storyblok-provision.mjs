@@ -637,6 +637,16 @@ function buildProduct(c) {
         ctaHref: c.howItWorks.ctaHref,
       }),
     ],
+    faq: [
+      blk("faq", {
+        eyebrow: c.faq.eyebrow,
+        heading: c.faq.heading,
+        subtext: c.faq.subtext,
+        ctaLabel: c.faq.ctaLabel,
+        ctaHref: c.faq.ctaHref,
+        items: c.faq.items.map((i) => blk("faq_item", { ...i })),
+      }),
+    ],
   });
 }
 

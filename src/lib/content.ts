@@ -364,6 +364,7 @@ export type ProductContent = {
   why: { heading: string; features: ProductWhyFeature[] };
   qualityTest: ProductQualityContent;
   howItWorks: HowItWorksContent;
+  faq: FaqContent;
 };
 
 /** Default content for the home page (stands in for the Storyblok story). */
@@ -1184,7 +1185,7 @@ export const bpc157Product: ProductContent = {
   eyebrow: "Recovery",
   name: "BPC-157",
   description:
-    "BPC-157 acts as a cellular signaling peptide that modulates angiogenic and growth factor expression. It mimics the body's natural gastric protective protein to support systemic connective tissue integrity and vascular endothelial response.",
+    "BPC-157 is a synthetic peptide based on a protective compound the body produces in the gut. It's studied for how it works with the body's own repair process across the tissue that takes the most load — tendon, ligament, muscle and the gut lining.",
   tagline: "Tissue repair, joint and gut support.",
   gallery: {
     main: "/images/pdp/hero-main.png",
@@ -1199,9 +1200,9 @@ export const bpc157Product: ProductContent = {
   },
   trust: [
     { icon: "/images/pdp/check.svg", label: "Physician-supervised" },
-    { icon: "/images/pdp/check.svg", label: "Licensed US pharmacy" },
+    { icon: "/images/pdp/check.svg", label: "Licensed US compounding pharmacy" },
     { icon: "/images/pdp/check.svg", label: "Third-party tested" },
-    { icon: "/images/pdp/check.svg", label: "Built around your body" },
+    { icon: "/images/pdp/check.svg", label: "Prescription-only" },
   ],
   methodLabel: "Injection method",
   methods: [
@@ -1212,20 +1213,20 @@ export const bpc157Product: ProductContent = {
   price: { amount: "$225.00", period: "/month" },
   planLabel: "Select a plan",
   plans: [
-    { label: "1-month plan", price: "$225.00", period: "/month" },
+    { label: "Monthly", price: "$225.00", period: "/month" },
     {
-      label: "3-month plan",
+      label: "3-Month",
       price: "$189.00",
       period: "/month",
-      badge: { text: "Recommended", variant: "recommended" },
-      save: "Save 15%",
+      badge: { text: "Clinically recommended", variant: "recommended" },
+      save: "Save $108",
     },
     {
-      label: "6-month plan",
+      label: "6-Month",
       price: "$166.00",
       period: "/month",
       badge: { text: "Best Value", variant: "best" },
-      save: "Save 25%",
+      save: "Save $354",
     },
   ],
   cta: {
@@ -1236,85 +1237,140 @@ export const bpc157Product: ProductContent = {
   accordion: [
     {
       title: "What it is",
-      body: "A cellular signaling peptide studied for its role in modulating angiogenic and growth-factor expression to support connective-tissue repair.",
+      body: "BPC-157 is a synthetic peptide modelled on a sequence found in a protein the body produces to protect and repair the gut. As a compounded protocol, it's studied for its role in cellular signalling — the messaging that tells tissue where and when to repair, form new blood supply, and reduces inflammation. It's one of the most researched peptides in recovery, which is why most protocols start here.",
     },
     {
       title: "How it's used",
-      body: "Prescribed as part of a supervised protocol. Your clinician sets the compound, dose and cycle based on your intake — most reviews complete within 1–2 hours.",
+      body: "BPC-157 is typically administered as a daily subcutaneous injection over a defined cycle — usually run in blocks rather than continuously. Your clinician sets your exact dose, timing, and cycle length from your intake, and it may be adjusted at your first monthly check-in based on how you're responding. Everything you need to reconstitute and inject is included, with instructions in your care portal.",
     },
     {
       title: "What's in the vial",
-      body: "Pharmaceutical-grade BPC-157, compounded at a licensed US pharmacy and batch-tested for purity and potency before it ships.",
+      body: "Pharmaceutical-grade BPC-157, compounded to your prescription at a licensed US 503A/503B pharmacy. Supplied as a lyophilised (freeze-dried) powder for reconstitution with bacteriostatic water, refrigerated after mixing, and used within the stability window your clinician confirms.",
+    },
+    {
+      title: "How SYNC ensures quality",
+      body: "Every SYNC protocol is compounded to prescription at a licensed US 503A/503B pharmacy and clinician-reviewed before it ships. Full third-party batch testing details are in the Quality panel below.",
     },
   ],
-  safetyLabel: "Important safety information",
-  safetyHref: "/safety",
+  safetyLabel: "Important Safety Information",
+  safetyHref: "/important-safety-information/bpc-157",
   why: {
     heading: "Why BPC-157",
     features: [
       {
         icon: "/images/pdp/icon-cellular.svg",
-        title: "Cellular Signaling",
-        description:
-          "Modulates angiogenic and growth factor expression at the site of repair.",
+        title: "Connective tissue repair",
+        description: "Supports the repair of tendon, ligament and muscle.",
       },
       {
         icon: "/images/pdp/icon-tissue.svg",
-        title: "Tissue Integrity",
-        description:
-          "Mimics natural gastric protective proteins to support systemic connective tissue.",
+        title: "Gut integrity",
+        description: "Supports the gut lining and digestive health.",
       },
       {
         icon: "/images/pdp/icon-optimized.svg",
-        title: "SYNC Optimized",
+        title: "Inflammation support",
         description:
-          "Pure, pharmaceutical-grade peptide delivered through a supervised protocol.",
+          "Helps reduce the inflammation that follows training or injury.",
       },
       {
         icon: "/images/pdp/icon-research.svg",
-        title: "Research Focused",
-        description:
-          "A foundational peptide molecule studied extensively for soft tissue response.",
+        title: "Joint comfort",
+        description: "Supports everyday mobility and joint movement.",
       },
     ],
   },
   qualityTest: {
-    heading: "Always quality tested, with proven results",
+    heading: "Tested every batch. Independently.",
     collage: [
       "/images/pdp/quality-a.png",
       "/images/pdp/quality-b.png",
       "/images/pdp/quality-a.png",
     ],
-    lead: "Our medication is conveniently delivered from a state-licensed pharmacy within our network, straight to your door when you need it.",
-    body: 'Every batch is fully tested in full chemistry and microbiology labs at the pharmacy facility to meet strict guidelines and parameters. This provides full confidence in producing industry best results for our consumers through strict compliance with cGMP regulations."',
+    lead: "Every SYNC protocol is compounded at a licensed US 503A/503B pharmacy and third-party tested — every batch, against four pharmacopoeia standards.",
+    body: "If a batch doesn't pass all four, it doesn't ship.",
     tests: [
       {
         name: "Potency",
         status: "Passed",
         description:
-          "This test is performed every 3 to 6 months. It confirms that the medication has plus or minus 10% of the appropriate concentration of the active ingredient.",
+          "Confirms the vial contains what the label says — active ingredient within ±10% of prescribed concentration.",
       },
       {
         name: "Sterility",
         status: "Passed",
         description:
-          "This test ensures the medication is free from any contaminants, including bacteria or other pathogens. Every batch is tested and must meet the requirements of USP 797.1.",
+          "Tested against USP 797 to confirm the compound is free from bacterial or fungal contamination.",
       },
       {
-        name: "pH Balance.",
+        name: "pH balance",
         status: "Passed",
         description:
-          "This test assesses the acid/base balance to ensure minimal irritation upon injection, helping maintain physiological compatibility & comfort for the patient during administration.",
+          "Balanced to minimise irritation at the injection site and remain compatible with the body.",
       },
       {
-        name: "Endotoxicity",
+        name: "Endotoxins",
         status: "Passed",
         description:
-          "This test measures bacterial endotoxins to prevent fever and adverse reactions, ensuring the medication meets strict safety standards.",
+          "Tested against USP 85 to confirm bacterial endotoxin levels are within safe limits — protecting against fever and adverse reactions.",
       },
     ],
   },
   howItWorks: howItWorks,
+  faq: {
+    eyebrow: "FAQ",
+    heading: "Everything worth asking.",
+    subtext: "Protocols, prescriptions, and what happens after you order.",
+    ctaLabel: "Contact our care team",
+    ctaHref: "/contact",
+    items: [
+      {
+        question: "Is BPC-157 FDA-approved?",
+        answer:
+          "No compounded medication is FDA-approved, including BPC-157. It's prepared to your prescription at a licensed US 503A/503B compounding pharmacy, which operates under FDA-registered oversight and state pharmacy law. In July 2026 a federal advisory committee recommended BPC-157 be added to the compoundable substances list — a formal recognition, though not a final ruling. Your clinician reviews whether treatment is appropriate for you before anything ships.",
+      },
+      {
+        question: "Who is BPC-157 prescribed for, and who is it not right for?",
+        answer:
+          "BPC-157 may be considered for adults where, following a comprehensive clinical assessment, a prescribing practitioner determines it is appropriate as part of an individualised treatment plan. Not everyone will be suitable for treatment. Your clinician will review your medical history, current medications, and individual circumstances before making a prescribing decision. If BPC-157 is not considered appropriate for you, your clinician will explain why and discuss alternative options where appropriate.",
+      },
+      {
+        question: "Do I need bloodwork before starting?",
+        answer:
+          "Not typically for BPC-157. Your intake and health history are usually enough for your clinician to build a protocol. If they want bloodwork to inform your specific case, they'll ask — but it's not a routine gate to starting. We're also introducing bloodwork tracking soon to help you and your clinician measure how your protocol is progressing over time.",
+      },
+      {
+        question: "Can I stack BPC-157 with other compounds or supplements?",
+        answer:
+          "Yes, in many cases. BPC-157 is often run alongside other recovery peptides or as part of a broader protocol — that's why our Advanced blends exist. If you're already running something else (peptide, hormone, or medication), share it in your intake. Your clinician builds the protocol around what you're on, not against it.",
+      },
+      {
+        question: "How will I know it's working?",
+        answer:
+          "Everyone responds differently, and it depends on what your body is working through. Most people notice something in the first month — a joint that settles, gut symptoms easing, better sleep — but months two and three are usually where the real changes land. Your clinician checks in monthly and adjusts if you're not seeing what you should be.",
+      },
+      {
+        question: "What happens if I need to pause, change, or cancel?",
+        answer:
+          "Any time, from your account. If your goals change, message us and we'll adjust your protocol with you. No calls, no retention scripts, no penalty for pausing between cycles.",
+      },
+      {
+        question: "What's included when it ships?",
+        answer:
+          "Your prescribed vial, sterile syringes, bacteriostatic water for reconstitution, alcohol swabs, and a sharps disposal option. Full reconstitution and injection instructions are included in the box and reviewed in your care portal. Everything ships discreetly and temperature-controlled where required.",
+      },
+      {
+        question: "What if I run out mid-cycle?",
+        answer:
+          "Message us and we'll expedite a replacement — most reorders ship the same day. Your subscription is timed so this shouldn't happen, but if life gets in the way, we've got you.",
+      },
+      {
+        question: "Do you take insurance, HSA, or FSA?",
+        answer:
+          "No insurance — SYNC is cash-pay, which lets us build every protocol around your body rather than around what an insurer will approve. HSA and FSA support is rolling out soon through our payment partner, and we'll email you when it goes live.",
+      },
+    ],
+  },
 };
 
 export type CartUpsell = {

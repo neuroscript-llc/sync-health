@@ -583,6 +583,7 @@ export const components = [
       whyFeatures: bloks(["product_why_feature"]),
       qualityTest: bloks(["product_quality"]),
       howItWorks: bloks(["product_how_it_works"]),
+      faq: bloks(["faq"]),
     }),
     { is_root: true, is_nestable: false },
   ),

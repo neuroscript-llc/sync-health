@@ -390,6 +390,7 @@ export function mapProduct(
   const accordion = arr(content.accordion);
   const whyFeatures = arr(content.whyFeatures);
   const thumbs = arr(content.galleryThumbnails);
+  const fq = arr(content.faq)[0];
 
   return {
     slug: str(content.slug) || fb.slug,
@@ -493,5 +494,20 @@ export function mapProduct(
           ctaHref: str(h.ctaHref),
         }
       : fb.howItWorks,
+    faq: fq
+      ? {
+          eyebrow: str(fq.eyebrow) || fb.faq.eyebrow,
+          heading: str(fq.heading) || fb.faq.heading,
+          subtext: str(fq.subtext) || fb.faq.subtext,
+          ctaLabel: str(fq.ctaLabel) || fb.faq.ctaLabel,
+          ctaHref: str(fq.ctaHref) || fb.faq.ctaHref,
+          items: arr(fq.items).length
+            ? arr(fq.items).map((i) => ({
+                question: str(i.question),
+                answer: str(i.answer),
+              }))
+            : fb.faq.items,
+        }
+      : fb.faq,
   };
 }
