@@ -431,7 +431,7 @@ function buildJournal(c) {
         title: c.featured.title,
         excerpt: c.featured.excerpt,
         meta: c.featured.meta,
-        image: c.featured.image,
+        image: null, // asset field — client uploads; front-end falls back to local
         href: c.featured.href,
         readMoreLabel: c.featured.readMoreLabel,
       }),
@@ -468,13 +468,13 @@ function buildArticle(c) {
     dek: c.dek,
     authorLabel: c.author.label,
     authorName: c.author.name,
-    authorAvatar: c.author.avatar,
+    authorAvatar: null, // asset field — client uploads; front-end falls back to local
     publishedLabel: c.published.label,
     publishedValue: c.published.value,
     readTimeLabel: c.readTime.label,
     readTimeValue: c.readTime.value,
     metaLine: c.metaLine,
-    cover: c.cover,
+    cover: null, // asset field — client uploads; front-end falls back to local
     tocLabel: c.tocLabel,
     toc: c.toc.map((t) => blk("article_toc", { label: t.label, id: t.id })),
     prose: c.prose.map((b) =>
@@ -485,7 +485,7 @@ function buildArticle(c) {
     reviewerLabel: c.reviewer.label,
     reviewerName: c.reviewer.name,
     reviewerNote: c.reviewer.note,
-    reviewerAvatar: c.reviewer.avatar,
+    reviewerAvatar: null, // asset field — client uploads; front-end falls back to local
     relatedEyebrow: c.related.eyebrow,
     relatedHeading: c.related.heading,
     relatedArticles: c.related.articles.map(journalArticleBlok),

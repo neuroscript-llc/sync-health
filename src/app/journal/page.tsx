@@ -4,8 +4,8 @@ import { SiteHeader } from "@/components/site-header";
 import { Footer } from "@/components/footer";
 import { JournalPage } from "@/components/journal-page";
 import { siteHeader, journal, footer } from "@/lib/content";
-import { getStoryContent, resolveVersion } from "@/lib/storyblok";
-import { mapJournal } from "@/lib/storyblok-map";
+import { getStoryContent, getStories, resolveVersion } from "@/lib/storyblok";
+import { mapJournal, mapArticleStoryCard } from "@/lib/storyblok-map";
 
 export const dynamic = "force-dynamic";
 
@@ -22,10 +22,23 @@ export default async function JournalRoute({
 }) {
   const sp = await searchParams;
   const { isEnabled } = await draftMode();
-  const content = mapJournal(
-    await getStoryContent("journal", resolveVersion(sp, isEnabled)),
-    journal,
+  const version = resolveVersion(sp, isEnabled);
+
+  const base = mapJournal(await getStoryContent("journal", version), journal);
+
+  // The article grid lists every `article_page` story, so a blog created in
+  // Storyblok appears here automatically (newest first). Falls back to the
+  // journal story's curated cards when no article stories exist.
+  const stories = await getStories(
+    {
+      content_type: "article_page",
+      per_page: 100,
+      sort_by: "first_published_at:desc",
+    },
+    version,
   );
+  const dynamic = stories.map(mapArticleStoryCard).filter((a) => a.title);
+  const content = dynamic.length ? { ...base, articles: dynamic } : base;
 
   return (
     <main className="min-h-screen overflow-clip bg-white">

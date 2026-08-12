@@ -56,3 +56,29 @@ export async function getStoryContent(
     return null;
   }
 }
+
+/**
+ * Fetch a list of stories (e.g. every `article_page` for the Journal index).
+ * Returns [] when Storyblok is unconfigured or the fetch fails.
+ */
+export async function getStories(
+  params: Record<string, unknown>,
+  version: "draft" | "published",
+): Promise<Array<{ slug?: string; content?: Record<string, unknown> | null }>> {
+  if (!isStoryblokConfigured()) return [];
+  try {
+    const client = getStoryblok();
+    const { data } = await client.get("cdn/stories", {
+      version,
+      cv: Date.now(),
+      ...params,
+    });
+    return (data?.stories ?? []) as Array<{
+      slug?: string;
+      content?: Record<string, unknown> | null;
+    }>;
+  } catch (err) {
+    console.error("[storyblok] failed to load stories:", err);
+    return [];
+  }
+}

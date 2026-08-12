@@ -172,6 +172,23 @@ export function ArticlePage({ content }: { content: ArticleContent }) {
                       {block.text}
                     </blockquote>
                   );
+                case "image":
+                  return (
+                    <figure key={i} className="my-2">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={block.image}
+                        alt={block.caption ?? ""}
+                        loading="lazy"
+                        className="w-full rounded-2xl"
+                      />
+                      {block.caption && (
+                        <figcaption className="mt-2 text-sm text-ink/60">
+                          {block.caption}
+                        </figcaption>
+                      )}
+                    </figure>
+                  );
                 default:
                   return (
                     <p key={i} className="text-base leading-6 text-ink/80">

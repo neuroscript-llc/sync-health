@@ -176,7 +176,8 @@ export type ArticleProseBlock =
   | { type: "lead"; text: string }
   | { type: "h2"; text: string; id: string }
   | { type: "p"; text: string }
-  | { type: "quote"; text: string };
+  | { type: "quote"; text: string }
+  | { type: "image"; image: string; caption?: string };
 
 export type ArticleContent = {
   journalLabel: string;

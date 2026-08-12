@@ -71,6 +71,24 @@ const mapArticleCard = (a: Blok): JournalArticle => ({
   href: str(a.href),
 });
 
+/** Map a published `article_page` story → a Journal index card, so newly
+    created articles appear on /journal automatically. */
+export function mapArticleStoryCard(story: {
+  slug?: string;
+  content?: Blok | null;
+}): JournalArticle {
+  const c = (story.content ?? {}) as Blok;
+  const slug = str(story.slug).replace(/^article-/, "");
+  return {
+    category: str(c.category),
+    title: str(c.title),
+    excerpt: str(c.dek),
+    meta: str(c.metaLine) || str(c.publishedValue),
+    image: img(c.cover) || "/images/journal/featured.png",
+    href: `/journal/${slug}`,
+  };
+}
+
 export function mapJournal(
   content: Blok | null,
   fallback: JournalContent,
@@ -91,7 +109,7 @@ export function mapJournal(
           title: str(featured.title),
           excerpt: str(featured.excerpt),
           meta: str(featured.meta),
-          image: img(featured.image),
+          image: img(featured.image) || fallback.featured.image,
           href: str(featured.href),
           readMoreLabel: str(featured.readMoreLabel),
         }
@@ -125,6 +143,12 @@ function mapProse(b: Blok): ArticleProseBlock {
       return { type: "h2", text, id: str(b.id) };
     case "quote":
       return { type: "quote", text };
+    case "image":
+      return {
+        type: "image",
+        image: img(b.image),
+        ...(str(b.caption) ? { caption: str(b.caption) } : {}),
+      };
     default:
       return { type: "p", text };
   }

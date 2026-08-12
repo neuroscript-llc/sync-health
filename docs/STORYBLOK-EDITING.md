@@ -95,7 +95,26 @@ These were flagged "pending" in the copy doc and currently reuse BPC-157 values:
 
 ---
 
-## 6. Publishing
+## 6. Creating a new blog post (with images)
+
+Blog posts live on the Journal (`/journal`). Each post is its own story — create
+one and it appears on the Journal automatically, newest first.
+
+1. **Content → ＋ New story** (tip: **Duplicate** an existing Article for a
+   ready-made structure).
+2. Content type: **Article page**. Set the slug to **`article-your-topic`** — it
+   must start with `article-`. The post's URL becomes `/journal/your-topic`.
+3. Fill in **category, title, dek** (the intro), **meta line**, and the body.
+4. **Upload images** — the **cover**, **author/reviewer photos**, and any body
+   image are proper upload fields: click → **Choose asset** → upload (drag-drop
+   works).
+5. **Add images inside the article:** in **prose**, add a block, set its **type**
+   to **image**, upload the **image**, and (optionally) add a **caption**.
+6. **Publish.** The post now shows on `/journal` and at its own page.
+
+> To edit an existing post, open it the same way and change any field.
+
+## 7. Publishing
 
 Hit **Publish** on a story and the live site reflects it within a few seconds.
 That's it — you're done.
