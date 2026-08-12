@@ -211,8 +211,9 @@ export function ProductHero({
   return (
     <section {...rest}>
       <div className="mx-auto flex max-w-[1276px] flex-col justify-center gap-12 px-6 pb-6 pt-14 xl:flex-row xl:items-start">
-        {/* ---- Gallery ------------------------------------------------ */}
-        <div className="flex w-full flex-col gap-5 xl:w-[560px] xl:shrink-0">
+        {/* ---- Gallery (sticky on desktop: floats with scroll through the
+                hero, releases at the "Why" section below) ------------------ */}
+        <div className="flex w-full flex-col gap-5 xl:sticky xl:top-6 xl:w-[560px] xl:shrink-0 xl:self-start">
           <div className="relative aspect-[560/520] w-full overflow-hidden rounded-[32px]">
             <Image
               src={content.gallery.main}
