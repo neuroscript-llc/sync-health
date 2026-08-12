@@ -77,7 +77,7 @@ export function HowItWorks({
           className={
             isProduct
               ? "group inline-flex items-center gap-2 rounded-full bg-ink py-4 pl-6 pr-5 font-mono text-lg uppercase tracking-wide text-white transition-opacity duration-300 hover:opacity-90 lg:text-xl"
-              : "group inline-flex items-center gap-2 rounded-full border border-brand bg-brand/5 py-4 pl-6 pr-5 font-mono text-lg uppercase tracking-wide text-brand transition-colors duration-300 hover:border-transparent hover:bg-brand hover:text-white lg:text-xl"
+              : "group inline-flex items-center gap-2 rounded-full border border-ink bg-ink/5 py-4 pl-6 pr-5 font-mono text-lg uppercase tracking-wide text-ink transition-colors duration-300 hover:border-transparent hover:bg-ink hover:text-white lg:text-xl"
           }
         >
           {content.ctaLabel}

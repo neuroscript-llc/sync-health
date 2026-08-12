@@ -87,7 +87,7 @@ function Toggle({
           type="button"
           className={`rounded-full px-4 py-3 font-mono text-base uppercase leading-none transition-colors ${
             fullWidth ? "flex-1" : ""
-          } ${opt === toggle.active ? "bg-brand text-white" : "text-brand"}`}
+          } ${opt === toggle.active ? "bg-ink text-white" : "text-ink/60"}`}
         >
           {opt}
         </button>
