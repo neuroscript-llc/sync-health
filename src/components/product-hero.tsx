@@ -327,10 +327,10 @@ export function ProductHero({
 
           {/* Price */}
           <p className="font-medium text-ink">
-            <span className="text-[40px] leading-[48px] tracking-[-0.02em]">
+            <span className="text-[32px] leading-10 tracking-[-0.02em]">
               {content.price.amount}
             </span>
-            <span className="text-lg text-ink/80">{content.price.period}</span>
+            <span className="text-base text-ink/80">{content.price.period}</span>
           </p>
 
           {/* Plan selector — mobile: dropdown (Figma); desktop: plan cards */}

@@ -46,9 +46,11 @@ function Ticker({ messages }: { messages: string[] }) {
 function NavMegaMenu({
   eyebrow,
   links,
+  cta,
 }: {
   eyebrow: string;
   links: { label: string; href: string }[];
+  cta: { label: string; href: string };
 }) {
   return (
     <div className="invisible absolute left-0 top-full z-50 pt-3 opacity-0 transition-all duration-200 group-hover/nav:visible group-hover/nav:opacity-100">
@@ -69,11 +71,12 @@ function NavMegaMenu({
               </Link>
             ))}
           </div>
+          {/* Figma: Source Code Pro Medium 16/24, uppercase. */}
           <Link
-            href="/products/bpc-157"
-            className="group/cta inline-flex items-center gap-2 self-start rounded-full bg-brand py-4 pl-6 pr-5 text-xl text-white"
+            href={cta.href}
+            className="group/cta inline-flex items-center gap-2 self-start rounded-full bg-brand py-4 pl-6 pr-5 font-mono text-base font-medium uppercase leading-6 text-white"
           >
-            Start Your Protocol
+            {cta.label}
             <ArrowIcon className="size-6 transition-transform duration-200 group-hover/cta:-rotate-45" />
           </Link>
         </div>
@@ -162,7 +165,11 @@ export function SiteHeader({ content }: { content: SiteHeaderContent }) {
                   )}
                 </Link>
                 {menu && (
-                  <NavMegaMenu eyebrow={menu.eyebrow} links={menu.links} />
+                  <NavMegaMenu
+                    eyebrow={menu.eyebrow}
+                    links={menu.links}
+                    cta={{ label: content.ctaLabel, href: content.ctaHref }}
+                  />
                 )}
               </div>
             );
@@ -231,9 +238,10 @@ export function SiteHeader({ content }: { content: SiteHeaderContent }) {
             {content.loginLabel}
           </Link>
 
+          {/* Nav CTA — Figma: Source Code Pro Medium 16/24, uppercase. */}
           <Link
             href={content.ctaHref}
-            className="group hidden shrink-0 items-center gap-1.5 rounded-full bg-brand py-2.5 pl-4 pr-3 text-sm font-medium text-brand-foreground sm:flex sm:gap-2 sm:py-3 sm:pl-5 sm:pr-4 sm:text-base"
+            className="group hidden shrink-0 items-center gap-1.5 rounded-full bg-brand py-2.5 pl-4 pr-3 font-mono text-sm font-medium uppercase leading-6 text-brand-foreground sm:flex sm:gap-2 sm:py-3 sm:pl-5 sm:pr-4 sm:text-base"
           >
             <span className="whitespace-nowrap">{content.ctaLabel}</span>
             <ArrowIcon className="size-5 shrink-0 transition-transform duration-200 group-hover:-rotate-45" />
