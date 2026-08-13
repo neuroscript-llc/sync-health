@@ -120,20 +120,28 @@ export function SiteHeader({ content }: { content: SiteHeaderContent }) {
     <header className="relative z-20 flex w-full flex-col items-center gap-2">
       <Ticker messages={content.tickerMessages} />
 
-      <nav className="flex w-full max-w-[980px] items-center gap-2 rounded-full bg-white/60 py-3 pl-5 pr-3 backdrop-blur-md sm:gap-3 sm:pl-8 sm:pr-3">
-        <Link href="/" className="shrink-0" aria-label="Sync. home">
-          <Image
-            src="/images/sync-logo.svg"
-            alt="Sync."
-            width={100}
-            height={26}
-            priority
-            className="h-auto w-20 sm:w-[100px]"
-          />
-        </Link>
+      <nav className="relative flex w-full max-w-[980px] items-center justify-between rounded-full bg-white/[0.56] px-3 py-2 backdrop-blur-md sm:justify-start sm:gap-3 sm:py-3 sm:pl-8 sm:pr-3">
+        {/* Left: hamburger (mobile) · logo + primary links (sm ↑) */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          <MobileMenu content={content} />
 
-        {/* Primary links */}
-        <div className="hidden items-center gap-0.5 md:flex">
+          <Link
+            href="/"
+            className="hidden shrink-0 sm:block"
+            aria-label="Sync. home"
+          >
+            <Image
+              src="/images/sync-logo.svg"
+              alt="Sync."
+              width={100}
+              height={26}
+              priority
+              className="h-auto w-[100px]"
+            />
+          </Link>
+
+          {/* Primary links */}
+          <div className="hidden items-center gap-0.5 md:flex">
           {content.navLinks.map((link) => {
             const menu = menuForLabel(link.label);
             return (
@@ -159,16 +167,31 @@ export function SiteHeader({ content }: { content: SiteHeaderContent }) {
               </div>
             );
           })}
+          </div>
         </div>
 
-        {/* Actions */}
-        <div className="flex min-w-0 flex-1 items-center justify-end gap-1">
-          <MobileMenu content={content} />
+        {/* Mobile: logo centred in the pill */}
+        <Link
+          href="/"
+          className="absolute left-1/2 -translate-x-1/2 shrink-0 sm:hidden"
+          aria-label="Sync. home"
+        >
+          <Image
+            src="/images/sync-logo.svg"
+            alt="Sync."
+            width={100}
+            height={26}
+            priority
+            className="h-auto w-[86px]"
+          />
+        </Link>
 
+        {/* Actions */}
+        <div className="flex items-center gap-0.5 sm:flex-1 sm:justify-end sm:gap-1">
           <button
             type="button"
             aria-label="Search"
-            className="shrink-0 rounded-full p-2 text-ink/80 transition-colors hover:bg-white/70 sm:p-3"
+            className="shrink-0 rounded-full p-3 text-ink/80 transition-colors hover:bg-white/70"
           >
             <Search className="size-5" aria-hidden />
           </button>

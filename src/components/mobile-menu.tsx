@@ -42,7 +42,7 @@ export function MobileMenu({ content }: { content: SiteHeaderContent }) {
         aria-label="Open menu"
         aria-expanded={open}
         onClick={() => setOpen(true)}
-        className="shrink-0 rounded-full p-2 text-ink/80 transition-colors hover:bg-white/70 md:hidden"
+        className="shrink-0 rounded-full p-3 text-ink/80 transition-colors hover:bg-white/70 md:hidden"
       >
         <Menu className="size-5" aria-hidden />
       </button>

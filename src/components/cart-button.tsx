@@ -11,7 +11,7 @@ export function CartButton() {
       type="button"
       onClick={open}
       aria-label="Open cart"
-      className="shrink-0 rounded-full p-2 text-ink/80 transition-colors hover:bg-white/70 sm:p-3"
+      className="shrink-0 rounded-full p-3 text-ink/80 transition-colors hover:bg-white/70"
     >
       <ShoppingBag className="size-5" strokeWidth={1.5} aria-hidden />
     </button>
