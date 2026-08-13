@@ -17,7 +17,7 @@ function TickerTrack({
   return (
     <ul
       aria-hidden={ariaHidden}
-      className="flex shrink-0 items-center gap-24 whitespace-nowrap pr-24 font-mono text-[13px] uppercase tracking-[0.08em] text-ink"
+      className="flex shrink-0 items-center gap-12 whitespace-nowrap pr-12 font-mono text-[11px] uppercase tracking-[0.08em] text-ink sm:gap-24 sm:pr-24 sm:text-[13px]"
     >
       {messages.map((msg, i) => (
         <li key={i}>{msg}</li>
@@ -29,7 +29,7 @@ function TickerTrack({
 function Ticker({ messages }: { messages: string[] }) {
   // Two identical tracks in one flex; the flex slides -50% for a seamless loop.
   return (
-    <div className="w-full overflow-hidden rounded-lg bg-white/80 py-3 backdrop-blur-sm">
+    <div className="w-full overflow-hidden rounded-lg bg-white/80 py-2 backdrop-blur-sm sm:py-3">
       <div className="flex w-max animate-marquee">
         <TickerTrack messages={messages} />
         <TickerTrack messages={messages} ariaHidden />
