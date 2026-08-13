@@ -180,6 +180,7 @@ export function CatalogBlok({ blok }: { blok: SbBlokData }) {
           ctaLabel: str(p.ctaLabel),
           ctaHref: str(p.ctaHref),
           featured: bool(p.featured),
+          tier: str(p.tier),
         })),
         ctaLabel: str(blok.ctaLabel),
         ctaHref: str(blok.ctaHref),

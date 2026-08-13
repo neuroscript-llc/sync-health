@@ -11,7 +11,7 @@ export function HowItWorks({
   ...rest
 }: {
   content: HowItWorksContent;
-  /** "product" drops the cream backdrop and uses a solid-ink CTA (PDP). */
+  /** "product" drops the cream backdrop (PDP). */
   variant?: "default" | "product";
 } & Omit<React.ComponentPropsWithoutRef<"section">, "content">) {
   const isProduct = variant === "product";
@@ -36,10 +36,12 @@ export function HowItWorks({
 
         {/* Step cards */}
         <div className="grid w-full gap-3 md:grid-cols-3">
-          {content.steps.map((step) => (
+          {content.steps.map((step, i) => (
             <article
               key={step.number}
-              className="flex min-h-[520px] flex-col justify-between rounded-[36px] border border-white bg-white/40 p-8 backdrop-blur-sm"
+              // --i drives the stacked-deck offset on mobile (see .stack-card).
+              style={{ "--i": i } as React.CSSProperties}
+              className="stack-card flex min-h-[520px] flex-col justify-between rounded-[36px] border border-white bg-white/40 p-8 backdrop-blur-sm"
             >
               <div className="flex items-start justify-between gap-4">
                 <h3 className="max-w-[265px] font-manrope text-[28px] font-medium leading-8 tracking-[-0.01em] text-ink">
@@ -72,13 +74,11 @@ export function HowItWorks({
         </div>
 
         {/* CTA */}
+        {/* Figma: 48px solid-ink pill — 12/16/12/20 padding, 16px mono, 24px
+            arrow. Solid black at every breakpoint (orange is nav-only). */}
         <Link
           href={content.ctaHref}
-          className={
-            isProduct
-              ? "group inline-flex items-center gap-2 rounded-full bg-ink py-4 pl-6 pr-5 font-mono text-lg uppercase tracking-wide text-white transition-opacity duration-300 hover:opacity-90 lg:text-xl"
-              : "group inline-flex items-center gap-2 rounded-full border border-ink bg-ink/5 py-4 pl-6 pr-5 font-mono text-lg uppercase tracking-wide text-ink transition-colors duration-300 hover:border-transparent hover:bg-ink hover:text-white lg:text-xl"
-          }
+          className="group inline-flex items-center gap-2 rounded-full bg-ink py-3 pl-5 pr-4 font-mono text-base uppercase tracking-wide text-white transition-opacity duration-300 hover:opacity-90 sm:py-4 sm:pl-6 sm:pr-5 sm:text-lg lg:text-xl"
         >
           {content.ctaLabel}
           <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />

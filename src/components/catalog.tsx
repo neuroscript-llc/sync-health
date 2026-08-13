@@ -65,13 +65,17 @@ function ProductCard({ product }: { product: CatalogProduct }) {
 }
 
 /** Single / Advanced pill toggle. Full-width segmented on mobile (Figma),
-    compact on desktop. Purely presentational (active from content). */
+    compact on desktop. Controlled — filters the product list below. */
 function Toggle({
-  toggle,
+  options,
+  value,
+  onChange,
   fullWidth,
   className,
 }: {
-  toggle: CatalogContent["toggle"];
+  options: string[];
+  value: string;
+  onChange: (opt: string) => void;
   fullWidth?: boolean;
   className?: string;
 }) {
@@ -81,17 +85,26 @@ function Toggle({
         fullWidth ? "w-full" : ""
       } ${className ?? ""}`}
     >
-      {toggle.options.map((opt) => (
-        <button
-          key={opt}
-          type="button"
-          className={`rounded-full px-4 py-3 font-mono text-base uppercase leading-none transition-colors ${
-            fullWidth ? "flex-1" : ""
-          } ${opt === toggle.active ? "bg-ink text-white" : "text-ink/60"}`}
-        >
-          {opt}
-        </button>
-      ))}
+      {options.map((opt) => {
+        const isActive = opt === value;
+        return (
+          <button
+            key={opt}
+            type="button"
+            aria-pressed={isActive}
+            onClick={() => onChange(opt)}
+            className={`rounded-full px-4 py-3 font-mono text-base uppercase leading-none transition-colors ${
+              fullWidth ? "flex-1" : ""
+            } ${
+              isActive
+                ? "bg-brand text-brand-foreground"
+                : "text-ink/60 hover:text-ink"
+            }`}
+          >
+            {opt}
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -102,6 +115,20 @@ export function Catalog({
 }: { content: CatalogContent } & Omit<React.ComponentPropsWithoutRef<"section">, "content">) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+
+  const options = content.toggle.options;
+  const [tier, setTier] = useState(content.toggle.active || options[0] || "");
+
+  // Products opt into a tier; untagged ones show under every tab, so content
+  // that predates the tier field (e.g. Storyblok) never renders an empty grid.
+  const matching = content.products.filter((p) => !p.tier || p.tier === tier);
+  const products = matching.length ? matching : content.products;
+
+  const selectTier = (opt: string) => {
+    setTier(opt);
+    setActive(0);
+    trackRef.current?.scrollTo({ left: 0, behavior: "smooth" });
+  };
 
   // Track which card is nearest centre (mobile slider dot indicator).
   const onScroll = () => {
@@ -136,14 +163,25 @@ export function Catalog({
           </div>
 
           {/* Desktop: toggle sits in the header */}
-          <Toggle toggle={content.toggle} className="hidden sm:flex" />
+          <Toggle
+            options={options}
+            value={tier}
+            onChange={selectTier}
+            className="hidden sm:flex"
+          />
         </div>
 
         {/* Mobile (Figma): full-width toggle + slider + dots grouped (gap 20).
             On desktop this wrapper dissolves (contents) so the grid flows in
             the inner column and the header toggle is used instead. */}
         <div className="flex w-full flex-col gap-5 sm:contents">
-          <Toggle toggle={content.toggle} fullWidth className="sm:hidden" />
+          <Toggle
+            options={options}
+            value={tier}
+            onChange={selectTier}
+            fullWidth
+            className="sm:hidden"
+          />
 
           {/* Products — horizontal scroll-snap slider on mobile, grid on desktop. */}
           <div
@@ -151,15 +189,15 @@ export function Catalog({
             onScroll={onScroll}
             className="-mx-5 flex w-[calc(100%+40px)] snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-5 px-5 [scrollbar-width:none] sm:mx-0 sm:grid sm:w-full sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 lg:grid-cols-4 [&::-webkit-scrollbar]:hidden"
           >
-            {content.products.map((product, i) => (
-              <ProductCard key={i} product={product} />
+            {products.map((product, i) => (
+              <ProductCard key={product.name || i} product={product} />
             ))}
           </div>
 
           {/* Slider dots (mobile only) — graduated by distance from the active
               card: active 16px (ink), neighbours 10px, farther 6px (Figma). */}
           <div className="flex h-6 items-center justify-center gap-[7px] sm:hidden">
-            {content.products.map((_, i) => {
+            {products.map((_, i) => {
               const dist = Math.abs(i - active);
               const size = dist === 0 ? 16 : dist === 1 ? 10 : 6;
               return (

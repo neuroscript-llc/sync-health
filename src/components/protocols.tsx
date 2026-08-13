@@ -175,7 +175,7 @@ export function Protocols({
         {/* CTA */}
         <Link
           href={content.ctaHref}
-          className="group inline-flex items-center gap-2 rounded-full border border-ink bg-ink py-3 pl-5 pr-4 font-mono text-base uppercase tracking-wide text-white transition-colors duration-300 sm:bg-ink/5 sm:text-ink sm:hover:border-transparent sm:hover:bg-ink sm:hover:text-white sm:py-4 sm:pl-6 sm:pr-5 sm:text-lg lg:text-xl"
+          className="group inline-flex items-center gap-2 rounded-full bg-ink py-3 pl-5 pr-4 font-mono text-base uppercase tracking-wide text-white transition-opacity duration-300 hover:opacity-90 sm:py-4 sm:pl-6 sm:pr-5 sm:text-lg lg:text-xl"
         >
           {content.ctaLabel}
           <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />

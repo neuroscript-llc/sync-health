@@ -95,6 +95,8 @@ export const components = [
     ctaLabel: text(),
     ctaHref: text(),
     featured: boolean(),
+    // Which Single / Advanced tab shows this product. Blank = shown in both.
+    tier: option(["Single", "Advanced"]),
   })),
   comp("compare_cell", "Compare cell", () => ({
     type: option(["check", "cross", "yes", "text"]),

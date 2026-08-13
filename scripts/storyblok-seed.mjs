@@ -16,13 +16,13 @@ export const seed = {
     loginLabel: "Login",
     loginHref: "/login",
     ctaLabel: "Start Your Protocol",
-    ctaHref: "/start",
+    ctaHref: "/products/bpc-157",
   },
 
   hero: {
     headline: "We're simplifying the path to the Good Life",
     ctaLabel: "Start your protocol",
-    ctaHref: "/start",
+    ctaHref: "/products/bpc-157",
     backgroundImage: "/images/hero-bg.jpg",
     backgroundAlt: "",
   },
@@ -49,7 +49,7 @@ export const seed = {
       { number: "03", title: "It ships — and evolves", description: "Compounded, tested, at your door. Then your clinician checks in — and cycle two isn't cycle one. Most platforms stop at checkout." },
     ],
     ctaLabel: "Start your protocol",
-    ctaHref: "/start",
+    ctaHref: "/products/bpc-157",
   },
 
   protocols: {
@@ -65,7 +65,7 @@ export const seed = {
       { image: "/images/step-glow.png", description: "Tailored workout routines that align with your fitness level and personal goals, helping you reach your desired results.", category: "Hormonal Health", featured: false, color: "#F05DA0", bgColor: "#F8B4D3" },
     ],
     ctaLabel: "Shop all",
-    ctaHref: "/shop",
+    ctaHref: "/products/bpc-157",
   },
 
   quality: {
@@ -86,14 +86,19 @@ export const seed = {
     heading: "Peptides, prescribed\n& personalized.",
     toggleOptions: ["Single", "Advanced"],
     toggleActive: "Single",
+    // tier drives the Single / Advanced toggle; untagged products show in both.
     products: [
-      { category: "Recovery", name: "BPC-157", description: "Tissue repair, joint and gut support.", image: "/images/catalog/vial-recovery.png", ctaLabel: "Start your protocol", ctaHref: "/start", featured: true },
-      { category: "Weight", name: "Compounded Tirzepatide", description: "Dual-action weight management, once weekly.", image: "/images/catalog/vial-bpc157.png", ctaLabel: "Start your protocol", ctaHref: "/start", featured: false },
-      { category: "Hormonal", name: "Sermorelin", description: "Growth-hormone support, recovery and sleep.", image: "/images/catalog/vial-recovery.png", ctaLabel: "Start your protocol", ctaHref: "/start", featured: false },
-      { category: "Skin", name: "GHK-Cu", description: "Skin, hair and collagen renewal.", image: "/images/catalog/vial-bpc157.png", ctaLabel: "Start your protocol", ctaHref: "/start", featured: false },
+      { category: "Recovery", name: "BPC-157", description: "Tissue repair, joint and gut support.", image: "/images/catalog/vial-recovery.png", ctaLabel: "Start your protocol", ctaHref: "/products/bpc-157", featured: true, tier: "Single" },
+      { category: "Performance", name: "Sermorelin", description: "Growth-hormone support, recovery and sleep.", image: "/images/catalog/vial-bpc157.png", ctaLabel: "Start your protocol", ctaHref: "/products/sermorelin", featured: false, tier: "Single" },
+      { category: "Skin", name: "GHK-Cu", description: "Skin, hair and collagen renewal.", image: "/images/catalog/vial-recovery.png", ctaLabel: "Start your protocol", ctaHref: "/products/ghk-cu", featured: false, tier: "Single" },
+      { category: "Longevity", name: "NAD+", description: "Cellular energy, focus and healthy aging.", image: "/images/catalog/vial-bpc157.png", ctaLabel: "Start your protocol", ctaHref: "/products/nad", featured: false, tier: "Single" },
+      { category: "Weight", name: "Compounded Tirzepatide", description: "Dual-action weight management, once weekly.", image: "/images/catalog/vial-recovery.png", ctaLabel: "Start your protocol", ctaHref: "/products/tirzepatide", featured: true, tier: "Advanced" },
+      { category: "Weight", name: "Compounded Semaglutide", description: "Appetite, weight and metabolic support.", image: "/images/catalog/vial-bpc157.png", ctaLabel: "Start your protocol", ctaHref: "/products/semaglutide", featured: false, tier: "Advanced" },
+      { category: "Metabolic", name: "MOTS-C", description: "Metabolic health and cellular energy.", image: "/images/catalog/vial-recovery.png", ctaLabel: "Start your protocol", ctaHref: "/products/mots-c", featured: false, tier: "Advanced" },
+      { category: "Hormonal", name: "PT-141", description: "Sexual desire and arousal support.", image: "/images/catalog/vial-bpc157.png", ctaLabel: "Start your protocol", ctaHref: "/products/pt-141", featured: false, tier: "Advanced" },
     ],
     ctaLabel: "Shop all",
-    ctaHref: "/shop",
+    ctaHref: "/products/bpc-157",
   },
 
   compare: {
@@ -179,7 +184,7 @@ export const seed = {
     subtext:
       "Five-minute assessment.\nA licensed clinician builds it.\nNo charge until your protocol is approved.",
     ctaLabel: "Start your protocol",
-    ctaHref: "/start",
+    ctaHref: "/products/bpc-157",
   },
 
   footer: {

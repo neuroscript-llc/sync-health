@@ -198,11 +198,31 @@ body {
   will-change: transform;
 }
 
+/* "How it works" step cards stack into a deck as you scroll (mobile only).
+   Each card sticks a little lower than the one before it, so the previous
+   card's top edge stays peeking out behind the current one — an envelope /
+   stacked-deck effect. Cards must be opaque here, otherwise the card beneath
+   bleeds through the stack. Desktop (md+) keeps the 3-column grid. */
+@media (max-width: 767px) {
+  .stack-card {
+    position: sticky;
+    top: calc(16px + var(--i, 0) * 14px);
+    z-index: calc(var(--i, 0) + 1);
+    background-color: #f6f6f1;
+    box-shadow: 0 -10px 34px rgba(29, 29, 27, 0.1);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
   .animate-marquee-slow,
   .animate-vial-float {
     animation: none;
+  }
+  /* Fall back to a plain scrolling list — no pinning. */
+  .stack-card {
+    position: static;
+    box-shadow: none;
   }
 }
 

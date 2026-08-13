@@ -78,6 +78,9 @@ export type CatalogProduct = {
   ctaHref: string;
   /** First product uses a filled button; the rest are outlined. */
   featured?: boolean;
+  /** Which toggle tab shows this product ("Single" / "Advanced"). Untagged
+      products show under every tab. */
+  tier?: string;
 };
 
 export type CatalogContent = {
@@ -431,7 +434,7 @@ export const howItWorks: HowItWorksContent = {
     },
   ],
   ctaLabel: "Start your protocol",
-  ctaHref: "/start",
+  ctaHref: "/products/bpc-157",
 };
 
 export const protocols: ProtocolsContent = {
@@ -483,7 +486,7 @@ export const protocols: ProtocolsContent = {
     },
   ],
   ctaLabel: "Shop all",
-  ctaHref: "/shop",
+  ctaHref: "/products/bpc-157",
 };
 
 export const quality: QualityContent = {
@@ -522,6 +525,8 @@ export const catalog: CatalogContent = {
   eyebrow: "Our formulatory",
   heading: "The architecture of in sync.",
   toggle: { options: ["Single", "Advanced"], active: "Single" },
+  // "Single" = single-compound protocols; "Advanced" = metabolic / hormonal.
+  // Descriptions mirror each product's PDP tagline.
   products: [
     {
       category: "Recovery",
@@ -531,30 +536,71 @@ export const catalog: CatalogContent = {
       ctaLabel: "Start your protocol",
       ctaHref: "/products/bpc-157",
       featured: true,
-    },
-    {
-      category: "Weight",
-      name: "Compounded Tirzepatide",
-      description: "Dual-action weight management, once weekly.",
-      image: "/images/catalog/vial-bpc157.png",
-      ctaLabel: "Start your protocol",
-      ctaHref: "/products/tirzepatide",
+      tier: "Single",
     },
     {
       category: "Performance",
       name: "Sermorelin",
       description: "Growth-hormone support, recovery and sleep.",
-      image: "/images/catalog/vial-recovery.png",
+      image: "/images/catalog/vial-bpc157.png",
       ctaLabel: "Start your protocol",
       ctaHref: "/products/sermorelin",
+      tier: "Single",
     },
     {
       category: "Skin",
       name: "GHK-Cu",
       description: "Skin, hair and collagen renewal.",
-      image: "/images/catalog/vial-bpc157.png",
+      image: "/images/catalog/vial-recovery.png",
       ctaLabel: "Start your protocol",
       ctaHref: "/products/ghk-cu",
+      tier: "Single",
+    },
+    {
+      category: "Longevity",
+      name: "NAD+",
+      description: "Cellular energy, focus and healthy aging.",
+      image: "/images/catalog/vial-bpc157.png",
+      ctaLabel: "Start your protocol",
+      ctaHref: "/products/nad",
+      tier: "Single",
+    },
+    {
+      category: "Weight",
+      name: "Compounded Tirzepatide",
+      description: "Dual-action weight management, once weekly.",
+      image: "/images/catalog/vial-recovery.png",
+      ctaLabel: "Start your protocol",
+      ctaHref: "/products/tirzepatide",
+      featured: true,
+      tier: "Advanced",
+    },
+    {
+      category: "Weight",
+      name: "Compounded Semaglutide",
+      description: "Appetite, weight and metabolic support.",
+      image: "/images/catalog/vial-bpc157.png",
+      ctaLabel: "Start your protocol",
+      ctaHref: "/products/semaglutide",
+      tier: "Advanced",
+    },
+    {
+      category: "Metabolic",
+      name: "MOTS-C",
+      description: "Metabolic health and cellular energy.",
+      image: "/images/catalog/vial-recovery.png",
+      ctaLabel: "Start your protocol",
+      ctaHref: "/products/mots-c",
+      tier: "Advanced",
+    },
+    {
+      category: "Hormonal",
+      name: "PT-141",
+      description: "Sexual desire and arousal support.",
+      image: "/images/catalog/vial-bpc157.png",
+      ctaLabel: "Start your protocol",
+      ctaHref: "/products/pt-141",
+      tier: "Advanced",
     },
   ],
   ctaLabel: "Shop all",
@@ -1117,7 +1163,7 @@ export const finalCta: FinalCtaContent = {
   subtext:
     "Five-minute assessment.\nA licensed clinician builds it.\nNo charge until your protocol is approved.",
   ctaLabel: "Start your protocol",
-  ctaHref: "/start",
+  ctaHref: "/products/bpc-157",
 };
 
 export const footer: FooterContent = {
@@ -1174,7 +1220,7 @@ export const footer: FooterContent = {
 export const hero: HeroContent = {
   headline: "We're simplifying the path to the Good Life",
   ctaLabel: "Start your protocol",
-  ctaHref: "/start",
+  ctaHref: "/products/bpc-157",
   backgroundImage: {
     src: "/images/hero-bg.jpg",
     alt: "",

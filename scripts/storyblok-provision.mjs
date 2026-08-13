@@ -267,6 +267,7 @@ function buildBody() {
           ctaLabel: p.ctaLabel,
           ctaHref: p.ctaHref,
           featured: p.featured,
+          tier: p.tier,
         }),
       ),
       ctaLabel: s.catalog.ctaLabel,
