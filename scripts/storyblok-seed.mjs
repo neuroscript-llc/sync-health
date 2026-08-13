@@ -16,13 +16,13 @@ export const seed = {
     loginLabel: "Login",
     loginHref: "/login",
     ctaLabel: "Start Your Protocol",
-    ctaHref: "/products/bpc-157",
+    ctaHref: "/start",
   },
 
   hero: {
     headline: "We're simplifying the path to the Good Life",
     ctaLabel: "Start your protocol",
-    ctaHref: "/products/bpc-157",
+    ctaHref: "/start",
     backgroundImage: "/images/hero-bg.jpg",
     backgroundAlt: "",
   },
@@ -49,7 +49,7 @@ export const seed = {
       { number: "03", title: "It ships — and evolves", description: "Compounded, tested, at your door. Then your clinician checks in — and cycle two isn't cycle one. Most platforms stop at checkout." },
     ],
     ctaLabel: "Start your protocol",
-    ctaHref: "/products/bpc-157",
+    ctaHref: "/start",
   },
 
   protocols: {
@@ -65,7 +65,7 @@ export const seed = {
       { image: "/images/step-glow.png", description: "Tailored workout routines that align with your fitness level and personal goals, helping you reach your desired results.", category: "Hormonal Health", featured: false, color: "#F05DA0", bgColor: "#F8B4D3" },
     ],
     ctaLabel: "Shop all",
-    ctaHref: "/products/bpc-157",
+    ctaHref: "/start",
   },
 
   quality: {
@@ -98,7 +98,7 @@ export const seed = {
       { category: "Hormonal", name: "PT-141", description: "Sexual desire and arousal support.", image: "/images/catalog/vial-bpc157.png", ctaLabel: "Start your protocol", ctaHref: "/products/pt-141", featured: false, tier: "Advanced" },
     ],
     ctaLabel: "Shop all",
-    ctaHref: "/products/bpc-157",
+    ctaHref: "/start",
   },
 
   compare: {
@@ -184,7 +184,7 @@ export const seed = {
     subtext:
       "Five-minute assessment.\nA licensed clinician builds it.\nNo charge until your protocol is approved.",
     ctaLabel: "Start your protocol",
-    ctaHref: "/products/bpc-157",
+    ctaHref: "/start",
   },
 
   footer: {

@@ -384,7 +384,7 @@ export const siteHeader: SiteHeaderContent = {
   loginLabel: "Login",
   loginHref: "/login",
   ctaLabel: "Start Your Protocol",
-  ctaHref: "/products/bpc-157",
+  ctaHref: "/start",
 };
 
 export const trustBar: TrustBarContent = {
@@ -434,7 +434,7 @@ export const howItWorks: HowItWorksContent = {
     },
   ],
   ctaLabel: "Start your protocol",
-  ctaHref: "/products/bpc-157",
+  ctaHref: "/start",
 };
 
 export const protocols: ProtocolsContent = {
@@ -486,7 +486,7 @@ export const protocols: ProtocolsContent = {
     },
   ],
   ctaLabel: "Shop all",
-  ctaHref: "/products/bpc-157",
+  ctaHref: "/start",
 };
 
 export const quality: QualityContent = {
@@ -604,7 +604,7 @@ export const catalog: CatalogContent = {
     },
   ],
   ctaLabel: "Shop all",
-  ctaHref: "/products/bpc-157",
+  ctaHref: "/start",
 };
 
 export const compare: CompareContent = {
@@ -1163,7 +1163,7 @@ export const finalCta: FinalCtaContent = {
   subtext:
     "Five-minute assessment.\nA licensed clinician builds it.\nNo charge until your protocol is approved.",
   ctaLabel: "Start your protocol",
-  ctaHref: "/products/bpc-157",
+  ctaHref: "/start",
 };
 
 export const footer: FooterContent = {
@@ -1220,7 +1220,7 @@ export const footer: FooterContent = {
 export const hero: HeroContent = {
   headline: "We're simplifying the path to the Good Life",
   ctaLabel: "Start your protocol",
-  ctaHref: "/products/bpc-157",
+  ctaHref: "/start",
   backgroundImage: {
     src: "/images/hero-bg.jpg",
     alt: "",
@@ -2113,6 +2113,76 @@ export const allProducts: ProductContent[] = [
   dsipProduct,
   motsCProduct,
 ];
+
+/* ------------------------------ Formulary (/start) ---------------------- */
+
+export type FormularyContent = {
+  eyebrow: string;
+  heading: string;
+  subtext: string;
+  /** Label for the "show everything" category pill. */
+  allLabel: string;
+  sortLabel: string;
+  sortOptions: string[];
+  toggle: { options: string[]; active: string };
+  products: CatalogProduct[];
+  cta: {
+    eyebrow: string;
+    heading: string;
+    subtext: string;
+    label: string;
+    href: string;
+  };
+};
+
+/** Single-compound protocols vs the advanced metabolic / hormonal ones. */
+const FORMULARY_TIERS: Record<string, string> = {
+  "bpc-157": "Single",
+  sermorelin: "Single",
+  "ghk-cu": "Single",
+  nad: "Single",
+  dsip: "Single",
+  tirzepatide: "Advanced",
+  semaglutide: "Advanced",
+  "mots-c": "Advanced",
+  "pt-141": "Advanced",
+};
+
+// Only two vial renders exist, so cards alternate between them until real
+// per-compound art lands (see docs/STORYBLOK-EDITING.md §5).
+const FORMULARY_VIALS = [
+  "/images/catalog/vial-recovery.png",
+  "/images/catalog/vial-bpc157.png",
+];
+
+export const formulary: FormularyContent = {
+  eyebrow: "The formulary",
+  heading: "Every protocol, in one place.",
+  subtext:
+    "Six categories, one standard of care. Every compound below is prescribed by a licensed clinician in your state, compounded by a US pharmacy, and adjusted around how your body actually responds.",
+  allLabel: "All",
+  sortLabel: "Sort by:",
+  sortOptions: ["Recommended", "Name A–Z", "Category"],
+  toggle: { options: ["Single", "Advanced"], active: "Single" },
+  // Derived from the product pages so a new PDP appears here automatically.
+  products: allProducts.map((p, i) => ({
+    category: p.eyebrow,
+    name: p.name,
+    description: p.tagline,
+    image: FORMULARY_VIALS[i % FORMULARY_VIALS.length],
+    ctaLabel: "Start your protocol",
+    ctaHref: `/products/${p.slug}`,
+    tier: FORMULARY_TIERS[p.slug],
+  })),
+  cta: {
+    eyebrow: "Not sure where to start",
+    heading: "Let a clinician decide.",
+    subtext:
+      "Answer the intake and a licensed US clinician will tell you which compound fits — or that none of them do. Both are real answers, and neither costs you anything until a protocol is approved.",
+    label: "Start your protocol",
+    href: "/products/bpc-157",
+  },
+};
 
 export type CartUpsell = {
   category: string;
