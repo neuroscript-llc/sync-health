@@ -31,7 +31,7 @@ export function Hero({
         <div className="relative z-10 flex min-h-[720px] flex-col p-3 lg:min-h-[856px]">
           <SiteHeader content={header} />
 
-          <div className="mx-auto flex w-full max-w-[980px] flex-1 flex-col items-center gap-12 pt-24 text-center lg:pt-[120px]">
+          <div className="mx-auto flex w-full max-w-[980px] flex-1 flex-col items-center justify-center gap-12 pb-10 text-center sm:justify-start sm:pb-0 sm:pt-24 lg:pt-[120px]">
             <h1 className="text-balance text-[2.75rem] font-medium leading-[1.05] tracking-[-0.03em] text-white [text-shadow:0_0_180px_rgba(208,53,22,0.95),0_0_90px_rgba(208,53,22,0.55)] sm:text-6xl lg:text-7xl xl:text-[88px] xl:leading-[96px]">
               {content.headline}
             </h1>

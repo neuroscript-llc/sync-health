@@ -20,7 +20,7 @@ function LogoTrack({
             alt={ariaHidden ? "" : logo.alt}
             width={logo.width}
             height={logo.height}
-            className="h-16 w-auto object-contain"
+            className="h-10 w-auto object-contain sm:h-12"
           />
         </li>
       ))}
@@ -34,7 +34,7 @@ export function TrustBar({
 }: { content: TrustBarContent } & Omit<React.ComponentPropsWithoutRef<"section">, "content">) {
   return (
     <section
-      className="flex flex-col items-center gap-6 bg-cream py-10"
+      className="flex flex-col items-center gap-6 bg-cream pt-10 pb-0 sm:gap-12"
       {...rest}
     >
       <p className="font-mono text-sm font-medium uppercase tracking-[0.04em] text-brand">

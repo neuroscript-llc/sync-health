@@ -17,7 +17,7 @@ export function HowItWorks({
   const isProduct = variant === "product";
   return (
     <section
-      className={`${isProduct ? "" : "bg-cream"} px-6 py-12 sm:px-9`}
+      className={`${isProduct ? "py-12" : "bg-cream pb-12 pt-6 sm:pt-12"} px-6 sm:px-9`}
       {...rest}
     >
       <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-16">
