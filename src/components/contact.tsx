@@ -1,0 +1,206 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import type { ContactChannel, ContactContent } from "@/lib/content";
+
+const FIELD_BOX =
+  "w-full rounded-xl border border-ink/20 bg-[#FCFCFC] px-4 py-3 text-base leading-6 text-ink outline-none transition-colors placeholder:text-ink/40 focus:border-ink/40";
+
+const LABEL =
+  "font-mono text-sm font-medium uppercase tracking-[0.02em] text-ink/80";
+
+/**
+ * Renders the emergency copy with its "911" as a live tel: link — the Figma
+ * underlines that word specifically.
+ */
+function EmergencyCopy({ body }: { body: string }) {
+  const [before, ...rest] = body.split("911");
+  if (rest.length === 0) return <p className="text-sm leading-5 text-white/80">{body}</p>;
+  return (
+    <p className="text-sm leading-5 text-white/80">
+      {before}
+      <a href="tel:911" className="underline underline-offset-2">
+        911
+      </a>
+      {rest.join("911")}
+    </p>
+  );
+}
+
+function Channel({ channel }: { channel: ContactChannel }) {
+  return (
+    <div className="flex flex-col gap-2 rounded-2xl border border-ink/[0.12] bg-white p-6">
+      <p className="font-mono text-xs font-medium uppercase tracking-[0.06em] text-brand">
+        {channel.eyebrow}
+      </p>
+      <p className="text-sm leading-5 text-ink/80">{channel.description}</p>
+
+      {channel.email && (
+        <a
+          href={`mailto:${channel.email}`}
+          className="font-medium leading-6 text-ink underline underline-offset-2 transition-colors hover:text-brand"
+        >
+          {channel.email}
+        </a>
+      )}
+
+      {channel.cta && (
+        <Link
+          href={channel.cta.href}
+          className="mt-1 inline-flex items-center gap-2 self-start rounded-full bg-ink py-3 pl-6 pr-5 font-mono text-base uppercase leading-6 text-white transition-opacity duration-300 hover:opacity-90"
+        >
+          {channel.cta.label}
+        </Link>
+      )}
+    </div>
+  );
+}
+
+export function Contact({ content }: { content: ContactContent }) {
+  const { form } = content;
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
+    "idle",
+  );
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    setStatus("sending");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: data.get("name"),
+          email: data.get("email"),
+          message: data.get("message"),
+        }),
+      });
+      setStatus(res.ok ? "sent" : "error");
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  return (
+    <section className="px-5 py-12 sm:px-9 sm:py-20">
+      <div className="mx-auto flex w-full max-w-[1368px] flex-col gap-8 sm:gap-11">
+        {/* Heading */}
+        <div className="flex flex-col gap-3 sm:gap-4">
+          <p className="font-mono text-sm font-medium uppercase tracking-[0.04em] text-brand">
+            {content.eyebrow}
+          </p>
+          <h1 className="text-5xl font-medium leading-[1.16] tracking-[-0.03em] text-ink lg:text-[56px] lg:leading-[64px] lg:tracking-[-0.02em]">
+            {content.heading}
+          </h1>
+          <p className="max-w-[822px] text-base leading-[1.5] text-ink/80 sm:text-lg">
+            {content.subtext}
+          </p>
+        </div>
+
+        {/* Form + channels. The channel rail is a fixed 440px on desktop and
+            stacks under the form below lg (Figma 1108:8001). */}
+        <div className="flex flex-col gap-8 lg:flex-row">
+          <form
+            onSubmit={onSubmit}
+            className="flex flex-1 flex-col gap-5 rounded-[20px] border border-ink/[0.12] bg-white p-6 sm:p-8"
+          >
+            <p className="font-mono text-xs font-medium uppercase tracking-[0.06em] text-brand">
+              {form.eyebrow}
+            </p>
+
+            <div className="flex flex-col gap-4 sm:flex-row">
+              <div className="flex flex-1 flex-col gap-1">
+                <label htmlFor="contact-name" className={LABEL}>
+                  {form.nameLabel}
+                </label>
+                <input
+                  id="contact-name"
+                  name="name"
+                  type="text"
+                  required
+                  autoComplete="name"
+                  placeholder={form.namePlaceholder}
+                  className={FIELD_BOX}
+                />
+              </div>
+
+              <div className="flex flex-1 flex-col gap-1">
+                <label htmlFor="contact-email" className={LABEL}>
+                  {form.emailLabel}
+                </label>
+                <input
+                  id="contact-email"
+                  name="email"
+                  type="email"
+                  required
+                  autoComplete="email"
+                  placeholder={form.emailPlaceholder}
+                  className={FIELD_BOX}
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-1 flex-col gap-2">
+              <label
+                htmlFor="contact-message"
+                className="font-mono text-xs font-medium uppercase tracking-[0.06em] text-ink/80"
+              >
+                {form.messageLabel}
+              </label>
+              <textarea
+                id="contact-message"
+                name="message"
+                required
+                rows={6}
+                placeholder={form.messagePlaceholder}
+                className={`${FIELD_BOX} min-h-[160px] flex-1 resize-y`}
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={status === "sending" || status === "sent"}
+              className="w-full rounded-full bg-ink px-5 py-4 font-mono text-lg uppercase leading-8 text-white transition-opacity duration-300 hover:opacity-90 disabled:opacity-60 sm:text-xl"
+            >
+              {status === "sending" ? "Sending…" : form.submitLabel}
+            </button>
+
+            {/* Only one of these ever shows — the form keeps its fields so a
+                failed send isn't lost. */}
+            {status === "sent" && (
+              <p
+                role="status"
+                className="text-sm leading-5 text-ink"
+              >
+                <span className="font-medium">{form.successHeading}</span>{" "}
+                {form.successBody}
+              </p>
+            )}
+            {status === "error" && (
+              <p role="alert" className="text-sm leading-5 text-brand">
+                {form.errorBody}
+              </p>
+            )}
+
+            <p className="text-xs leading-5 text-ink/80">{form.disclaimer}</p>
+          </form>
+
+          <div className="flex w-full flex-col gap-4 lg:w-[440px] lg:shrink-0">
+            {content.channels.map((c) => (
+              <Channel key={c.eyebrow} channel={c} />
+            ))}
+
+            <div className="flex flex-col gap-2 rounded-2xl bg-ink p-6">
+              <p className="font-mono text-xs font-medium uppercase tracking-[0.06em] text-brand">
+                {content.emergency.eyebrow}
+              </p>
+              <EmergencyCopy body={content.emergency.body} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

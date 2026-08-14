@@ -231,6 +231,56 @@ export type FaqContent = {
   items: FaqItem[];
 };
 
+export type FaqCategoryItem = FaqItem & {
+  /** Tab this question sits under. The tab row is derived from these. */
+  category: string;
+};
+
+/** Standalone FAQ browser (Figma 1108:8039) — tabs over a full-width accordion. */
+export type FaqPageContent = {
+  eyebrow: string;
+  heading: string;
+  subtext: string;
+  /** Label for the leading "show everything" tab. */
+  allLabel: string;
+  items: FaqCategoryItem[];
+};
+
+/** A way to reach us. Resolves to either a mailto link or a CTA button. */
+export type ContactChannel = {
+  eyebrow: string;
+  description: string;
+  email?: string;
+  cta?: { label: string; href: string };
+};
+
+export type ContactContent = {
+  eyebrow: string;
+  heading: string;
+  subtext: string;
+  form: {
+    eyebrow: string;
+    nameLabel: string;
+    namePlaceholder: string;
+    emailLabel: string;
+    emailPlaceholder: string;
+    messageLabel: string;
+    messagePlaceholder: string;
+    submitLabel: string;
+    disclaimer: string;
+    successHeading: string;
+    successBody: string;
+    /** Shown when the send fails — points at a channel that always works. */
+    errorBody: string;
+  };
+  channels: ContactChannel[];
+  emergency: {
+    eyebrow: string;
+    /** The literal "911" in this copy is rendered as a tel: link. */
+    body: string;
+  };
+};
+
 export type FinalCtaContent = {
   eyebrow: string;
   heading: string;
@@ -1155,6 +1205,134 @@ export const faq: FaqContent = {
         "It depends on the protocol and your goals — some people notice changes within a few weeks, while longevity and metabolic protocols typically build over 8–14 weeks. Your clinician sets expectations up front.",
     },
   ],
+};
+
+export const contact: ContactContent = {
+  eyebrow: "Contact",
+  heading: "Talk to an Expert.",
+  subtext:
+    "Our care team answers messages seven days a week. Clinical questions about an active protocol go straight to the provider who wrote it — not to a queue.",
+  form: {
+    eyebrow: "Send us a message",
+    nameLabel: "Full name",
+    namePlaceholder: "Marcus Reid",
+    emailLabel: "Email address",
+    emailPlaceholder: "marcus.reid@gmail.com",
+    messageLabel: "Message",
+    messagePlaceholder:
+      "I started my recovery protocol three weeks ago and wanted to check whether the timing of my dose matters relative to training…",
+    submitLabel: "Send message",
+    disclaimer:
+      "Please don’t include sensitive medical details in this form. For anything about an active prescription, message your clinician from your patient dashboard — that channel is HIPAA-secured.",
+    successHeading: "Message sent.",
+    successBody:
+      "Our care team answers seven days a week — expect a reply within one business day.",
+    errorBody:
+      "We couldn’t send that just now. Email hello@beinsync.co and we’ll pick it up from there.",
+  },
+  channels: [
+    {
+      eyebrow: "Care team",
+      description: "General questions, orders, shipping and billing.",
+      email: "hello@beinsync.co",
+    },
+    {
+      eyebrow: "Clinical",
+      description:
+        "Questions about an active protocol, dosing or side effects.",
+      cta: { label: "Chat with clinician", href: "/login" },
+    },
+    {
+      eyebrow: "Press & partnerships",
+      description: "Media requests and collaboration enquiries.",
+      email: "press@sync.health",
+    },
+  ],
+  emergency: {
+    eyebrow: "Medical emergency",
+    body: "SYNC is not an emergency service and we cannot respond to urgent medical situations. If you are experiencing a severe reaction, difficulty breathing, chest pain or any medical emergency, call 911 or go to your nearest emergency room.",
+  },
+};
+
+/** Items are authored grouped by category — that order becomes the tab order. */
+export const faqPage: FaqPageContent = {
+  eyebrow: "FAQ",
+  heading: "Questions?\nAnswered.",
+  subtext:
+    "Everything you need to know about protocols, safety and getting started.",
+  allLabel: "All",
+  items: [
+    {
+      category: "Getting started",
+      question: "What is SYNC?",
+      answer:
+        "SYNC is a US telehealth platform that builds personalised peptide protocols. Every protocol is prescribed by a licensed US clinician, compounded at a licensed US pharmacy, and adjusted around how your body responds.",
+    },
+    {
+      category: "Getting started",
+      question: "How does the assessment work?",
+      answer:
+        "It’s a short intake about your goals, history and what you’ve tried before. A clinician reviews your answers, may follow up with questions, and builds a protocol matched to you — usually within 1–2 hours.",
+    },
+    {
+      category: "Prescriptions",
+      question: "Do I need a prescription?",
+      answer:
+        "Yes. Nothing ships without a prescription. You complete an online assessment, and a licensed provider reviews it and prescribes only what’s appropriate for you — no prior prescription needed to start.",
+    },
+    {
+      category: "Prescriptions",
+      question: "What happens if a protocol isn’t right for me?",
+      answer:
+        "Then it isn’t prescribed. If the clinician reviewing your intake decides a compound isn’t appropriate — or that something else fits you better — they’ll tell you and propose the alternative. You’re not charged until a protocol is approved.",
+    },
+    {
+      category: "Shipping",
+      question: "How fast is shipping?",
+      answer:
+        "Most protocols are reviewed within 1–2 hours and leave the compounding pharmacy within two business days. Delivery is free on orders over $50, and temperature-controlled wherever the compound requires it.",
+    },
+    {
+      category: "Shipping",
+      question: "What’s in the box?",
+      answer:
+        "Your prescribed vial, sterile syringes, bacteriostatic water for reconstitution, alcohol swabs and a sharps disposal option — plus full reconstitution and injection instructions. Everything ships discreetly in unbranded packaging.",
+    },
+    {
+      category: "Billing",
+      question: "Can I change or cancel?",
+      answer:
+        "Anytime, from your account. If your goals change, message us and we’ll adjust your protocol with you. No calls, no retention scripts, no penalty for pausing between cycles.",
+    },
+    {
+      category: "Billing",
+      question: "Do you take insurance?",
+      answer:
+        "No — SYNC is cash-pay, which lets us build every protocol around your body rather than around what an insurer will approve. HSA and FSA support is rolling out soon through our payment partner, and we’ll email you when it goes live.",
+    },
+    {
+      category: "Safety",
+      question: "Where are the medications made?",
+      answer:
+        "All compounds are made at licensed, accredited U.S. 503A/503B pharmacies, batch-tested for purity and potency before they’re dispensed to you.",
+    },
+    {
+      category: "Safety",
+      question: "Are SYNC’s peptides safe and legal?",
+      answer:
+        "Every protocol is prescribed by a licensed U.S. provider and compounded at accredited 503A/503B pharmacies. Compounded medications are not FDA-approved; your provider reviews whether treatment is appropriate for you before anything ships.",
+    },
+  ],
+};
+
+/** Closing CTA on the contact page (Figma 1108:8094). */
+export const contactCta: FinalCtaContent = {
+  eyebrow: "Still have a question?",
+  heading: "Ask before you order.",
+  subtext:
+    "Our care team would rather talk you out of the wrong protocol than sell you one. Message us and a human will answer.",
+  ctaLabel: "Start your protocol",
+  ctaHref: "/start",
 };
 
 export const finalCta: FinalCtaContent = {
