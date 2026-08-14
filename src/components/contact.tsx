@@ -85,26 +85,28 @@ export function Contact({ content }: { content: ContactContent }) {
 
   return (
     <section className="px-5 py-12 sm:px-9 sm:py-20">
-      <div className="mx-auto flex w-full max-w-[1368px] flex-col gap-8 sm:gap-11">
-        {/* Heading */}
-        <div className="flex flex-col gap-3 sm:gap-4">
-          <p className="font-mono text-sm font-medium uppercase tracking-[0.04em] text-brand">
-            {content.eyebrow}
-          </p>
-          <h1 className="text-5xl font-medium leading-[1.16] tracking-[-0.03em] text-ink lg:text-[56px] lg:leading-[64px] lg:tracking-[-0.02em]">
-            {content.heading}
-          </h1>
+      <div className="mx-auto flex w-full max-w-[1368px] flex-col gap-6 sm:gap-11">
+        {/* Heading — mobile tightens the eyebrow to the headline (Figma 1108:7669). */}
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1 sm:gap-4">
+            <p className="font-mono text-sm font-medium uppercase tracking-[0.08em] text-brand sm:tracking-[0.04em]">
+              {content.eyebrow}
+            </p>
+            <h1 className="text-5xl font-medium leading-[1.16] tracking-[-0.03em] text-ink lg:text-[56px] lg:leading-[64px] lg:tracking-[-0.02em]">
+              {content.heading}
+            </h1>
+          </div>
           <p className="max-w-[822px] text-base leading-[1.5] text-ink/80 sm:text-lg">
             {content.subtext}
           </p>
         </div>
 
         {/* Form + channels. The channel rail is a fixed 440px on desktop and
-            stacks under the form below lg (Figma 1108:8001). */}
-        <div className="flex flex-col gap-8 lg:flex-row">
+            stacks under the form below lg (Figma 1108:8001 / 1108:7668). */}
+        <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
           <form
             onSubmit={onSubmit}
-            className="flex flex-1 flex-col gap-5 rounded-[20px] border border-ink/[0.12] bg-white p-6 sm:p-8"
+            className="flex flex-1 flex-col gap-4 rounded-3xl border border-ink/[0.08] bg-white px-5 py-6 sm:gap-5 sm:rounded-[20px] sm:border-ink/[0.12] sm:p-8"
           >
             <p className="font-mono text-xs font-medium uppercase tracking-[0.06em] text-brand">
               {form.eyebrow}
@@ -155,14 +157,14 @@ export function Contact({ content }: { content: ContactContent }) {
                 required
                 rows={6}
                 placeholder={form.messagePlaceholder}
-                className={`${FIELD_BOX} min-h-[160px] flex-1 resize-y`}
+                className={`${FIELD_BOX} min-h-[172px] flex-1 resize-y`}
               />
             </div>
 
             <button
               type="submit"
               disabled={status === "sending" || status === "sent"}
-              className="w-full rounded-full bg-ink px-5 py-4 font-mono text-lg uppercase leading-8 text-white transition-opacity duration-300 hover:opacity-90 disabled:opacity-60 sm:text-xl"
+              className="w-full rounded-full bg-ink px-5 py-3 font-mono text-base uppercase leading-6 text-white transition-opacity duration-300 hover:opacity-90 disabled:opacity-60 sm:py-4 sm:text-xl sm:leading-8"
             >
               {status === "sending" ? "Sending…" : form.submitLabel}
             </button>
@@ -187,7 +189,7 @@ export function Contact({ content }: { content: ContactContent }) {
             <p className="text-xs leading-5 text-ink/80">{form.disclaimer}</p>
           </form>
 
-          <div className="flex w-full flex-col gap-4 lg:w-[440px] lg:shrink-0">
+          <div className="flex w-full flex-col gap-6 lg:w-[440px] lg:shrink-0 lg:gap-4">
             {content.channels.map((c) => (
               <Channel key={c.eyebrow} channel={c} />
             ))}

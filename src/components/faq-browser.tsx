@@ -43,19 +43,26 @@ export function FaqBrowser({ content }: { content: FaqPageContent }) {
   return (
     <section id="faq" className="scroll-mt-24 px-5 py-12 sm:px-9 sm:py-20">
       <div className="mx-auto flex w-full max-w-[1368px] flex-col gap-10 sm:gap-16">
-        <div className="flex flex-col gap-3 sm:gap-[18px]">
-          <p className="font-mono text-sm font-medium uppercase tracking-[0.04em] text-brand">
-            {content.eyebrow}
-          </p>
-          <h2 className="whitespace-pre-line text-5xl font-medium leading-[1.16] tracking-[-0.03em] text-ink lg:text-[56px] lg:leading-[64px] lg:tracking-[-0.02em]">
-            {content.heading}
-          </h2>
-          <p className="max-w-[448px] text-base leading-[1.5] text-ink/[0.66]">
-            {content.subtext}
-          </p>
+        {/* Mobile pulls the eyebrow tight to the headline and pushes the tabs
+            well clear of the subtext; desktop spaces all four evenly at 18px
+            (Figma 1108:7711 / 1108:8040). */}
+        <div className="flex flex-col gap-10 sm:gap-[18px]">
+          <div className="flex flex-col gap-4 sm:gap-[18px]">
+            <div className="flex flex-col gap-1 sm:gap-[18px]">
+              <p className="font-mono text-sm font-medium uppercase tracking-[0.08em] text-brand sm:tracking-[0.04em]">
+                {content.eyebrow}
+              </p>
+              <h2 className="whitespace-pre-line text-5xl font-medium leading-[1.16] tracking-[-0.03em] text-ink lg:text-[56px] lg:leading-[64px] lg:tracking-[-0.02em]">
+                {content.heading}
+              </h2>
+            </div>
+            <p className="text-base leading-[1.5] text-ink/80 sm:max-w-[448px] sm:text-ink/[0.66]">
+              {content.subtext}
+            </p>
+          </div>
 
           {/* Tabs scroll sideways on mobile rather than wrapping into a block. */}
-          <div className="-mx-5 mt-1 flex gap-2 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
+          <div className="-mx-5 flex gap-2 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
             {categories.map((c) => (
               <FilterPill
                 key={c}
