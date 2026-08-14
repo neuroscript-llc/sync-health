@@ -6,12 +6,12 @@ export function Team({ content }: { content: TeamContent }) {
   return (
     <section className="px-5 py-12 sm:px-9 sm:py-20">
       <div className="mx-auto flex w-full max-w-[1368px] flex-col gap-8 sm:gap-11">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:gap-10">
-          <div className="flex flex-1 flex-col gap-1 sm:gap-3">
-            <p className="font-mono text-sm font-medium uppercase tracking-[0.08em] text-brand sm:tracking-[0.04em]">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:gap-10">
+          <div className="flex flex-1 flex-col gap-1 lg:gap-3">
+            <p className="font-mono text-sm font-medium uppercase tracking-[0.08em] text-brand lg:tracking-[0.04em]">
               {content.eyebrow}
             </p>
-            <h2 className="text-4xl font-medium leading-[1.16] tracking-[-0.03em] text-ink sm:text-5xl lg:text-[56px] lg:leading-[64px] lg:tracking-[-0.02em]">
+            <h2 className="text-5xl font-medium leading-[1.16] tracking-[-0.03em] text-ink lg:text-[56px] lg:leading-[64px] lg:tracking-[-0.02em]">
               {content.heading}
             </h2>
           </div>
@@ -20,27 +20,30 @@ export function Team({ content }: { content: TeamContent }) {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
+        {/* Eight people don't fit a phone as a grid, so mobile scrolls them
+            sideways at the Figma's 240px card width (1305:7147); lg lays them
+            out four across. The negative margin lets cards bleed to the edge. */}
+        <div className="-mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-2 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-6 lg:overflow-visible lg:px-0 lg:pb-0 [&::-webkit-scrollbar]:hidden">
           {content.members.map((m) => (
             <div
               key={m.name}
-              className="flex flex-col gap-4 rounded-3xl border border-ink/[0.08] bg-white p-2 pb-4"
+              className="flex w-60 shrink-0 snap-start flex-col gap-4 rounded-3xl border border-ink/[0.08] bg-white p-1 pb-3 lg:w-auto lg:p-2 lg:pb-4"
             >
-              <div className="relative h-[200px] w-full overflow-hidden rounded-2xl bg-[#EAECEC] sm:h-[280px]">
+              <div className="relative h-60 w-full overflow-hidden rounded-2xl bg-[#EAECEC] lg:h-[280px]">
                 <Image
                   src={m.photo}
                   alt={m.name}
                   fill
-                  sizes="(max-width: 1024px) 50vw, 312px"
+                  sizes="(max-width: 1024px) 240px, 312px"
                   className="object-cover"
                 />
               </div>
 
               <div className="flex flex-col gap-1 px-2">
-                <p className="text-lg font-medium leading-7 text-ink sm:text-2xl sm:leading-8">
+                <p className="text-xl font-medium leading-7 text-ink lg:text-2xl lg:leading-8">
                   {m.name}
                 </p>
-                <p className="text-sm leading-5 text-ink/80 sm:text-base sm:leading-6">
+                <p className="text-sm leading-5 text-ink/80 lg:text-base lg:leading-6">
                   {m.role}
                 </p>
               </div>

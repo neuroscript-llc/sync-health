@@ -12,11 +12,11 @@ export function Coverage({ content }: { content: CoverageContent }) {
         {/* Heading, then the copy stacked directly beneath it at 819px —
             not a second column (Figma 2147223366). */}
         <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1 sm:gap-3">
-            <p className="font-mono text-sm font-medium uppercase tracking-[0.08em] text-brand sm:tracking-[0.04em]">
+          <div className="flex flex-col gap-1 lg:gap-3">
+            <p className="font-mono text-sm font-medium uppercase tracking-[0.08em] text-brand lg:tracking-[0.04em]">
               {content.eyebrow}
             </p>
-            <h2 className="max-w-[622px] text-4xl font-medium leading-[1.16] tracking-[-0.03em] text-ink sm:text-5xl lg:text-[56px] lg:leading-[64px] lg:tracking-[-0.02em]">
+            <h2 className="max-w-[622px] text-5xl font-medium leading-[1.16] tracking-[-0.03em] text-ink lg:text-[56px] lg:leading-[64px] lg:tracking-[-0.02em]">
               {content.heading}
             </h2>
           </div>

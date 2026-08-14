@@ -20,7 +20,8 @@ export function AboutHero({ content }: { content: AboutHeroContent }) {
           </p>
         </div>
 
-        <div className="relative h-[280px] w-full overflow-hidden rounded-3xl sm:h-[440px] lg:h-[640px]">
+        {/* Tall on mobile too — the Figma gives it 560px there (1302:5817). */}
+        <div className="relative h-[560px] w-full overflow-hidden rounded-3xl lg:h-[640px]">
           <Image
             src={content.image.src}
             alt={content.image.alt}

@@ -8,12 +8,13 @@ import type { FounderNotesContent } from "@/lib/content";
 export function FounderNotes({ content }: { content: FounderNotesContent }) {
   return (
     <section className="px-5 py-12 sm:px-9 sm:py-20">
-      <div className="mx-auto flex w-full max-w-[900px] flex-col items-center gap-6">
-        <div className="flex flex-col items-center gap-1 text-center sm:gap-4">
+      <div className="mx-auto flex w-full max-w-[900px] flex-col gap-6 sm:items-center">
+        {/* Left-aligned on mobile, centred from sm (Figma 1115:9541 / 1302:5822). */}
+        <div className="flex flex-col gap-1 sm:items-center sm:gap-4 sm:text-center">
           <p className="font-mono text-sm font-medium uppercase tracking-[0.08em] text-brand sm:tracking-[0.04em]">
             {content.eyebrow}
           </p>
-          <h2 className="text-4xl font-medium leading-[1.16] tracking-[-0.03em] text-ink sm:text-5xl lg:text-[56px] lg:leading-[64px] lg:tracking-[-0.02em]">
+          <h2 className="text-5xl font-medium leading-[1.16] tracking-[-0.03em] text-ink lg:text-[56px] lg:leading-[64px] lg:tracking-[-0.02em]">
             {content.heading}
           </h2>
         </div>
@@ -24,25 +25,28 @@ export function FounderNotes({ content }: { content: FounderNotesContent }) {
               key={note.name}
               className="flex flex-col gap-3 rounded-3xl bg-white p-3 sm:flex-row"
             >
-              <div className="relative aspect-square w-full shrink-0 overflow-hidden rounded-[20px] bg-[#F16818] ring-2 ring-white sm:aspect-auto sm:size-[320px]">
+              {/* 160px square on mobile, 320px beside the quote from sm. */}
+              <div className="relative size-40 shrink-0 overflow-hidden rounded-[20px] bg-[#F16818] ring-2 ring-white sm:size-[320px]">
                 <Image
                   src={note.photo}
                   alt={note.name}
                   fill
-                  sizes="320px"
+                  sizes="(max-width: 640px) 160px, 320px"
                   className="object-cover"
                 />
               </div>
 
-              <div className="flex flex-1 flex-col justify-between gap-6 p-3">
-                <p className="text-base leading-[1.4] text-ink/80 sm:text-xl">
+              <div className="flex flex-1 flex-col justify-between gap-3 p-1 sm:gap-6 sm:p-3">
+                <p className="text-lg leading-[1.4] text-ink/80 sm:text-xl">
                   {note.quote}
                 </p>
                 <div className="flex flex-col gap-1">
-                  <p className="text-xl font-medium leading-8 text-ink sm:text-2xl">
+                  <p className="text-xl font-medium leading-7 text-ink sm:text-2xl sm:leading-8">
                     {note.name}
                   </p>
-                  <p className="text-base leading-6 text-ink/80">{note.role}</p>
+                  <p className="text-sm leading-5 text-ink/80 sm:text-base sm:leading-6">
+                    {note.role}
+                  </p>
                 </div>
               </div>
             </div>
