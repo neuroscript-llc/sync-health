@@ -7,7 +7,11 @@ import type { PrinciplesContent } from "@/lib/content";
  */
 export function Principles({ content }: { content: PrinciplesContent }) {
   return (
-    <section className="px-5 py-12 sm:px-9 sm:py-20">
+    // The compare section above bleeds its coral glow down over this one via a
+    // positioned child, which would otherwise paint on top of this section's
+    // text. Positioning this section puts the copy back above the glow while
+    // still letting it show through the transparent background.
+    <section className="relative z-10 px-5 py-12 sm:px-9 sm:py-20">
       <div className="mx-auto flex w-full max-w-[1368px] flex-col gap-8 sm:gap-11">
         <div className="flex flex-col gap-1 sm:gap-4">
           <p className="font-mono text-sm font-medium uppercase tracking-[0.08em] text-brand sm:tracking-[0.04em]">
