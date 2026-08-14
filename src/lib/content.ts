@@ -1478,8 +1478,8 @@ export type CareersContent = {
   body: string;
   ctaLabel: string;
   ctaHref: string;
-  /** Four columns of portraits; the outer two are offset upward. */
-  collage: string[];
+  /** Pre-composed artwork — the staggered grid and its edge fade are baked in. */
+  collage: { src: string; alt: string };
 };
 
 export const aboutHero: AboutHeroContent = {
@@ -1737,21 +1737,24 @@ export const aboutQuality: QualityContent = {
   heading: "Clinical care that stays with you.",
   supporting:
     "The people, the pharmacy, and the process behind every protocol.",
+  // The icon filenames don't describe what they draw: clinical.svg is the
+  // clipboard, safe.svg the pen, trusted.svg the shield-check. Paired here to
+  // the glyphs the Figma shows, not to the names.
   features: [
     {
-      icon: "/images/quality/trusted.svg",
+      icon: "/images/quality/clinical.svg",
       title: "Physician-supervised care",
       description:
         "A licensed US physician reviews your intake, prescribes your protocol, and stays with you through it.",
     },
     {
-      icon: "/images/quality/clinical.svg",
+      icon: "/images/quality/safe.svg",
       title: "Compounded, not sourced",
       description:
         "Sourced from US-based, licensed pharmacies for consistent quality.",
     },
     {
-      icon: "/images/quality/safe.svg",
+      icon: "/images/quality/trusted.svg",
       title: "Tested every batch",
       description:
         "Every batch is tested by an independent lab for purity, potency and sterility.",
@@ -1771,7 +1774,7 @@ export const careers: CareersContent = {
   body: "Remote-first, flexible hours, and a bar for evidence that occasionally slows us down on purpose. Clinical, engineering, operations and content.",
   ctaLabel: "Job openings",
   ctaHref: "/contact",
-  collage: team.members.map((m) => m.photo),
+  collage: { src: "/images/about/careers-collage.png", alt: "" },
 };
 
 export const aboutTestimonials: TestimonialsContent = {

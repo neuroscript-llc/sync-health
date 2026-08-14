@@ -198,6 +198,35 @@ body {
   will-change: transform;
 }
 
+/* Coverage-map pins breathe: the two halo rings swell and fade on a slow
+   loop while the dot itself stays put. Each marker sets its own
+   `--pin-delay` so the map ripples rather than pulsing in lockstep. */
+@keyframes pin-breathe {
+  0%,
+  100% {
+    transform: scale(0.72);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-pin-breathe {
+  animation: pin-breathe 3.6s ease-in-out infinite;
+  animation-delay: var(--pin-delay, 0s);
+  will-change: transform, opacity;
+}
+
+/* The inner ring trails the outer one so the halo reads as one expanding
+   pulse rather than two rings moving together. */
+.animate-pin-breathe-inner {
+  animation: pin-breathe 3.6s ease-in-out infinite;
+  animation-delay: calc(var(--pin-delay, 0s) + 0.45s);
+  will-change: transform, opacity;
+}
+
 /* "How it works" step cards stack into a deck as you scroll (mobile only).
    Each card sticks a little lower than the one before it, so the previous
    card's top edge stays peeking out behind the current one — an envelope /
@@ -216,7 +245,9 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
   .animate-marquee-slow,
-  .animate-vial-float {
+  .animate-vial-float,
+  .animate-pin-breathe,
+  .animate-pin-breathe-inner {
     animation: none;
   }
   /* Fall back to a plain scrolling list — no pinning. */
