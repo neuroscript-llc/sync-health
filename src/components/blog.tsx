@@ -55,7 +55,10 @@ export function Blog({
   };
 
   return (
-    <section className="bg-white px-5 py-12 sm:px-9 sm:py-12" {...rest}>
+    // Positioned so the closing CTA's coral glow — which is centred on that
+    // section and so overflows upward — stays behind this one instead of
+    // washing over the article meta and the CTA pill.
+    <section className="relative z-10 bg-white px-5 py-12 sm:px-9 sm:py-12" {...rest}>
       <div className="mx-auto flex max-w-[1368px] flex-col gap-10">
         {/* Header */}
         <div className="flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-end">

@@ -1794,6 +1794,7 @@ export const aboutBlog: BlogContent = {
   ...blog,
   eyebrow: "The journal",
   heading: "The SYNC journal.",
+  ctaLabel: "Read the journal",
 };
 
 export const aboutCta: FinalCtaContent = {
