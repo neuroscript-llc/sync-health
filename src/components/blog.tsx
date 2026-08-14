@@ -55,11 +55,13 @@ export function Blog({
   };
 
   return (
-    // Positioned so the closing CTA's coral glow — which is centred on that
-    // section and so overflows upward — stays behind this one instead of
-    // washing over the article meta and the CTA pill.
-    <section className="relative z-10 bg-white px-5 py-12 sm:px-9 sm:py-12" {...rest}>
-      <div className="mx-auto flex max-w-[1368px] flex-col gap-10">
+    // The closing CTA centres its coral glow on its own section, so the top
+    // half overflows up into this one. The section stays unpositioned, letting
+    // the glow wash over its white background and fade in smoothly; only the
+    // content is lifted above it, so the article meta and the CTA pill stay
+    // crisp. Raising the section itself would clip the glow at the boundary.
+    <section className="bg-white px-5 py-12 sm:px-9 sm:py-12" {...rest}>
+      <div className="relative z-10 mx-auto flex max-w-[1368px] flex-col gap-10">
         {/* Header */}
         <div className="flex flex-col items-start justify-between gap-8 sm:flex-row sm:items-end">
           <div className="flex max-w-[396px] flex-col gap-4 sm:gap-6">
