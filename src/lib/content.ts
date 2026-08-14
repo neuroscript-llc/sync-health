@@ -1405,6 +1405,403 @@ export const hero: HeroContent = {
   },
 };
 
+/* --- About page (Figma 1115:10081) ------------------------------------
+   Sections unique to /about are typed here; the ones it shares with the
+   home page (how-it-works, compare, quality, testimonials, protocols,
+   journal, closing CTA) reuse those components with about-specific copy. */
+
+export type AboutHeroContent = {
+  eyebrow: string;
+  heading: string;
+  body: string;
+  image: { src: string; alt: string };
+};
+
+export type FounderNote = {
+  name: string;
+  role: string;
+  quote: string;
+  photo: string;
+};
+
+export type FounderNotesContent = {
+  eyebrow: string;
+  heading: string;
+  notes: FounderNote[];
+};
+
+export type TimelineStep = { year: string; title: string; body: string };
+
+export type TimelineContent = {
+  eyebrow: string;
+  heading: string;
+  subtext: string;
+  steps: TimelineStep[];
+};
+
+export type Principle = { number: string; title: string; body: string };
+
+export type PrinciplesContent = {
+  eyebrow: string;
+  heading: string;
+  image: { src: string; alt: string };
+  principles: Principle[];
+};
+
+export type CoverageContent = {
+  eyebrow: string;
+  heading: string;
+  paragraphs: string[];
+  map: { src: string; alt: string };
+  /** Marker positions as percentages of the map box. */
+  markers: { x: number; y: number }[];
+};
+
+export type TeamMember = {
+  name: string;
+  role: string;
+  /** Grouping pill under the name, e.g. "Management". */
+  tag: string;
+  photo: string;
+};
+
+export type TeamContent = {
+  eyebrow: string;
+  heading: string;
+  subtext: string;
+  members: TeamMember[];
+};
+
+export type CareersContent = {
+  eyebrow: string;
+  heading: string;
+  body: string;
+  ctaLabel: string;
+  ctaHref: string;
+  /** Four columns of portraits; the outer two are offset upward. */
+  collage: string[];
+};
+
+export const aboutHero: AboutHeroContent = {
+  eyebrow: "About Sync",
+  heading: "We built the system we couldn’t find.",
+  body: "Peptides were everywhere and nowhere. Research chemicals sold with a wink. Forums doing the job of physicians. Telehealth platforms that were really just order forms with a doctor’s signature at the end. We wanted the version where a clinician actually decides so we built it.",
+  image: {
+    src: "/images/about/hero.jpg",
+    alt: "A Sync. member with her monthly protocol",
+  },
+};
+
+export const founderNotes: FounderNotesContent = {
+  eyebrow: "Founder’s note",
+  heading: "A note from the founder",
+  notes: [
+    {
+      name: "Amelia",
+      role: "Co-Founder @SYNC Health",
+      photo: "/images/about/founder-amelia.jpg",
+      quote:
+        "Peptides were everywhere and nowhere — research chemicals, forum advice, telehealth forms that auto-generated prescriptions. We built SYNC because we wanted a clinician to actually read your history, look at your labs, and decide. Everything is compounded individually, third-party tested, and revisited every cycle. The version of you that started is not the version of you three months in.",
+    },
+    {
+      name: "Patrick",
+      role: "Co-Founder @SYNC Health",
+      photo: "/images/about/founder-patrick.jpg",
+      quote:
+        "I watched patients cycle through vendors and template scripts with no one tracking how they responded. Medicine isn’t a transaction — it’s a conversation that evolves. At SYNC, a licensed provider reviews your history and goals, your protocol is compounded specifically for you and tested before it ships, and we revisit it every cycle.",
+    },
+  ],
+};
+
+export const aboutHowItWorks: HowItWorksContent = {
+  eyebrow: "How it works",
+  heading: "The path to your protocol.",
+  subtext:
+    "From your intake to your door, every protocol is built by a licensed US clinician around who you are and where you’re headed.",
+  cardImage: "/images/step-portrait.png",
+  steps: [
+    {
+      number: "01",
+      title: "Take the assessment.",
+      description:
+        "Your goals, your body, your history — everything your clinician needs to build a protocol around you.",
+    },
+    {
+      number: "02",
+      title: "Clinician-built protocol.",
+      description:
+        "A licensed US clinician reviews your intake, decides if a protocol is right for you, and prescribes the compound, dose and cycle for your body. Approved within 24 hours.",
+    },
+    {
+      number: "03",
+      title: "Delivered. Then evolved.",
+      description:
+        "Compounded at a licensed US pharmacy and shipped to you discreetly. Monthly check-ins keep your clinician involved, your dosing on track, and your protocol aligned with where you’re headed.",
+    },
+  ],
+  ctaLabel: "Start your protocol",
+  ctaHref: "/start",
+};
+
+export const timeline: TimelineContent = {
+  eyebrow: "The road here",
+  heading: "Four years, one argument.",
+  subtext:
+    "We started because the honest version of this category did not exist. Every step since has been about moving the decision further away from the customer and closer to a clinician.",
+  steps: [
+    {
+      year: "2022",
+      title: "The problem, named",
+      body: "Two years of watching people run compounds off forum threads. We start mapping what a clinician-led version would actually require — licensing, pharmacy, testing, all of it.",
+    },
+    {
+      year: "2023",
+      title: "Clinicians first",
+      body: "We build the intake before we build the store. First providers licensed across multiple states join, and the rule is set: a protocol is a clinical decision or it is nothing.",
+    },
+    {
+      year: "2024",
+      title: "Pharmacy and proof",
+      body: "Partnership with an FDA-registered compounding pharmacy operating under cGMP. Independent third-party batch testing becomes non-negotiable on every lot we dispense.",
+    },
+    {
+      year: "2026",
+      title: "Protocols that adapt",
+      body: "Cycle-based check-ins ship. Your clinician sees what actually happened and adjusts compound, dose or cadence — the part most platforms never built.",
+    },
+  ],
+};
+
+export const aboutCompare: CompareContent = {
+  ...compare,
+  eyebrow: "Side by side",
+  heading: "A higher standard of care.",
+  subtext: "Because the compound is only as good as the care around it.",
+  features: [
+    "A clinician chooses the compound, dose and cycle for your body",
+    "Every batch third-party tested for purity, potency and sterility",
+    "Protocol adjusted every cycle",
+    "Intake covers what you’ve run and how it went",
+    "A clinician you can message",
+    "Approved within 24 hours",
+  ],
+  sync: Array.from({ length: 6 }, () => ({ type: "check" as const })),
+  competitors: [
+    {
+      title: "Grey market",
+      cells: [
+        { type: "text", text: "You decide" },
+        { type: "text", text: "Unregulated" },
+        { type: "cross" },
+        { type: "cross" },
+        { type: "cross" },
+        { type: "cross" },
+      ],
+    },
+    {
+      title: "Generic telehealth",
+      cells: [
+        { type: "text", text: "Template" },
+        { type: "text", text: "Varies" },
+        { type: "cross" },
+        { type: "text", text: "Basic form" },
+        { type: "text", text: "Support queue" },
+        { type: "text", text: "2-5 days" },
+      ],
+    },
+  ],
+};
+
+export const principles: PrinciplesContent = {
+  eyebrow: "What we hold to",
+  heading: "Four rules we don’t bend.",
+  image: {
+    src: "/images/about/hero.jpg",
+    alt: "A Sync. member with her monthly protocol",
+  },
+  principles: [
+    {
+      number: "01",
+      title: "A clinician decides, not a cart",
+      body: "You can tell us what you are interested in. You cannot tell us what to prescribe. The person with the license makes the call, and sometimes that call is no.",
+    },
+    {
+      number: "02",
+      title: "Compounded, never sourced",
+      body: "Every vial is prepared for you by a licensed US compounding pharmacy. We do not resell research chemicals, and we do not import from unregulated suppliers.",
+    },
+    {
+      number: "03",
+      title: "Tested, then tested again",
+      body: "Purity, potency, sterility and endotoxins — verified by an independent lab on every batch, with results your clinician can pull up.",
+    },
+    {
+      number: "04",
+      title: "The protocol is allowed to change",
+      body: "Cycle two should not look like cycle one. We check in, read what happened, and adjust. A protocol that never changes was never personalised.",
+    },
+  ],
+};
+
+export const coverage: CoverageContent = {
+  eyebrow: "Why Sync?",
+  heading: "Science backed, nationwide coverage",
+  paragraphs: [
+    "Practicing telemedicine across all 50 states, we make it easy for you to start your journey online. Whether you begin with a lab test or a therapy, you’ll receive personalized care with access to a dedicated coach for one-on-one guidance. We’re here to support you every step of the way.",
+    "And the best part? We believe in transparency. No hidden fees, just clear, honest pricing. We’re here for you, welcome to SYNC Health.",
+  ],
+  map: { src: "/images/about/coverage-map.png", alt: "Map of the United States" },
+  // Percentages of the 1296×600 map box the Figma positions them in.
+  markers: [
+    { x: 19.98, y: 18.95 },
+    { x: 22.98, y: 46.95 },
+    { x: 24.97, y: 26.95 },
+    { x: 28.97, y: 40.95 },
+    { x: 30.97, y: 15.95 },
+    { x: 30.97, y: 57.95 },
+    { x: 27.98, y: 72.95 },
+    { x: 45.97, y: 40.95 },
+    { x: 46.97, y: 65.95 },
+    { x: 46.97, y: 19.95 },
+    { x: 48.97, y: 20.95 },
+    { x: 51.97, y: 51.95 },
+    { x: 54.97, y: 61.95 },
+    { x: 61.97, y: 54.95 },
+    { x: 63.97, y: 29.95 },
+    { x: 69.97, y: 24.95 },
+    { x: 69.97, y: 44.95 },
+    { x: 69.97, y: 64.95 },
+    { x: 76.97, y: 25.95 },
+  ],
+};
+
+export const team: TeamContent = {
+  eyebrow: "Clinical team, advisors, investors",
+  heading: "The people accountable for the decision.",
+  subtext:
+    "Prescribing providers are licensed in the states they serve. Advisors have no prescribing authority and no say in any individual protocol.",
+  members: [
+    {
+      name: "Amelie Jane",
+      role: "Chief Executive Officer",
+      tag: "Management",
+      photo: "/images/about/team/amelie-jane.jpg",
+    },
+    {
+      name: "Ronald Martinez",
+      role: "Chief Technology Officer",
+      tag: "Management",
+      photo: "/images/about/team/ronald-martinez.jpg",
+    },
+    {
+      name: "Charles Lee",
+      role: "Pharmacy Liaison",
+      tag: "Advisor",
+      photo: "/images/about/team/charles-lee.jpg",
+    },
+    {
+      name: "Barbara Wilson",
+      role: "Scientific Advisor",
+      tag: "Peptide pharmacology",
+      photo: "/images/about/team/barbara-wilson.jpg",
+    },
+    {
+      name: "Deborah Rodriguez",
+      role: "Medical Assistant",
+      tag: "Assistant",
+      photo: "/images/about/team/deborah-rodriguez.jpg",
+    },
+    {
+      name: "Mary Anderson",
+      role: "Nursing Assistant",
+      tag: "Assistant",
+      photo: "/images/about/team/mary-anderson.jpg",
+    },
+    {
+      name: "Karen",
+      role: "Sales Manager",
+      tag: "Team",
+      photo: "/images/about/team/karen.jpg",
+    },
+    {
+      name: "Carol Mitchell",
+      role: "Marketing Coordinator",
+      tag: "Team",
+      photo: "/images/about/team/carol-mitchell.jpg",
+    },
+  ],
+};
+
+export const aboutQuality: QualityContent = {
+  eyebrow: "Why patients choose Sync",
+  heading: "Clinical care that stays with you.",
+  supporting:
+    "The people, the pharmacy, and the process behind every protocol.",
+  features: [
+    {
+      icon: "/images/quality/trusted.svg",
+      title: "Physician-supervised care",
+      description:
+        "A licensed US physician reviews your intake, prescribes your protocol, and stays with you through it.",
+    },
+    {
+      icon: "/images/quality/clinical.svg",
+      title: "Compounded, not sourced",
+      description:
+        "Sourced from US-based, licensed pharmacies for consistent quality.",
+    },
+    {
+      icon: "/images/quality/safe.svg",
+      title: "Tested every batch",
+      description:
+        "Every batch is tested by an independent lab for purity, potency and sterility.",
+    },
+    {
+      icon: "/images/quality/delivery.svg",
+      title: "Approved in 24 hours",
+      description:
+        "Reviewed the same day. Delivered discreetly to your door, tracked and temperature-controlled where the compound requires it.",
+    },
+  ],
+};
+
+export const careers: CareersContent = {
+  eyebrow: "Work with Sync",
+  heading: "We are hiring people who would rather be right than fast.",
+  body: "Remote-first, flexible hours, and a bar for evidence that occasionally slows us down on purpose. Clinical, engineering, operations and content.",
+  ctaLabel: "Job openings",
+  ctaHref: "/contact",
+  collage: team.members.map((m) => m.photo),
+};
+
+export const aboutTestimonials: TestimonialsContent = {
+  ...testimonials,
+  eyebrow: "From the community",
+  heading: "The ones who stopped guessing.",
+};
+
+export const aboutProtocols: ProtocolsContent = {
+  ...protocols,
+  eyebrow: "Explore protocols",
+  heading: "Optimise for what matters most.",
+  subtext: "Every goal is personal. Every protocol is built around yours.",
+};
+
+export const aboutBlog: BlogContent = {
+  ...blog,
+  eyebrow: "The journal",
+  heading: "The SYNC journal.",
+};
+
+export const aboutCta: FinalCtaContent = {
+  eyebrow: "Personalised protocol, tailored",
+  heading: "Your version of in SYNC starts here.",
+  subtext:
+    "Take the intake, get a clinician’s read, and start a protocol built around your body — or find out it isn’t the right moment. Both answers are free.",
+  ctaLabel: "Start your protocol",
+  ctaHref: "/start",
+};
+
 export const bpc157Product: ProductContent = {
   slug: "bpc-157",
   eyebrow: "Recovery",
