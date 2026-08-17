@@ -321,6 +321,8 @@ export type FooterContent = {
 
 export type HeroContent = {
   headline: string;
+  /** Optional — Storyblok stories seeded before the field exists omit it. */
+  subheadline?: string;
   ctaLabel: string;
   ctaHref: string;
   backgroundImage: {
@@ -1397,6 +1399,8 @@ export const footer: FooterContent = {
 
 export const hero: HeroContent = {
   headline: "We're simplifying the path to the Good Life",
+  subheadline:
+    "Clinician-reviewed peptide protocols, compounded in US pharmacies and delivered to your door.",
   ctaLabel: "Start your protocol",
   ctaHref: "/start",
   backgroundImage: {

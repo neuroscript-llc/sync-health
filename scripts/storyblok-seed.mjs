@@ -21,6 +21,8 @@ export const seed = {
 
   hero: {
     headline: "We're simplifying the path to the Good Life",
+    subheadline:
+      "Clinician-reviewed peptide protocols, compounded in US pharmacies and delivered to your door.",
     ctaLabel: "Start your protocol",
     ctaHref: "/start",
     backgroundImage: "/images/hero-bg.jpg",

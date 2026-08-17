@@ -70,6 +70,7 @@ export function HeroBlok({ blok }: { blok: SbBlokData }) {
       header={mapHeader(arr(blok.header)[0])}
       content={{
         headline: str(blok.headline),
+        subheadline: str(blok.subheadline),
         ctaLabel: str(blok.ctaLabel),
         ctaHref: str(blok.ctaHref),
         backgroundImage: {

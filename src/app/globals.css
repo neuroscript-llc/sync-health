@@ -242,10 +242,25 @@ body {
   }
 }
 
+/* The mobile nav pill re-enters as a fixed bar once the header has scrolled
+   off (see StickyNav) — it slides in rather than blinking into place. */
+@keyframes nav-drop {
+  from {
+    transform: translateY(-120%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.animate-nav-drop {
+  animation: nav-drop 220ms ease-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee,
   .animate-marquee-slow,
   .animate-vial-float,
+  .animate-nav-drop,
   .animate-pin-breathe,
   .animate-pin-breathe-inner {
     animation: none;

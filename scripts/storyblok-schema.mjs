@@ -156,6 +156,7 @@ export const components = [
   // --- section bloks ------------------------------------------------------
   comp("hero", "Hero", () => ({
     headline: text(),
+    subheadline: textarea(),
     ctaLabel: text(),
     ctaHref: text(),
     backgroundImage: asset(),

@@ -174,6 +174,7 @@ function buildBody() {
   return [
     blk("hero", {
       headline: s.hero.headline,
+      subheadline: s.hero.subheadline,
       ctaLabel: s.hero.ctaLabel,
       ctaHref: s.hero.ctaHref,
       backgroundImage: a(s.hero.backgroundImage, s.hero.backgroundAlt),
