@@ -1,27 +1,23 @@
 /** Mega-menu / mobile-menu link groups (Figma 190:2797 / 304:1096). */
+export type NavGroup = {
+  label: string;
+  /** Only set on leaf rows; a group with children expands instead of linking. */
+  href?: string;
+  children?: { label: string; href: string }[];
+};
+
 export const LEARN_LINKS = [
   { label: "Journal", href: "/journal" },
   { label: "Blog", href: "/journal" },
 ];
 
-// Each category links to a representative live product page.
-export const PROTOCOL_LINKS = [
-  { label: "Recovery", href: "/products/bpc-157" },
-  { label: "Performance", href: "/products/sermorelin" },
-  { label: "Metabolic", href: "/products/mots-c" },
-  { label: "Skin & Longevity", href: "/products/ghk-cu" },
-  { label: "Hormonal Health", href: "/products/pt-141" },
-];
-
 /**
- * Mobile menu rows. Each expands in place to list the compounds in that
- * category. Kept as literals (rather than derived from `content.ts`) so the
- * client bundle doesn't pull in the whole content module for a nav menu.
+ * The compounds under each protocol category. Both menus read this, so the
+ * desktop mega-menu and the mobile drawer can't drift apart. Kept as literals
+ * (rather than derived from `content.ts`) so the client bundle doesn't pull in
+ * the whole content module for a nav menu.
  */
-export const MOBILE_MENU_LINKS: {
-  label: string;
-  children: { label: string; href: string }[];
-}[] = [
+export const PROTOCOL_CATEGORIES: NavGroup[] = [
   {
     label: "Recovery",
     children: [
@@ -55,8 +51,22 @@ export const MOBILE_MENU_LINKS: {
     label: "Hormonal Health",
     children: [{ label: "PT-141", href: "/products/pt-141" }],
   },
+];
+
+/** Mobile menu rows: every category, plus Learn. */
+export const MOBILE_MENU_LINKS = [
+  ...PROTOCOL_CATEGORIES.map((c) => ({
+    label: c.label,
+    children: c.children ?? [],
+  })),
   { label: "Learn", children: LEARN_LINKS },
 ];
+
+// The desktop mega-menu lists five categories in the Figma — Weight is drawn
+// on the mobile drawer only (190:2797).
+const MEGA_MENU_CATEGORIES = PROTOCOL_CATEGORIES.filter(
+  (c) => c.label !== "Weight",
+);
 
 /** Copy for the promo card pinned to the bottom of the mobile menu. */
 export const MOBILE_MENU_PROMO = {
@@ -64,9 +74,12 @@ export const MOBILE_MENU_PROMO = {
 };
 
 /** Resolve a top-level nav label to its mega-menu group, if any. */
-export function menuForLabel(label: string) {
+export function menuForLabel(label: string): {
+  eyebrow: string;
+  groups: NavGroup[];
+} | null {
   if (label === "Protocols")
-    return { eyebrow: "Resources", links: PROTOCOL_LINKS };
-  if (label === "Learn") return { eyebrow: "Learn", links: LEARN_LINKS };
+    return { eyebrow: "Resources", groups: MEGA_MENU_CATEGORIES };
+  if (label === "Learn") return { eyebrow: "Learn", groups: LEARN_LINKS };
   return null;
 }

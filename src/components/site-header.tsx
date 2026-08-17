@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronDown, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { ArrowIcon } from "@/components/arrow-icon";
 import { CartButton } from "@/components/cart-button";
 import { MobileMenu } from "@/components/mobile-menu";
-import { menuForLabel } from "@/components/nav-links";
+import { NavItem } from "@/components/nav-item";
 import { StickyNav } from "@/components/sticky-nav";
 import type { SiteHeaderContent } from "@/lib/content";
 
@@ -39,86 +39,6 @@ function Ticker({ messages }: { messages: string[] }) {
   );
 }
 
-/**
- * Shared nav mega-menu. Two columns: eyebrow + links + CTA on the left, a
- * featured product card on the right. Revealed on hover of the nav item via
- * `group/nav` — the `pt-3` wrapper bridges the gap so hover isn't lost.
- */
-function NavMegaMenu({
-  eyebrow,
-  links,
-  cta,
-}: {
-  eyebrow: string;
-  links: { label: string; href: string }[];
-  cta: { label: string; href: string };
-}) {
-  return (
-    <div className="invisible absolute left-0 top-full z-50 pt-3 opacity-0 transition-all duration-200 group-hover/nav:visible group-hover/nav:opacity-100">
-      <div className="flex items-stretch gap-8 rounded-xl bg-white p-6 shadow-[0_24px_70px_rgba(29,29,27,0.16)]">
-        {/* Left: links + CTA */}
-        <div className="flex w-[320px] flex-col justify-between gap-10">
-          <div className="flex flex-col gap-4">
-            <p className="font-mono text-base font-medium uppercase tracking-[0.02em] text-brand">
-              {eyebrow}
-            </p>
-            {links.map((l) => (
-              <Link
-                key={l.label}
-                href={l.href}
-                className="text-xl leading-[30px] text-ink transition-colors hover:text-brand"
-              >
-                {l.label}
-              </Link>
-            ))}
-          </div>
-          {/* Figma: Source Code Pro Medium 16/24, uppercase. */}
-          <Link
-            href={cta.href}
-            className="group/cta inline-flex items-center gap-2 self-start rounded-full bg-brand py-4 pl-6 pr-5 font-mono text-base font-medium uppercase leading-6 text-white"
-          >
-            {cta.label}
-            <ArrowIcon className="size-6 transition-transform duration-200 group-hover/cta:-rotate-45" />
-          </Link>
-        </div>
-
-        {/* Right: featured product card */}
-        <Link
-          href="/products/bpc-157"
-          className="group/card flex w-[256px] flex-col gap-3 rounded-2xl bg-white p-2 shadow-[0_10px_40px_rgba(29,29,27,0.10)]"
-        >
-          <div className="aspect-square w-full overflow-hidden rounded-lg">
-            <Image
-              src="/images/catalog/vial-recovery.png"
-              alt="BPC-157"
-              width={240}
-              height={240}
-              loading="eager"
-              className="h-full w-full object-cover"
-            />
-          </div>
-          <div className="flex flex-col gap-3 px-2 pb-1">
-            <div className="flex flex-col gap-0.5">
-              <p className="font-mono text-xs font-medium uppercase tracking-[0.02em] text-brand">
-                Recovery
-              </p>
-              <h4 className="text-xl font-medium text-ink">BPC-157</h4>
-              <p className="text-sm text-ink/80">
-                Tissue repair, joint and gut support.
-              </p>
-            </div>
-            <div className="h-px w-full bg-ink/[0.08]" />
-            <span className="flex items-center gap-2 text-base text-ink">
-              Learn more
-              <ArrowIcon className="size-6 transition-transform duration-200 group-hover/card:-rotate-45" />
-            </span>
-          </div>
-        </Link>
-      </div>
-    </div>
-  );
-}
-
 export function SiteHeader({ content }: { content: SiteHeaderContent }) {
   return (
     <header className="relative z-20 flex w-full flex-col items-center gap-2">
@@ -147,35 +67,15 @@ export function SiteHeader({ content }: { content: SiteHeaderContent }) {
 
             {/* Primary links */}
             <div className="hidden items-center gap-0.5 md:flex">
-            {content.navLinks.map((link) => {
-              const menu = menuForLabel(link.label);
-              return (
-                <div
+              {content.navLinks.map((link) => (
+                <NavItem
                   key={link.label}
-                  className={menu ? "group/nav relative" : undefined}
-                >
-                  <Link
-                    href={link.href}
-                    className="flex items-center gap-1 rounded-full py-3 pl-4 pr-3 text-base font-medium text-ink/80 transition-colors hover:bg-white/70"
-                  >
-                    {link.label}
-                    {link.hasDropdown && (
-                      <ChevronDown
-                        className="size-5 text-ink/50 transition-transform duration-200 group-hover/nav:rotate-180"
-                        aria-hidden
-                      />
-                    )}
-                  </Link>
-                  {menu && (
-                    <NavMegaMenu
-                      eyebrow={menu.eyebrow}
-                      links={menu.links}
-                      cta={{ label: content.ctaLabel, href: content.ctaHref }}
-                    />
-                  )}
-                </div>
-              );
-            })}
+                  label={link.label}
+                  href={link.href}
+                  hasDropdown={link.hasDropdown}
+                  cta={{ label: content.ctaLabel, href: content.ctaHref }}
+                />
+              ))}
             </div>
           </div>
 

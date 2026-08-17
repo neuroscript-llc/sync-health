@@ -10,8 +10,10 @@ export const seed = {
       "Most protocol reviews completed within 1–2 hours.",
     ],
     navLinks: [
-      { label: "Protocols", href: "/protocols", hasDropdown: true },
-      { label: "Learn", href: "/learn", hasDropdown: true },
+      // Both open a mega-menu rather than navigating, but a dropdown can be
+      // turned off in the CMS — so these have to point somewhere real.
+      { label: "Protocols", href: "/products/bpc-157", hasDropdown: true },
+      { label: "Learn", href: "/journal", hasDropdown: true },
     ],
     loginLabel: "Login",
     loginHref: "/login",
