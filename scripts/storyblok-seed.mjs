@@ -157,13 +157,13 @@ export const seed = {
     subtext:
       "Physician-informed articles on the compounds, protocols and the research behind them.",
     articles: [
-      { category: "Science", title: "The science behind compounded peptides & why sourcing matters.", meta: "6 min read · Apr 2026", image: "/images/blog/science.png", href: "/learn/compounded-peptides" },
-      { category: "Weight", title: "GLP-1s, explained without the hype: what to actually expect.", meta: "8 min read · Mar 2026", image: "/images/blog/weight.png", href: "/learn/glp-1s-explained" },
-      { category: "Routine", title: "Building a wellness routine that actually sticks past week three.", meta: "5 min read · Mar 2026", image: "/images/blog/routine.png", href: "/learn/wellness-routine" },
-      { category: "Science", title: "The science behind compounded peptides & why sourcing matters.", meta: "6 min read · Apr 2026", image: "/images/blog/science.png", href: "/learn/compounded-peptides" },
+      { category: "Science", title: "The science behind compounded peptides & why sourcing matters.", meta: "6 min read · Apr 2026", image: "/images/blog/science.png", href: "/journal/compounded-peptides" },
+      { category: "Weight", title: "GLP-1s, explained without the hype: what to actually expect.", meta: "8 min read · Mar 2026", image: "/images/blog/weight.png", href: "/journal/glp-1s-explained" },
+      { category: "Routine", title: "Building a wellness routine that actually sticks past week three.", meta: "5 min read · Mar 2026", image: "/images/blog/routine.png", href: "/journal/wellness-routine" },
+      { category: "Science", title: "The science behind compounded peptides & why sourcing matters.", meta: "6 min read · Apr 2026", image: "/images/blog/science.png", href: "/journal/compounded-peptides" },
     ],
     ctaLabel: "View all articles",
-    ctaHref: "/learn",
+    ctaHref: "/journal",
   },
 
   faq: {

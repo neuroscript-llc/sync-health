@@ -757,14 +757,14 @@ export const blog: BlogContent = {
         "The science behind compounded peptides & why sourcing matters.",
       meta: "6 min read · Apr 2026",
       image: "/images/blog/science.png",
-      href: "/learn/compounded-peptides",
+      href: "/journal/compounded-peptides",
     },
     {
       category: "Weight",
       title: "GLP-1s, explained without the hype: what to actually expect.",
       meta: "8 min read · Mar 2026",
       image: "/images/blog/weight.png",
-      href: "/learn/glp-1s-explained",
+      href: "/journal/glp-1s-explained",
     },
     {
       category: "Routine",
@@ -772,7 +772,7 @@ export const blog: BlogContent = {
         "Building a wellness routine that actually sticks past week three.",
       meta: "5 min read · Mar 2026",
       image: "/images/blog/routine.png",
-      href: "/learn/wellness-routine",
+      href: "/journal/wellness-routine",
     },
     {
       category: "Science",
@@ -780,11 +780,11 @@ export const blog: BlogContent = {
         "The science behind compounded peptides & why sourcing matters.",
       meta: "6 min read · Apr 2026",
       image: "/images/blog/science.png",
-      href: "/learn/compounded-peptides",
+      href: "/journal/compounded-peptides",
     },
   ],
   ctaLabel: "View all articles",
-  ctaHref: "/learn",
+  ctaHref: "/journal",
 };
 
 /** /journal index — Figma 957-14210. Article cards are presentational; images
