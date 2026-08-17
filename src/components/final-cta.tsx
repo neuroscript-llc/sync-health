@@ -35,9 +35,12 @@ export function FinalCta({
           </p>
         </div>
 
+        {/* Mobile takes the 48px pill the phone frames use everywhere else —
+            12/20/12/16 padding, 16/24 label, 24px arrow — and only steps up to
+            the desktop size at sm. */}
         <a
           href={content.ctaHref}
-          className="group flex items-center gap-2 rounded-full bg-ink py-4 pl-6 pr-5 font-mono text-xl uppercase leading-8 text-white transition-colors duration-300 hover:bg-ink/90"
+          className="group flex items-center gap-2 rounded-full bg-ink py-3 pl-5 pr-4 font-mono text-base uppercase leading-6 text-white transition-colors duration-300 hover:bg-ink/90 sm:py-4 sm:pl-6 sm:pr-5 sm:text-xl sm:leading-8"
         >
           {content.ctaLabel}
           <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />

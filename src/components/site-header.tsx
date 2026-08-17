@@ -179,7 +179,9 @@ export function SiteHeader({ content }: { content: SiteHeaderContent }) {
             </div>
           </div>
 
-          {/* Mobile: logo centred in the pill */}
+          {/* Mobile: logo centred in the pill. Drawn at the SVG's natural
+              100×26 — its ink box is 86.24×24 there, which is exactly the
+              wordmark the mobile frame specs (Frame 1984078171). */}
           <Link
             href="/"
             className="absolute left-1/2 -translate-x-1/2 shrink-0 sm:hidden"
@@ -191,7 +193,7 @@ export function SiteHeader({ content }: { content: SiteHeaderContent }) {
               width={100}
               height={26}
               priority
-              className="h-auto w-[86px]"
+              className="h-auto w-[100px]"
             />
           </Link>
 
