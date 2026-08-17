@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { ProductContent, ProductWhyFeature } from "@/lib/content";
@@ -88,9 +88,48 @@ export function ProductWhy({
 >) {
   const { heading, features } = content.why;
   const n = features.length;
-  const [active, setActive] = useState(n - 1);
-  const prev = () => setActive((active - 1 + n) % n);
-  const next = () => setActive((active + 1) % n);
+
+  // Mobile carousel. The strip is a real scroller, so it can be swiped as well
+  // as stepped with the arrows; `active` only exists to give the arrows
+  // somewhere to count from, and follows the strip when it's swiped.
+  const strip = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+
+  const scrollToCard = (i: number) => {
+    const el = strip.current;
+    const card = el?.children[i] as HTMLElement | undefined;
+    if (!el || !card) return;
+    el.scrollTo({
+      left: card.offsetLeft - (el.clientWidth - card.offsetWidth) / 2,
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : "smooth",
+    });
+  };
+
+  const step = (delta: number) => {
+    const i = (active + delta + n) % n;
+    setActive(i);
+    scrollToCard(i);
+  };
+
+  // Whichever card is nearest the middle of the strip is the active one.
+  const syncActive = () => {
+    const el = strip.current;
+    if (!el) return;
+    const middle = el.scrollLeft + el.clientWidth / 2;
+    let nearest = 0;
+    let best = Infinity;
+    Array.from(el.children).forEach((child, i) => {
+      const card = child as HTMLElement;
+      const distance = Math.abs(card.offsetLeft + card.offsetWidth / 2 - middle);
+      if (distance < best) {
+        best = distance;
+        nearest = i;
+      }
+    });
+    if (nearest !== active) setActive(nearest);
+  };
 
   return (
     <section {...rest}>
@@ -153,71 +192,78 @@ export function ProductWhy({
           </div>
         </div>
 
-        {/* Mobile: card carousel over the vial / blurred-hands backdrop.
-            Positions are percentages of a 350 x 550 design stage, so the whole
-            composition scales with the viewport instead of sitting inset. */}
-        <div className="relative mx-auto aspect-[350/550] w-full max-w-[600px] overflow-hidden xl:hidden">
-          {/* Blurred coral hands + vial (backdrop) */}
-          <Image
-            src="/images/pdp/hand-top.png"
-            alt=""
-            aria-hidden
-            width={918}
-            height={467}
-            className="pointer-events-none absolute right-[-2.3%] top-[-0.4%] z-0 w-[85.7%] blur-[3px]"
-          />
-          <Image
-            src="/images/pdp/hand-bottom.png"
-            alt=""
-            aria-hidden
-            width={933}
-            height={458}
-            className="pointer-events-none absolute left-[-2.9%] top-[51.5%] z-0 w-[91.4%] blur-[3px]"
-          />
-          <div className="absolute left-1/2 top-[10.5%] z-[1] w-[91.4%] -translate-x-1/2">
+        {/* Mobile: the vial composition, then the benefits as a swipeable
+            strip. The cards used to be absolutely positioned around the vial,
+            where the neighbouring two landed on the artwork and read as
+            overlapping debris rather than as a carousel. */}
+        <div className="flex w-full flex-col gap-5 xl:hidden">
+          {/* Backdrop. Positions are percentages of a 350 x 440 design stage —
+              the height the artwork itself fills — so the whole composition
+              scales with the viewport instead of sitting inset. */}
+          <div className="relative mx-auto aspect-[350/440] w-full max-w-[600px] overflow-hidden">
             <Image
-              src="/images/pdp/why-vial.png"
-              alt={content.name}
-              width={1267}
-              height={1212}
-              className="animate-vial-float w-full"
+              src="/images/pdp/hand-top.png"
+              alt=""
+              aria-hidden
+              width={918}
+              height={467}
+              className="pointer-events-none absolute right-[-2.3%] top-[-0.5%] z-0 w-[85.7%] blur-[3px]"
             />
+            <Image
+              src="/images/pdp/hand-bottom.png"
+              alt=""
+              aria-hidden
+              width={933}
+              height={458}
+              className="pointer-events-none absolute left-[-2.9%] top-[64.4%] z-0 w-[91.4%] blur-[3px]"
+            />
+            <div className="absolute left-1/2 top-[13.1%] z-[1] w-[91.4%] -translate-x-1/2">
+              <Image
+                src="/images/pdp/why-vial.png"
+                alt={content.name}
+                width={1267}
+                height={1212}
+                className="animate-vial-float w-full"
+              />
+            </div>
+
+            {/* Prev / next arrows (Figma Frame 9: 350px row, centred) */}
+            <div className="absolute left-1/2 top-[50.6%] z-30 flex w-[350px] max-w-full -translate-x-1/2 items-center justify-between">
+              <button
+                type="button"
+                onClick={() => step(-1)}
+                aria-label="Previous feature"
+                className="grid size-11 place-items-center rounded-full bg-[#DFD5CE] transition-opacity hover:opacity-80"
+              >
+                <ArrowLeft className="size-5 text-ink" strokeWidth={1} aria-hidden />
+              </button>
+              <button
+                type="button"
+                onClick={() => step(1)}
+                aria-label="Next feature"
+                className="grid size-11 place-items-center rounded-full bg-[#DFD5CE] transition-opacity hover:opacity-80"
+              >
+                <ArrowRight className="size-5 text-ink" strokeWidth={1} aria-hidden />
+              </button>
+            </div>
           </div>
 
-          {/* Blurred neighbouring cards peeking in from the sides */}
-          <MobileWhyCard
-            feature={features[(active - 1 + n) % n]}
-            className="absolute left-[-78.6%] top-[61.6%] z-10 w-[102.6%] blur-[4px]"
-          />
-          <MobileWhyCard
-            feature={features[(active + 1) % n]}
-            className="absolute left-[67.1%] top-[61.6%] z-10 w-[102.6%] blur-[4px]"
-          />
-
-          {/* Active card (sharp, full width, bottom) */}
-          <MobileWhyCard
-            feature={features[active]}
-            className="absolute bottom-0 left-0 z-20 w-full"
-          />
-
-          {/* Prev / next arrows (Figma Frame 9: 350px row, centred) */}
-          <div className="absolute left-1/2 top-[40.5%] z-30 flex w-[350px] max-w-full -translate-x-1/2 items-center justify-between">
-            <button
-              type="button"
-              onClick={prev}
-              aria-label="Previous feature"
-              className="grid size-11 place-items-center rounded-full bg-[#DFD5CE] transition-opacity hover:opacity-80"
-            >
-              <ArrowLeft className="size-5 text-ink" strokeWidth={1} aria-hidden />
-            </button>
-            <button
-              type="button"
-              onClick={next}
-              aria-label="Next feature"
-              className="grid size-11 place-items-center rounded-full bg-[#DFD5CE] transition-opacity hover:opacity-80"
-            >
-              <ArrowRight className="size-5 text-ink" strokeWidth={1} aria-hidden />
-            </button>
+          {/* Side padding keeps the strip off the screen edge; at 86% wide the
+              next card always peeks in, which is what makes it read as a
+              carousel. The end cards butt against the scroll bounds, so only
+              the middle ones actually land centred. */}
+          <div
+            ref={strip}
+            onScroll={syncActive}
+            className="mx-auto flex w-full max-w-[600px] snap-x snap-mandatory gap-3 overflow-x-auto px-[7%] pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
+            {features.map((feature) => (
+              <MobileWhyCard
+                key={feature.title}
+                feature={feature}
+                className="w-[86%] shrink-0 snap-center"
+              />
+            ))}
           </div>
         </div>
       </div>

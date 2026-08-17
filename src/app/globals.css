@@ -159,6 +159,10 @@ body {
 .overlay-viewport {
   width: calc(100vw / var(--app-scale));
   height: calc(100vh / var(--app-scale));
+  /* On mobile Safari 100vh is the *large* viewport — the one you'd get with the
+     toolbars retracted — so an overlay sized with it runs under the URL bar and
+     hides whatever sits at its bottom. dvh tracks what's actually visible. */
+  height: calc(100dvh / var(--app-scale));
 }
 
 @keyframes marquee {

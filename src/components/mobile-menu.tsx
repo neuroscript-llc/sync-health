@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
@@ -50,6 +50,31 @@ export function MobileMenu({ content }: { content: SiteHeaderContent }) {
   const [open, setOpen] = useState(false);
   // Which category row is expanded — one at a time keeps the list scannable.
   const [expanded, setExpanded] = useState<string | null>(null);
+
+  // One entry per category row, so the effect below can bring the row that
+  // just opened back into view.
+  const rows = useRef<Record<string, HTMLDivElement | null>>({});
+
+  // Seven categories fill a phone screen, so the last one — Learn — opens its
+  // links below the fold of the scrolling list, where they read as missing
+  // rather than as something to scroll to. `nearest` scrolls only when the row
+  // (sub-links included) doesn't already fit, so the rows near the top stay put.
+  useEffect(() => {
+    if (!expanded) return;
+    const row = rows.current[expanded];
+    if (!row) return;
+    // A frame late: the sub-links have to be laid out before "nearest" can
+    // tell how far the row overflows.
+    const frame = requestAnimationFrame(() => {
+      row.scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "auto"
+          : "smooth",
+        block: "nearest",
+      });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [expanded]);
 
   // Lock body scroll + close on Escape while the overlay is open.
   useEffect(() => {
@@ -104,7 +129,10 @@ export function MobileMenu({ content }: { content: SiteHeaderContent }) {
                   return (
                     <div
                       key={link.label}
-                      className="border-b border-ink/[0.12]"
+                      ref={(el) => {
+                        rows.current[link.label] = el;
+                      }}
+                      className="scroll-mb-4 border-b border-ink/[0.12]"
                     >
                       <button
                         type="button"
