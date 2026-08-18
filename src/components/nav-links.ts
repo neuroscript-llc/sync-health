@@ -62,12 +62,6 @@ export const MOBILE_MENU_LINKS = [
   { label: "Learn", children: LEARN_LINKS },
 ];
 
-// The desktop mega-menu lists five categories in the Figma — Weight is drawn
-// on the mobile drawer only (190:2797).
-const MEGA_MENU_CATEGORIES = PROTOCOL_CATEGORIES.filter(
-  (c) => c.label !== "Weight",
-);
-
 /** Copy for the promo card pinned to the bottom of the mobile menu. */
 export const MOBILE_MENU_PROMO = {
   heading: "Stop guessing.\nStart your protocol.",
@@ -78,8 +72,11 @@ export function menuForLabel(label: string): {
   eyebrow: string;
   groups: NavGroup[];
 } | null {
+  // The Figma draws only five categories here and puts Weight on the mobile
+  // drawer alone (190:2797), which left semaglutide and tirzepatide with no
+  // path from the desktop nav — so both menus now list all six.
   if (label === "Protocols")
-    return { eyebrow: "Resources", groups: MEGA_MENU_CATEGORIES };
+    return { eyebrow: "Resources", groups: PROTOCOL_CATEGORIES };
   if (label === "Learn") return { eyebrow: "Learn", groups: LEARN_LINKS };
   return null;
 }
