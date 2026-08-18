@@ -325,9 +325,11 @@ export function ProductHero({
             </div>
           </div>
 
-          {/* Price */}
+          {/* Price. 32px is the desktop figure; on a phone it lands within a
+              few px of the 40px product name and the two compete, so the
+              amount steps down until the two-column layout starts at sm. */}
           <p className="font-medium text-ink">
-            <span className="text-[32px] leading-10 tracking-[-0.02em]">
+            <span className="text-2xl leading-8 tracking-[-0.02em] sm:text-[32px] sm:leading-10">
               {content.price.amount}
             </span>
             <span className="text-base text-ink/80">{content.price.period}</span>
