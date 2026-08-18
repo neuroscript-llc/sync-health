@@ -92,9 +92,13 @@ export function Quality({
                   height={48}
                   className={`size-12 ${dark ? "invert" : ""}`}
                 />
+                {/* 40px is the Figma desktop size, where each title gets a
+                    quarter of a 1368px row. On a phone the same 40px runs the
+                    short titles onto three lines, so both tones step down to
+                    32px until the four-column grid kicks in at lg. */}
                 <h3
                   className={`font-medium leading-[1.1] tracking-[-0.03em] lg:min-h-[88px] lg:text-[2.5rem] ${
-                    dark ? "text-[32px] leading-10 text-white lg:leading-[1.1]" : "text-[2.5rem] text-ink"
+                    dark ? "text-[32px] leading-10 text-white lg:leading-[1.1]" : "text-[32px] text-ink"
                   }`}
                 >
                   {feature.title}
