@@ -413,7 +413,15 @@ export type ProductContent = {
   price: { amount: string; period: string };
   planLabel: string;
   plans: ProductPlan[];
-  cta: { label: string; href: string; note: string };
+  /** `color` / `textColor` are optional hex overrides for the buy button,
+      set per product in Storyblok; blank keeps the Figma ink-on-white. */
+  cta: {
+    label: string;
+    href: string;
+    note: string;
+    color?: string;
+    textColor?: string;
+  };
   accordion: ProductAccordionItem[];
   safetyLabel: string;
   safetyHref: string;

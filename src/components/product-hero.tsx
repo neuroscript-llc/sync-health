@@ -408,10 +408,18 @@ export function ProductHero({
 
           {/* CTA — opens the cart drawer (add-to-cart) */}
           <div className="flex flex-col gap-2">
+            {/* Ink fill with a white label is the Figma default. Storyblok can
+                override both per product (ctaColor / ctaTextColor); the inline
+                style wins over the classes, and an unset field stays undefined
+                so the default holds. */}
             <button
               type="button"
               onClick={addToCart}
               className="flex w-full items-center justify-center rounded-full bg-ink px-6 py-5 font-mono text-base uppercase leading-6 text-white transition-opacity hover:opacity-90"
+              style={{
+                background: content.cta.color || undefined,
+                color: content.cta.textColor || undefined,
+              }}
             >
               {content.cta.label}
             </button>

@@ -465,6 +465,10 @@ export function mapProduct(
       label: str(content.ctaLabel) || fb.cta.label,
       href: str(content.ctaHref) || fb.cta.href,
       note: str(content.ctaNote) || fb.cta.note,
+      // Left undefined when unset so the component keeps its default classes
+      // rather than painting an empty string over them.
+      color: str(content.ctaColor) || fb.cta.color,
+      textColor: str(content.ctaTextColor) || fb.cta.textColor,
     },
     accordion: accordion.length
       ? accordion.map((a) => ({
