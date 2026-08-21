@@ -112,6 +112,7 @@ export function HowItWorksBlok({ blok }: { blok: SbBlokData }) {
           number: str(s.number),
           title: str(s.title),
           description: str(s.description),
+          image: img(s.image),
         })),
         ctaLabel: str(blok.ctaLabel),
         ctaHref: str(blok.ctaHref),

@@ -54,12 +54,14 @@ export function HowItWorks({
 
               {/* Pre-blurred portrait, shown plainly (no CSS blur or mask).
                   Fills the card width (capped) at its natural aspect ratio so
-                  it scales up on wide cards instead of floating small. */}
+                  it scales up on wide cards instead of floating small.
+                  Each step carries its own image; `cardImage` is the shared
+                  fallback for steps that haven't been given one. */}
               <div
                 aria-hidden
                 className="mx-auto aspect-[320/290] w-full max-w-[440px]"
                 style={{
-                  backgroundImage: `url(${content.cardImage})`,
+                  backgroundImage: `url(${step.image || content.cardImage})`,
                   backgroundSize: "contain",
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",

@@ -23,6 +23,9 @@ export type Step = {
   number: string;
   title: string;
   description: string;
+  /** Per-step portrait. Falls back to the section's `cardImage` when unset,
+      which is how the section behaved before steps had their own images. */
+  image?: string;
 };
 
 export type HowItWorksContent = {

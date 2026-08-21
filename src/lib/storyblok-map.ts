@@ -516,6 +516,7 @@ export function mapProduct(
                 number: str(s.number),
                 title: str(s.title),
                 description: str(s.description),
+                image: img(s.image),
               }))
             : fb.howItWorks.steps,
           ctaLabel: str(h.ctaLabel),
