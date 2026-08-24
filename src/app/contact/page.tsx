@@ -1,17 +1,12 @@
 import type { Metadata } from "next";
-import { SiteHeader } from "@/components/site-header";
-import { Footer } from "@/components/footer";
-import { Contact } from "@/components/contact";
-import { FaqBrowser } from "@/components/faq-browser";
-import { FinalCta } from "@/components/final-cta";
-import {
-  siteHeader,
-  contact,
-  faqPage,
-  contactCta,
-  footer,
-} from "@/lib/content";
+import { draftMode } from "next/headers";
+import { StoryblokStory } from "@storyblok/react/rsc";
+import type { ISbStoryData } from "@storyblok/react/rsc";
+import { getStoryblok, isStoryblokConfigured } from "@/lib/storyblok";
+import { ContactFallback } from "@/components/contact-fallback";
+import { contact } from "@/lib/content";
 
+// Draft content (Visual Editor / preview) must render fresh on every request.
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
@@ -19,20 +14,38 @@ export const metadata: Metadata = {
   description: contact.subtext,
 };
 
-export default function ContactRoute() {
-  return (
-    <main className="min-h-screen overflow-clip bg-white">
-      {/* Cream → white wash behind the header, contact block and FAQ; the
-          closing CTA sits on plain white with its own glow (Figma 1108:7992). */}
-      <div className="bg-[linear-gradient(180deg,#FCF8F1_0%,#FFFFFF_67%)]">
-        <div className="p-3">
-          <SiteHeader content={siteHeader} />
-        </div>
-        <Contact content={contact} />
-        <FaqBrowser content={faqPage} />
-      </div>
-      <FinalCta content={contactCta} />
-      <Footer content={footer} />
-    </main>
-  );
+async function fetchStory(
+  version: "draft" | "published",
+): Promise<ISbStoryData | null> {
+  try {
+    const client = getStoryblok();
+    // cv bust → published edits appear live (see getStoryContent).
+    const { data } = await client.get("cdn/stories/contact", {
+      version,
+      cv: Date.now(),
+    });
+    return data?.story ?? null;
+  } catch (err) {
+    console.error('[storyblok] failed to load contact story:', err);
+    return null;
+  }
+}
+
+export default async function ContactRoute({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  // Falls back to the local content whenever Storyblok is unconfigured or the
+  // story is missing, so the page never renders blank.
+  if (!isStoryblokConfigured()) return <ContactFallback />;
+
+  const sp = await searchParams;
+  const { isEnabled } = await draftMode();
+  const version: "draft" | "published" =
+    sp._storyblok || isEnabled ? "draft" : "published";
+
+  const story = await fetchStory(version);
+  if (!story) return <ContactFallback />;
+  return <StoryblokStory story={story} />;
 }

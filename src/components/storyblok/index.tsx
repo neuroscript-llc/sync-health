@@ -5,6 +5,16 @@ import {
 } from "@storyblok/react/rsc";
 
 import { Hero } from "@/components/hero";
+import { SiteHeader } from "@/components/site-header";
+import { AboutHero } from "@/components/about-hero";
+import { FounderNotes } from "@/components/founder-notes";
+import { Timeline } from "@/components/timeline";
+import { Principles } from "@/components/principles";
+import { Coverage } from "@/components/coverage";
+import { Team } from "@/components/team";
+import { Careers } from "@/components/careers";
+import { Contact } from "@/components/contact";
+import { FaqBrowser } from "@/components/faq-browser";
 import { TrustBar } from "@/components/trust-bar";
 import { HowItWorks } from "@/components/how-it-works";
 import { Protocols } from "@/components/protocols";
@@ -144,10 +154,210 @@ export function ProtocolsBlok({ blok }: { blok: SbBlokData }) {
   );
 }
 
+/** Standalone header row. Home nests its header inside the hero blok; the
+    About / Contact pages place it as its own section so it can be moved. */
+export function SiteHeaderBlok({ blok }: { blok: SbBlokData }) {
+  return (
+    <div className="p-3" {...storyblokEditable(blok)}>
+      <SiteHeader content={mapHeader(blok)} />
+    </div>
+  );
+}
+
+export function AboutHeroBlok({ blok }: { blok: SbBlokData }) {
+  return (
+    <AboutHero
+      {...storyblokEditable(blok)}
+      content={{
+        eyebrow: str(blok.eyebrow),
+        heading: str(blok.heading),
+        body: str(blok.body),
+        image: {
+          src: img(blok.image),
+          alt: alt(blok.image) || str(blok.imageAlt),
+        },
+      }}
+    />
+  );
+}
+
+export function FounderNotesBlok({ blok }: { blok: SbBlokData }) {
+  return (
+    <FounderNotes
+      {...storyblokEditable(blok)}
+      content={{
+        eyebrow: str(blok.eyebrow),
+        heading: str(blok.heading),
+        notes: arr(blok.notes).map((n) => ({
+          name: str(n.name),
+          role: str(n.role),
+          quote: str(n.quote),
+          photo: img(n.photo),
+        })),
+      }}
+    />
+  );
+}
+
+export function TimelineBlok({ blok }: { blok: SbBlokData }) {
+  return (
+    <Timeline
+      {...storyblokEditable(blok)}
+      content={{
+        eyebrow: str(blok.eyebrow),
+        heading: str(blok.heading),
+        subtext: str(blok.subtext),
+        steps: arr(blok.steps).map((s) => ({
+          year: str(s.year),
+          title: str(s.title),
+          body: str(s.body),
+        })),
+      }}
+    />
+  );
+}
+
+export function PrinciplesBlok({ blok }: { blok: SbBlokData }) {
+  return (
+    <Principles
+      {...storyblokEditable(blok)}
+      content={{
+        eyebrow: str(blok.eyebrow),
+        heading: str(blok.heading),
+        image: {
+          src: img(blok.image),
+          alt: alt(blok.image) || str(blok.imageAlt),
+        },
+        principles: arr(blok.principles).map((p) => ({
+          number: str(p.number),
+          title: str(p.title),
+          body: str(p.body),
+        })),
+      }}
+    />
+  );
+}
+
+export function CoverageBlok({ blok }: { blok: SbBlokData }) {
+  return (
+    <Coverage
+      {...storyblokEditable(blok)}
+      content={{
+        eyebrow: str(blok.eyebrow),
+        heading: str(blok.heading),
+        paragraphs: arr(blok.paragraphs).map((p) => str(p.text)),
+        map: { src: img(blok.map), alt: alt(blok.map) || str(blok.mapAlt) },
+        // Percentages of the map box, so they survive any map image swap.
+        markers: arr(blok.markers).map((m) => ({ x: num(m.x), y: num(m.y) })),
+      }}
+    />
+  );
+}
+
+export function TeamBlok({ blok }: { blok: SbBlokData }) {
+  return (
+    <Team
+      {...storyblokEditable(blok)}
+      content={{
+        eyebrow: str(blok.eyebrow),
+        heading: str(blok.heading),
+        subtext: str(blok.subtext),
+        members: arr(blok.members).map((m) => ({
+          name: str(m.name),
+          role: str(m.role),
+          tag: str(m.tag),
+          photo: img(m.photo),
+        })),
+      }}
+    />
+  );
+}
+
+export function CareersBlok({ blok }: { blok: SbBlokData }) {
+  return (
+    <Careers
+      {...storyblokEditable(blok)}
+      content={{
+        eyebrow: str(blok.eyebrow),
+        heading: str(blok.heading),
+        body: str(blok.body),
+        ctaLabel: str(blok.ctaLabel),
+        ctaHref: str(blok.ctaHref),
+        collage: {
+          src: img(blok.collage),
+          alt: alt(blok.collage) || str(blok.collageAlt),
+        },
+      }}
+    />
+  );
+}
+
+export function ContactBlok({ blok }: { blok: SbBlokData }) {
+  const form = arr(blok.form)[0] ?? ({} as SbBlokData);
+  return (
+    <Contact
+      {...storyblokEditable(blok)}
+      content={{
+        eyebrow: str(blok.eyebrow),
+        heading: str(blok.heading),
+        subtext: str(blok.subtext),
+        form: {
+          eyebrow: str(form.eyebrow),
+          nameLabel: str(form.nameLabel),
+          namePlaceholder: str(form.namePlaceholder),
+          emailLabel: str(form.emailLabel),
+          emailPlaceholder: str(form.emailPlaceholder),
+          messageLabel: str(form.messageLabel),
+          messagePlaceholder: str(form.messagePlaceholder),
+          submitLabel: str(form.submitLabel),
+          disclaimer: str(form.disclaimer),
+          successHeading: str(form.successHeading),
+          successBody: str(form.successBody),
+          errorBody: str(form.errorBody),
+        },
+        // A channel is either a mailto row or a CTA button — whichever the
+        // author fills in. Empty strings would render an <a href="">.
+        channels: arr(blok.channels).map((c) => ({
+          eyebrow: str(c.eyebrow),
+          description: str(c.description),
+          email: str(c.email) || undefined,
+          cta: str(c.ctaLabel)
+            ? { label: str(c.ctaLabel), href: str(c.ctaHref) }
+            : undefined,
+        })),
+        emergency: {
+          eyebrow: str(blok.emergencyEyebrow),
+          body: str(blok.emergencyBody),
+        },
+      }}
+    />
+  );
+}
+
+export function FaqBrowserBlok({ blok }: { blok: SbBlokData }) {
+  return (
+    <FaqBrowser
+      {...storyblokEditable(blok)}
+      content={{
+        eyebrow: str(blok.eyebrow),
+        heading: str(blok.heading),
+        subtext: str(blok.subtext),
+        allLabel: str(blok.allLabel),
+        items: arr(blok.items).map((i) => ({
+          category: str(i.category),
+          question: str(i.question),
+          answer: str(i.answer),
+        })),
+      }}
+    />
+  );
+}
+
 export function QualityBlok({ blok }: { blok: SbBlokData }) {
   return (
     <Quality
       {...storyblokEditable(blok)}
+      tone={str(blok.tone) === "dark" ? "dark" : "light"}
       content={{
         eyebrow: str(blok.eyebrow),
         heading: str(blok.heading),
@@ -331,10 +541,26 @@ export function FooterBlok({ blok }: { blok: SbBlokData }) {
   );
 }
 
+/**
+ * Page backdrops. Sections that carry their own fill paint over these; the
+ * ones that don't (founder notes, timeline, team…) sit on the wash, which is
+ * how the About frame is built. "warm" uses a fixed 620px stop so the tint
+ * doesn't stretch with page length.
+ */
+const PAGE_BACKGROUNDS: Record<string, string> = {
+  cream: "linear-gradient(180deg,#F0F0E7 0%,#FFFFFF 100%)",
+  warm: "linear-gradient(180deg,#FCF8F1 0%,#FFFFFF 620px)",
+};
+
 /** Top-level page: renders its `body` list of section bloks in order. */
 export function PageBlok({ blok }: { blok: SbBlokData }) {
+  const background = PAGE_BACKGROUNDS[str(blok.background)];
   return (
-    <main className="min-h-screen overflow-clip bg-white" {...storyblokEditable(blok)}>
+    <main
+      className={`min-h-screen overflow-clip ${background ? "" : "bg-white"}`}
+      style={background ? { background } : undefined}
+      {...storyblokEditable(blok)}
+    >
       {arr(blok.body).map((nested) => (
         <StoryblokServerComponent blok={nested} key={nested._uid} />
       ))}
@@ -346,6 +572,16 @@ export function PageBlok({ blok }: { blok: SbBlokData }) {
 export const storyblokComponents = {
   page: PageBlok,
   hero: HeroBlok,
+  site_header: SiteHeaderBlok,
+  about_hero: AboutHeroBlok,
+  founder_notes: FounderNotesBlok,
+  timeline: TimelineBlok,
+  principles: PrinciplesBlok,
+  coverage: CoverageBlok,
+  team: TeamBlok,
+  careers: CareersBlok,
+  contact: ContactBlok,
+  faq_browser: FaqBrowserBlok,
   trust_bar: TrustBarBlok,
   how_it_works: HowItWorksBlok,
   protocols: ProtocolsBlok,

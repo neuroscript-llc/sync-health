@@ -1380,6 +1380,7 @@ export const footer: FooterContent = {
     {
       links: [
         { label: "Shipping & Delivery", href: "/shipping", muted: true },
+        { label: "Refund Policy", href: "/refund-policy", muted: true },
         { label: "Privacy Policy", href: "/privacy", muted: true },
         { label: "Telehealth consent", href: "/telehealth-consent", muted: true },
         { label: "Terms & Conditions", href: "/terms", muted: true },
@@ -3093,5 +3094,97 @@ export const checkout: CheckoutContent = {
     { label: "Privacy policy", href: "/privacy" },
     { label: "Terms of service", href: "/terms" },
     { label: "Contact", href: "#" },
+  ],
+};
+
+/** Starter copy for the Refund Policy. Every field is overridden by the
+    "refund-policy" story once the client edits it in Storyblok. */
+export const refundPolicy: LegalContent = {
+  eyebrow: "Legal",
+  title: "Refund Policy",
+  lastUpdated: "Last updated · 1 August 2026",
+  intro:
+    "Compounded medications are made to your individual prescription, which limits what can be returned. This policy sets out when we refund, when we replace, and how to raise a problem with an order.",
+  contentsLabel: "Contents",
+  clauses: [
+    {
+      number: "01",
+      title: "Before your protocol ships",
+      id: "before-shipping",
+      body: "You can cancel any order for a full refund up until the point your prescription is released to the pharmacy. If your intake is still under clinical review, or a clinician declines to prescribe, you are not charged at all — any authorisation on your card is released.",
+    },
+    {
+      number: "02",
+      title: "After your protocol ships",
+      id: "after-shipping",
+      body: "Because each protocol is compounded to your prescription, dispensed medication cannot be returned, resold or reused, and is not refundable once it has left the pharmacy. This is a requirement of state pharmacy law, not a commercial preference.",
+    },
+    {
+      number: "03",
+      title: "Damaged, incorrect or delayed shipments",
+      id: "damaged-or-incorrect",
+      body: "If your order arrives damaged, arrives outside its required temperature range, is missing items, or is not what your prescription specifies, contact us within 7 days of delivery and we will replace it at no cost. Photographs of the packaging and vial help us resolve it faster and let us raise it with the pharmacy.",
+    },
+    {
+      number: "04",
+      title: "Subscriptions and renewals",
+      id: "subscriptions",
+      body: "Multi-month plans renew automatically until cancelled. Cancel or pause from your dashboard before the next cycle is processed and you are not charged for it. Cancelling does not refund a cycle that has already been dispensed.",
+    },
+    {
+      number: "05",
+      title: "How to request a refund",
+      id: "how-to-request",
+      body: "Email our care team with your order number and what went wrong. We aim to respond within one business day. Approved refunds return to your original payment method and typically clear within 5–10 business days, depending on your bank.",
+    },
+  ],
+};
+
+/** Starter copy for the Shipping Policy, served at /shipping — the address the
+    footer already points at. Overridden by the "shipping" story. */
+export const shippingPolicy: LegalContent = {
+  eyebrow: "Legal",
+  title: "Shipping Policy",
+  lastUpdated: "Last updated · 1 August 2026",
+  intro:
+    "How your protocol gets to you: when it leaves the pharmacy, how it is packed, and what to do if something goes wrong in transit.",
+  contentsLabel: "Contents",
+  clauses: [
+    {
+      number: "01",
+      title: "Processing time",
+      id: "processing",
+      body: "Most intakes are reviewed by a clinician the same day. Once your prescription is released, the pharmacy typically compounds and dispatches within 1–2 business days. Orders placed at a weekend or on a public holiday begin processing the next business day.",
+    },
+    {
+      number: "02",
+      title: "Delivery times and tracking",
+      id: "delivery",
+      body: "Standard delivery arrives within 2–5 business days of dispatch. You receive a tracking link by email as soon as the parcel is collected. Delivery estimates are provided by the carrier and are not guaranteed dates.",
+    },
+    {
+      number: "03",
+      title: "Cold chain and packaging",
+      id: "cold-chain",
+      body: "Compounds that require refrigeration ship in insulated packaging with a coolant pack, sized for the transit time. Every parcel is plain and unbranded — nothing on the outside identifies the contents or SYNC. Refrigerate temperature-sensitive items as soon as they arrive.",
+    },
+    {
+      number: "04",
+      title: "Shipping costs",
+      id: "costs",
+      body: "Delivery is free on orders over $50. Below that, a flat delivery charge is shown at checkout before you pay. Subscription cycles ship on the same terms as the original order.",
+    },
+    {
+      number: "05",
+      title: "Where we ship",
+      id: "where-we-ship",
+      body: "We ship within the United States only, and only to states where a licensed clinician can prescribe your protocol. We cannot deliver to PO boxes, freight forwarders, or addresses outside the US.",
+    },
+    {
+      number: "06",
+      title: "Failed, delayed or lost deliveries",
+      id: "problems",
+      body: "If a parcel is delayed beyond its estimate, arrives damaged, or is marked delivered but missing, contact our care team and we will trace it with the carrier. Where a temperature-sensitive shipment has been compromised in transit, we replace it rather than ask you to use it.",
+    },
   ],
 };

@@ -1,39 +1,12 @@
 import type { Metadata } from "next";
-import { SiteHeader } from "@/components/site-header";
-import { AboutHero } from "@/components/about-hero";
-import { FounderNotes } from "@/components/founder-notes";
-import { HowItWorks } from "@/components/how-it-works";
-import { Timeline } from "@/components/timeline";
-import { Compare } from "@/components/compare";
-import { Principles } from "@/components/principles";
-import { Coverage } from "@/components/coverage";
-import { Team } from "@/components/team";
-import { Quality } from "@/components/quality";
-import { Careers } from "@/components/careers";
-import { Testimonials } from "@/components/testimonials";
-import { Protocols } from "@/components/protocols";
-import { Blog } from "@/components/blog";
-import { FinalCta } from "@/components/final-cta";
-import { Footer } from "@/components/footer";
-import {
-  siteHeader,
-  aboutHero,
-  founderNotes,
-  aboutHowItWorks,
-  timeline,
-  aboutCompare,
-  principles,
-  coverage,
-  team,
-  aboutQuality,
-  careers,
-  aboutTestimonials,
-  aboutProtocols,
-  aboutBlog,
-  aboutCta,
-  footer,
-} from "@/lib/content";
+import { draftMode } from "next/headers";
+import { StoryblokStory } from "@storyblok/react/rsc";
+import type { ISbStoryData } from "@storyblok/react/rsc";
+import { getStoryblok, isStoryblokConfigured } from "@/lib/storyblok";
+import { AboutFallback } from "@/components/about-fallback";
+import { aboutHero } from "@/lib/content";
 
+// Draft content (Visual Editor / preview) must render fresh on every request.
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
@@ -41,31 +14,38 @@ export const metadata: Metadata = {
   description: aboutHero.body,
 };
 
-export default function AboutRoute() {
-  return (
-    // Cream → white wash on the page itself; the sections that carry their own
-    // fill (how-it-works, compare, the dark quality band) paint over it, which
-    // is how the Figma frame is built.
-    <main className="min-h-screen overflow-clip bg-[linear-gradient(180deg,#F0F0E7_0%,#FFFFFF_100%)]">
-      <div className="p-3">
-        <SiteHeader content={siteHeader} />
-      </div>
+async function fetchStory(
+  version: "draft" | "published",
+): Promise<ISbStoryData | null> {
+  try {
+    const client = getStoryblok();
+    // cv bust → published edits appear live (see getStoryContent).
+    const { data } = await client.get("cdn/stories/about", {
+      version,
+      cv: Date.now(),
+    });
+    return data?.story ?? null;
+  } catch (err) {
+    console.error('[storyblok] failed to load about story:', err);
+    return null;
+  }
+}
 
-      <AboutHero content={aboutHero} />
-      <FounderNotes content={founderNotes} />
-      <HowItWorks content={aboutHowItWorks} />
-      <Timeline content={timeline} />
-      <Compare content={aboutCompare} />
-      <Principles content={principles} />
-      <Coverage content={coverage} />
-      <Team content={team} />
-      <Quality content={aboutQuality} tone="dark" />
-      <Careers content={careers} />
-      <Testimonials content={aboutTestimonials} />
-      <Protocols content={aboutProtocols} />
-      <Blog content={aboutBlog} />
-      <FinalCta content={aboutCta} />
-      <Footer content={footer} />
-    </main>
-  );
+export default async function AboutRoute({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  // Falls back to the local content whenever Storyblok is unconfigured or the
+  // story is missing, so the page never renders blank.
+  if (!isStoryblokConfigured()) return <AboutFallback />;
+
+  const sp = await searchParams;
+  const { isEnabled } = await draftMode();
+  const version: "draft" | "published" =
+    sp._storyblok || isEnabled ? "draft" : "published";
+
+  const story = await fetchStory(version);
+  if (!story) return <AboutFallback />;
+  return <StoryblokStory story={story} />;
 }
