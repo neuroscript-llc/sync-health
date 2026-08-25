@@ -7,6 +7,7 @@ import { MobileMenu } from "@/components/mobile-menu";
 import { NavItem } from "@/components/nav-item";
 import { StickyNav } from "@/components/sticky-nav";
 import type { SiteHeaderContent } from "@/lib/content";
+import { marqueeLoop } from "@/lib/marquee";
 
 function TickerTrack({
   messages,
@@ -27,13 +28,33 @@ function TickerTrack({
   );
 }
 
+/** Deliberately under the real advance (~8.8px at 13px mono with 0.08em
+    tracking) so the estimate errs towards an extra repeat rather than a gap. */
+const TICKER_CHAR_PX = 8;
+/** gap-24 between messages, pr-24 after the last one. */
+const TICKER_GAP_PX = 96;
+/** Matches the pace of the original fixed 40s pass. */
+const TICKER_SPEED = 22;
+
 function Ticker({ messages }: { messages: string[] }) {
-  // Two identical tracks in one flex; the flex slides -50% for a seamless loop.
+  // Identical tracks in one flex; the flex slides -50% for a seamless loop.
+  // The track is repeated enough times that a half always overruns the
+  // viewport, otherwise the wrap point shows blank space on wide screens.
+  const trackWidth = messages.reduce(
+    (w, msg) => w + msg.length * TICKER_CHAR_PX + TICKER_GAP_PX,
+    0,
+  );
+  const { tracks, duration } = marqueeLoop(trackWidth, TICKER_SPEED);
+
   return (
     <div className="w-full overflow-hidden rounded-lg bg-white/80 py-2 backdrop-blur-sm sm:py-3">
-      <div className="flex w-max animate-marquee">
-        <TickerTrack messages={messages} />
-        <TickerTrack messages={messages} ariaHidden />
+      <div
+        className="flex w-max animate-marquee"
+        style={{ "--marquee-duration": duration } as React.CSSProperties}
+      >
+        {tracks.map((i) => (
+          <TickerTrack key={i} messages={messages} ariaHidden={i > 0} />
+        ))}
       </div>
     </div>
   );
