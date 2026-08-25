@@ -109,27 +109,21 @@ function Newsletter({
   newsletter: JournalContent["newsletter"];
 }) {
   return (
-    <section className="relative bg-white px-5 py-12 sm:px-9 sm:py-12">
-      {/* Warm radial wash (Figma 957-14248): white core → pink → coral, fading
-          to transparent. Rendered before the content and left UNCLIPPED, so it
-          bleeds past the section's top edge into the white above and reads as
-          one continuous wash (no section seam). Colours fade to transparent, so
-          no blend mode is needed over white; the dark footer below covers any
-          downward bleed and the page-level overflow-clip contains it sideways. */}
+    <section className="relative overflow-x-clip bg-white px-5 py-12 sm:px-9 sm:py-12">
+      {/* Coral mesh glow, the same backdrop the home final CTA and the /start
+          closing section use. This section previously painted its own CSS
+          radial (a saturated #FF4E98 into #FF563F) which read far heavier than
+          the wash everywhere else on the site. Sharing the asset keeps every
+          closing section on one backdrop.
+          Hung from the top of this section rather than centred on it, the same
+          way /start does, so the wash sits under the newsletter block instead
+          of reaching up into the article grid. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-[-15%] -top-40 bottom-[-12%] blur-[70px]"
-        style={{
-          background:
-            "radial-gradient(62% 56% at 50% 56%, #FFFFFF 10%, #FF4E98 44%, #FF563F 50%, rgba(255, 232, 232, 0) 78%)",
-        }}
-      />
-      {/* Soft cream bloom drifting in from the left. */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-[10%] top-1/3 h-[130%] w-[45%] -translate-y-1/4 rounded-full blur-[90px]"
-        style={{ background: "rgba(242, 236, 226, 0.7)" }}
-      />
+        className="pointer-events-none absolute left-1/2 top-0 w-[190%] max-w-none -translate-x-1/2 -translate-y-24 select-none sm:w-[130%]"
+      >
+        <img src="/images/footer/cta-glow.png" alt="" className="block w-full" />
+      </div>
 
       <div className="relative z-10 mx-auto flex max-w-[720px] flex-col items-center gap-8 sm:gap-10">
         <div className="flex flex-col items-center gap-4">
