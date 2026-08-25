@@ -46,7 +46,12 @@ export function Formulary({ content }: { content: FormularyContent }) {
 
   return (
     <>
-      <section className="flex flex-col gap-5 px-5 py-12 sm:gap-11 sm:px-9 sm:py-20">
+      {/* The CTA below centres its coral glow on its own section, and only
+          clips it horizontally, so the top half washes up into this one.
+          Lifting the listing keeps the cards and their copy crisp above it,
+          the same way the home page handles the section next to its final
+          CTA. Without this the glow paints over the last row of cards. */}
+      <section className="relative z-10 flex flex-col gap-5 px-5 py-12 sm:gap-11 sm:px-9 sm:py-20">
         <div className="mx-auto flex w-full max-w-[1368px] flex-col gap-5 sm:gap-11">
           {/* Heading */}
           <div className="flex flex-col gap-4">
@@ -128,11 +133,15 @@ export function Formulary({ content }: { content: FormularyContent }) {
       {/* "Let a clinician decide" — coral mesh glow behind the content, the
           same backdrop the home final CTA uses. overflow-x-clip stops the
           oversized gradient bleeding sideways; isolate keeps it under the
-          content without leaking into neighbouring sections. */}
+          content without leaking into neighbouring sections.
+          The glow hangs from the top of this section rather than being
+          centred on it. Centred, it reached ~285px above the section and over
+          the last row of product cards; hung here it clears them with all but
+          a sliver, and the footer covers the tail below. */}
       <section className="relative isolate flex min-h-[480px] flex-col items-center justify-center gap-10 overflow-x-clip bg-white px-5 py-12 text-center sm:min-h-0 sm:gap-16 sm:px-9 sm:py-20">
         <div
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-1/2 -z-10 w-[190%] max-w-none -translate-x-1/2 -translate-y-1/2 select-none sm:w-[130%]"
+          className="pointer-events-none absolute left-1/2 top-0 -z-10 w-[190%] max-w-none -translate-x-1/2 -translate-y-24 select-none sm:w-[130%]"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/images/footer/cta-glow.png" alt="" className="block w-full" />
