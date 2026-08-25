@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ArticleContent } from "@/lib/content";
 import { ArticleCard } from "@/components/journal-page";
+import { ArticleToc } from "@/components/article-toc";
 
 /* eslint-disable @next/next/no-img-element */
 
@@ -118,26 +119,7 @@ export function ArticlePage({ content }: { content: ArticleContent }) {
         <div className="mx-auto flex max-w-[1040px] flex-col gap-8 lg:flex-row lg:gap-20">
           {/* Table of contents — desktop only (Figma mobile omits it) */}
           <aside className="hidden lg:block lg:w-[200px] lg:shrink-0">
-            <div className="lg:sticky lg:top-24">
-              <p className="mb-3 font-mono text-xs tracking-[0.02em] text-ink/80">
-                {a.tocLabel}
-              </p>
-              <nav className="flex flex-col gap-3">
-                {a.toc.map((t, i) => (
-                  <a
-                    key={t.id}
-                    href={`#${t.id}`}
-                    className={`text-sm leading-5 transition-colors ${
-                      i === 0
-                        ? "font-medium text-ink"
-                        : "text-ink/80 hover:text-ink"
-                    }`}
-                  >
-                    {t.label}
-                  </a>
-                ))}
-              </nav>
-            </div>
+            <ArticleToc label={a.tocLabel} items={a.toc} />
           </aside>
 
           {/* Prose */}
@@ -175,7 +157,6 @@ export function ArticlePage({ content }: { content: ArticleContent }) {
                 case "image":
                   return (
                     <figure key={i} className="my-2">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={block.image}
                         alt={block.caption ?? ""}
