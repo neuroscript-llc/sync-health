@@ -2677,6 +2677,652 @@ export const motsCProduct: ProductContent = makeProduct({
 });
 
 /** Every product page, keyed by slug. Unknown slugs fall back to BPC-157. */
+
+/* -------------------------------------------------------------------------- *
+ *  Protocols added from the clinical review handoff. Pharmacy pricing is still
+ *  pending for all six, so `price` and `plans` are deliberately empty: the PDP
+ *  hides the figure and the plan selector, and the buy button becomes a link
+ *  to the intake. Fill both in and they behave like every other protocol.
+ *  Sections marked LOCKED in the handoff are shared verbatim across every PDP
+ *  and are reused from BPC-157 rather than duplicated.
+ * -------------------------------------------------------------------------- */
+
+export const semaxProduct: ProductContent = {
+  slug: "semax",
+  eyebrow: "Cognitive",
+  name: "Semax",
+  description:
+    "Semax is a neuropeptide that acts on the pathways governing focus, mood, and cognitive endurance — supporting how the brain sustains attention under load and recovers from mental fatigue. It's used in protocol for people running sustained cognitive demand, and for those who want cognitive support that works with the brain's own chemistry rather than stimulating it.",
+  tagline: "Focus, mood and cognitive endurance support.",
+  gallery: bpc157Product.gallery,
+  trust: bpc157Product.trust,
+  methodLabel: "Intranasal method",
+  methods: bpc157Product.methods,
+  // Pending pharmacy spec. Empty hides the price and plan selector.
+  price: { amount: "", period: "" },
+  planLabel: "",
+  plans: [],
+  cta: {
+    label: "Start your protocol",
+    href: "/start",
+    note: "Charged only after your protocol is approved. Cancel anytime.",
+  },
+  accordion: [
+    {
+      title: "What it is",
+      body: "Semax is a synthetic neuropeptide derived from a fragment of adrenocorticotropic hormone (ACTH), modified for stability so it acts in the brain without triggering ACTH's hormonal effects. It supports the expression of BDNF and NGF — the growth factors the brain uses to maintain and repair neurons — and modulates dopamine and serotonin activity in regions tied to focus, mood, and stress response. It has decades of clinical use behind it, with ongoing research into its broader cognitive and neuroprotective role.",
+    },
+    {
+      title: "How it's used",
+      body: "Semax is administered as intranasal drops, typically taken one to two times per day during a defined protocol period. Most protocols run in cycles — often two to four weeks on, followed by a break — with your clinician setting the exact dosing, timing, and cycle length based on your goals. It's most often used during periods of concentrated cognitive demand rather than as a daily-forever intervention.",
+    },
+    {
+      title: "What's in the vial",
+      body: "Pharmaceutical-grade Semax, compounded at a licensed US 503A pharmacy in the concentration your clinician prescribes. Buffers and diluent are standard for intranasal peptide preparations. Every batch is third-party tested — full potency, sterility, pH, and endotoxin results in the Quality panel below.",
+    },
+    {
+      title: "How SYNC ensures quality",
+      body: "Every SYNC protocol is compounded to prescription at a licensed US 503A/503B pharmacy and clinician-reviewed before it ships. Full third-party batch testing details are in the Quality panel below.",
+    },
+  ],
+  safetyLabel: "Important Safety Information",
+  safetyHref: "/important-safety-information/semax",
+  why: {
+    heading: "Why Semax",
+    features: [
+      {
+        icon: "/images/pdp/icon-cellular.svg",
+        title: "Sharpens focus",
+        description: "Supports sustained attention and mental clarity during demanding cognitive work.",
+      },
+      {
+        icon: "/images/pdp/icon-tissue.svg",
+        title: "Stabilises mood",
+        description: "Modulates dopamine and serotonin activity to support steadier mood under stress.",
+      },
+      {
+        icon: "/images/pdp/icon-optimized.svg",
+        title: "Builds cognitive endurance",
+        description: "Supports memory, learning, and the brain's own repair signalling for mental stamina.",
+      },
+      {
+        icon: "/images/pdp/icon-research.svg",
+        title: "Reinforces neural resilience",
+        description: "Studied for its role in neuroprotection, stress adaptation, and recovery from cognitive fatigue.",
+      },
+    ],
+  },
+  qualityTest: bpc157Product.qualityTest,
+  howItWorks: bpc157Product.howItWorks,
+  faq: {
+    ...bpc157Product.faq,
+    items: [
+      {
+        question: "How is Semax different from stimulants like caffeine, modafinil, or Adderall?",
+        answer: "Stimulants work by driving neurotransmitter release or blocking reuptake — they push the system harder. Semax doesn't work that way. It supports the brain's own regulatory chemistry — the growth factors and neurotransmitter systems that maintain focus, mood, and mental stamina — rather than forcing an output. That's why users typically report sustained cognitive endurance without the jitters, tolerance build, or crash that comes with stimulants. Semax isn't a replacement for a stimulant when you need one; it's a different tool for a different job.",
+      },
+      {
+        question: "How does Semax compare to OTC nootropics — racetams, lion's mane, alpha-GPC?",
+        answer: "OTC nootropics work on different mechanisms — cholinergic support, mushroom-derived nerve growth factor precursors, general neurotransmitter modulators. Some have evidence behind them, some don't. Semax is a prescription peptide with decades of clinical use behind it, dosed and cycled by a clinician, and made to pharmaceutical standards at a licensed compounding pharmacy. The comparison isn't stack-vs-stack — it's an OTC category versus a prescribed clinical protocol. Some patients continue with familiar OTC nootropics during a Semax cycle; that's a conversation to have with your clinician at intake.",
+      },
+      {
+        question: "Who is Semax prescribed for — and can I take it with other therapies?",
+        answer: "Semax is prescribed for adults working on focus, cognitive endurance, mood stability, or recovery from periods of high cognitive load. It's commonly paired with peptides that support the nervous system in complementary ways — including Selank, where Semax works on focus and cognitive drive while Selank supports calm and stress regulation. The two are often used together during high-demand periods. Share whatever you're currently on in your intake, including antidepressants, ADHD medication, or other nootropic use. It's not appropriate for pregnancy, active psychiatric conditions under acute treatment, or in combination with MAOIs without clinician review.",
+      },
+      {
+        question: "What are the common side effects?",
+        answer: "Semax has a small side effect profile. The most commonly reported effect is mild nasal irritation, a taste in the back of the throat after dosing, or a light headache during the first few days. Some patients notice a warm or energised sensation for the first hour after dosing. Effects typically ease as your body adjusts to the protocol. Rare but serious effects are covered in your Important Safety Information. Anything concerning while on protocol — you message us and we adjust.",
+      },
+      {
+        question: "What happens when I stop taking Semax?",
+        answer: "Semax doesn't create dependence — the pathways it supports return to baseline over the weeks following your last cycle. Because Semax works by supporting the brain's own systems rather than substituting for them, some of the gains built during a cycle — particularly around cognitive endurance and recovery — can persist beyond the protocol. This is why we use it cyclically, tied to periods of high cognitive demand, rather than as a permanent daily intervention. Cycling on and off through the year is common.",
+      },
+      {
+        question: "What happens if I need to pause, change, or cancel?",
+        answer: "Any time, from your account. If your goals change, message us and we'll adjust your protocol with you. No calls, no retention scripts, no penalty for pausing between cycles.",
+      },
+      {
+        question: "What if I run out mid-cycle?",
+        answer: "Message us and we'll expedite a replacement — most reorders ship the same day. Your subscription is timed so this shouldn't happen, but if life gets in the way, we've got you.",
+      },
+      {
+        question: "Do you take insurance, HSA, or FSA?",
+        answer: "No insurance — SYNC is cash-pay, which lets us build every protocol around your body rather than around what an insurer will approve. HSA and FSA support is rolling out soon through our payment partner, and we'll email you when it goes live.",
+      },
+    ],
+  },
+};
+
+export const selankProduct: ProductContent = {
+  slug: "selank",
+  eyebrow: "Cognitive",
+  name: "Selank",
+  description:
+    "Selank is a neuropeptide that acts on the systems regulating stress, mood, and cognitive stability — supporting a steadier nervous system, calmer focus, and reliable function under pressure. It's used in protocol for people running sustained stress load, and for those who want support that works with the body's own regulation rather than sedating or suppressing it.",
+  tagline: "Stress resilience, steady mood and calm focus.",
+  gallery: bpc157Product.gallery,
+  trust: bpc157Product.trust,
+  methodLabel: "Intranasal method",
+  methods: bpc157Product.methods,
+  // Pending pharmacy spec. Empty hides the price and plan selector.
+  price: { amount: "", period: "" },
+  planLabel: "",
+  plans: [],
+  cta: {
+    label: "Start your protocol",
+    href: "/start",
+    note: "Charged only after your protocol is approved. Cancel anytime.",
+  },
+  accordion: [
+    {
+      title: "What it is",
+      body: "Selank is a synthetic neuropeptide derived from tuftsin, a naturally occurring immunopeptide, modified for stability so it acts on the brain's stress and mood regulation pathways. It supports the expression of BDNF and modulates GABA, serotonin, and dopamine activity in regions tied to stress response, focus, and emotional stability — without the sedative mechanism of benzodiazepines or the neurotransmitter suppression of SSRIs. It has decades of clinical use behind it, with ongoing research into its role in stress resilience, cognitive stability, and immune modulation.",
+    },
+    {
+      title: "How it's used",
+      body: "Selank is administered as intranasal drops, typically taken one to three times per day during a defined protocol period. Most protocols run in cycles — often two to three weeks on, followed by a break — with your clinician setting the exact dosing, timing, and cycle length based on your goals. It's most often used during periods of concentrated stress load or high performance demand rather than as a permanent daily intervention.",
+    },
+    {
+      title: "What's in the vial",
+      body: "Pharmaceutical-grade Selank, compounded at a licensed US 503A pharmacy in the concentration your clinician prescribes. Buffers and diluent are standard for intranasal peptide preparations. Every batch is third-party tested — full potency, sterility, pH, and endotoxin results in the Quality panel below.",
+    },
+    {
+      title: "How SYNC ensures quality",
+      body: "Every SYNC protocol is compounded to prescription at a licensed US 503A/503B pharmacy and clinician-reviewed before it ships. Full third-party batch testing details are in the Quality panel below.",
+    },
+  ],
+  safetyLabel: "Important Safety Information",
+  safetyHref: "/important-safety-information/selank",
+  why: {
+    heading: "Why Selank",
+    features: [
+      {
+        icon: "/images/pdp/icon-cellular.svg",
+        title: "Steadies stress response",
+        description: "Quiets a racing mind and calms the nervous system without causing drowsiness.",
+      },
+      {
+        icon: "/images/pdp/icon-tissue.svg",
+        title: "Stabilises mood",
+        description: "Optimizes serotonin and dopamine pathways to maintain steady emotional balance.",
+      },
+      {
+        icon: "/images/pdp/icon-optimized.svg",
+        title: "Sharpens focus under pressure",
+        description: "Sustains attention span and locks in mental clarity during demanding tasks.",
+      },
+      {
+        icon: "/images/pdp/icon-research.svg",
+        title: "Reinforces neural resilience",
+        description: "Builds long-term cognitive defense while actively supporting your immune health.",
+      },
+    ],
+  },
+  qualityTest: bpc157Product.qualityTest,
+  howItWorks: bpc157Product.howItWorks,
+  faq: {
+    ...bpc157Product.faq,
+    items: [
+      {
+        question: "How is Selank different from anti-anxiety medications like benzodiazepines or SSRIs?",
+        answer: "Benzodiazepines work by sedating the nervous system. SSRIs work by suppressing serotonin reuptake. Selank does neither — it supports the nervous system's own regulation, modulating rather than sedating, adjusting rather than suppressing. That's why users typically report steadier stress response and calmer focus without drowsiness, dependence, or emotional flatness. Selank isn't a replacement for psychiatric medication when one is clinically needed. If you're on a benzodiazepine or SSRI, that's a conversation to have with your prescribing physician and your SYNC clinician before starting.",
+      },
+      {
+        question: "How does Selank compare to OTC calm supplements — ashwagandha, L-theanine, magnesium, CBD?",
+        answer: "OTC calm supplements work on different mechanisms — cortisol modulation, general relaxation, nerve support, or endocannabinoid modulation. Some have evidence behind them, some don't. Selank is a prescription peptide with decades of clinical use behind it, dosed and cycled by a clinician, and compounded to pharmaceutical standards. Some patients continue with familiar supplements during a Selank cycle — that's a conversation to have at intake.",
+      },
+      {
+        question: "Who is Selank prescribed for — and can I take it with other therapies?",
+        answer: "Selank is prescribed for adults working on stress regulation, emotional stability, or focus under pressure. It's commonly paired with Semax, where Selank supports calm and stress regulation while Semax supports focus and cognitive drive — often used together during high-demand periods. Share whatever you're currently on in your intake, including antidepressants, anti-anxiety medications, or ADHD medication. It's not appropriate for pregnancy, active psychiatric conditions under acute treatment, or in combination with MAOIs or benzodiazepines without clinician review.",
+      },
+      {
+        question: "What are the common side effects?",
+        answer: "Selank has a small side effect profile. The most commonly reported are mild nasal irritation, a taste in the back of the throat after dosing, or light drowsiness in the first few days that eases as your body adjusts. Some patients notice no perceptible effects until the second week — this is normal and doesn't mean the peptide isn't working. Rare but serious effects are covered in your Important Safety Information.",
+      },
+      {
+        question: "What happens when I stop taking Selank?",
+        answer: "Selank doesn't create dependence — the pathways it supports return to baseline over the weeks following your last cycle, without the rebound anxiety or tolerance that can come with benzodiazepines. Because Selank works by supporting the nervous system's own regulation, some of the stress resilience built during a cycle can persist beyond the protocol. This is why we use it cyclically rather than as a permanent daily intervention.",
+      },
+      {
+        question: "What happens if I need to pause, change, or cancel?",
+        answer: "Any time, from your account. If your goals change, message us and we'll adjust your protocol with you. No calls, no retention scripts, no penalty for pausing between cycles.",
+      },
+      {
+        question: "What if I run out mid-cycle?",
+        answer: "Message us and we'll expedite a replacement — most reorders ship the same day. Your subscription is timed so this shouldn't happen, but if life gets in the way, we've got you.",
+      },
+      {
+        question: "Do you take insurance, HSA, or FSA?",
+        answer: "No insurance — SYNC is cash-pay, which lets us build every protocol around your body rather than around what an insurer will approve. HSA and FSA support is rolling out soon through our payment partner, and we'll email you when it goes live.",
+      },
+    ],
+  },
+};
+
+export const performProduct: ProductContent = {
+  slug: "perform",
+  eyebrow: "Performance",
+  name: "PERFORM",
+  description:
+    "PERFORM combines CJC-1295 and Ipamorelin — two peptides that act on the systems regulating the body's natural growth hormone rhythm — supporting recovery, sleep depth, and lean body composition through the pulsatile release that training load, age, and stress tend to blunt. It's used in protocol for people running sustained physical demand, and for those who want performance support that works with the body's own axis rather than overriding it.",
+  tagline: "CJC-1295 and Ipamorelin for recovery, sleep and lean composition.",
+  gallery: bpc157Product.gallery,
+  trust: bpc157Product.trust,
+  methodLabel: "Injection method",
+  methods: bpc157Product.methods,
+  // Pending pharmacy spec. Empty hides the price and plan selector.
+  price: { amount: "", period: "" },
+  planLabel: "",
+  plans: [],
+  cta: {
+    label: "Start your protocol",
+    href: "/start",
+    note: "Charged only after your protocol is approved. Cancel anytime.",
+  },
+  accordion: [
+    {
+      title: "What it is",
+      body: "PERFORM is a two-peptide protocol combining CJC-1295 and Ipamorelin, formulated to support the body's natural growth hormone axis through complementary mechanisms.",
+    },
+    {
+      title: "How it's used",
+      body: "PERFORM is typically administered as a subcutaneous injection before bed, typically five nights on with two off — timing that aligns the peptide-driven GH pulse with the body's natural overnight release. Your clinician sets your exact dose, cycle length, and stack composition based on your intake, and cycles usually run with structured breaks rather than continuously. Everything you need to reconstitute and inject is included, with instructions in your care portal.",
+    },
+    {
+      title: "What's in the vial",
+      body: "Pharmaceutical-grade CJC-1295 (without DAC) and Ipamorelin, compounded together at a licensed US 503A pharmacy in the concentration your clinician prescribes. Buffers and diluent are standard for injectable peptide preparations. Every batch is third-party tested — full potency, sterility, pH, and endotoxin results in the Quality panel below.",
+    },
+    {
+      title: "How SYNC ensures quality",
+      body: "Every SYNC protocol is compounded to prescription at a licensed US 503A/503B pharmacy and clinician-reviewed before it ships. Full third-party batch testing details are in the Quality panel below.",
+    },
+  ],
+  safetyLabel: "Important Safety Information",
+  safetyHref: "/important-safety-information/perform",
+  why: {
+    heading: "Why PERFORM",
+    features: [
+      {
+        icon: "/images/pdp/icon-cellular.svg",
+        title: "Maximized Recovery",
+        description: "Rebuilds tissue faster between sessions so training load compounds instead of stacking as fatigue.",
+      },
+      {
+        icon: "/images/pdp/icon-tissue.svg",
+        title: "Enhanced Sleep Depth",
+        description: "Achieve the deep sleep cycles required for physical rejuvenation.",
+      },
+      {
+        icon: "/images/pdp/icon-optimized.svg",
+        title: "Lean Composition Support",
+        description: "Optimises metabolic efficiency to burn stored fat while preserving lean muscle across the cycle.",
+      },
+      {
+        icon: "/images/pdp/icon-research.svg",
+        title: "Sustained Baseline Support",
+        description: "Elevate your natural baselines without shutting down your endocrine system.",
+      },
+    ],
+  },
+  qualityTest: bpc157Product.qualityTest,
+  howItWorks: bpc157Product.howItWorks,
+  faq: {
+    ...bpc157Product.faq,
+    items: [
+      {
+        question: "Why the blend instead of running CJC-1295 and Ipamorelin separately?",
+        answer: "The two peptides act on different pathways — CJC-1295 through the GHRH receptor, Ipamorelin through the ghrelin receptor — to reinforce the same growth hormone pulse. Run separately, you get two protocols, two injections, two reconstitution steps, and two adherence points. Run together in one prescription, the pulse is co-timed by design, the dosing is calibrated against how they behave in the same body, and the clinician tracks one response instead of two. For most people who've decided they want both, the blend is the version that actually gets run consistently.",
+      },
+      {
+        question: "How is this different from Sermorelin?",
+        answer: "Sermorelin and CJC-1295 both act on the GHRH pathway — CJC-1295 with a longer signal window, Sermorelin with a shorter one. PERFORM adds Ipamorelin, which reinforces the same pulse through a separate receptor. The result is a fuller, more coordinated signal than Sermorelin produces alone. Sermorelin is the baseline restoration protocol; PERFORM is the optimized stack.",
+      },
+      {
+        question: "Can I stack PERFORM with other peptides or medications?",
+        answer: "Some peptides stack cleanly with PERFORM — BPC-157 for tissue repair, for example, runs on a separate pathway and typically layers without interaction. Others don't, particularly anything else acting on the GH axis or the pituitary. If you're on TRT, GLP-1s, thyroid medication, or any hormonal therapy, tell us at intake. Your clinician reviews the full picture before prescribing and will flag anything worth adjusting.",
+      },
+      {
+        question: "What are the side effects?",
+        answer: "Most people run PERFORM without notable side effects. What's reported: mild injection site tenderness early in the cycle, transient appetite increase from Ipamorelin that usually settles within two weeks, occasional mild water retention, and, less commonly, dream vividness or lighter sleep during the first few nights. Any component contraindication — active malignancy, uncontrolled endocrine disorders, pregnancy — is screened at intake.",
+      },
+      {
+        question: "What happens when I stop?",
+        answer: "Because PERFORM works by prompting your body's own GH release rather than replacing it, the pituitary axis stays intact when you stop. There's no dependence, no withdrawal, no crash. The pulse pattern returns to your pre-cycle baseline over a few weeks, which for most people means the recovery and sleep gains taper rather than end sharply. How long people run PERFORM varies — some cycle eight to twelve weeks on with structured breaks, others run longer arcs up to six months. Your clinician sets the rhythm at check-in.",
+      },
+      {
+        question: "Can I pause, change, or cancel?",
+        answer: "Any time, from your account. If your goals change, message us and we'll adjust your protocol with you. No calls, no retention scripts, no penalty for pausing between cycles.",
+      },
+      {
+        question: "What if I run out mid-cycle?",
+        answer: "Message us and we'll expedite a replacement — most reorders ship the same day. Your subscription is timed so this shouldn't happen, but if life gets in the way, we've got you.",
+      },
+      {
+        question: "Insurance / HSA / FSA?",
+        answer: "No insurance — SYNC is cash-pay, which lets us build every protocol around your body rather than around what an insurer will approve. HSA and FSA support is rolling out soon through our payment partner, and we'll email you when it goes live.",
+      },
+    ],
+  },
+};
+
+export const repairProduct: ProductContent = {
+  slug: "repair",
+  eyebrow: "Recovery",
+  name: "REPAIR",
+  description:
+    "REPAIR combines BPC-157, TB-500, KPV, and GHK-Cu — four peptides that act across the systems regulating tissue repair, inflammatory response, and connective tissue remodeling — supporting recovery from injury, training load, and the accumulated wear that soft tissue holds. It's used in protocol for people running sustained physical demand, and for those who want systemic recovery support that works across the full repair cycle rather than one site at a time.",
+  tagline: "BPC-157, TB-500, KPV and GHK-Cu for full-cycle tissue repair.",
+  gallery: bpc157Product.gallery,
+  trust: bpc157Product.trust,
+  methodLabel: "Injection method",
+  methods: bpc157Product.methods,
+  // Pending pharmacy spec. Empty hides the price and plan selector.
+  price: { amount: "", period: "" },
+  planLabel: "",
+  plans: [],
+  cta: {
+    label: "Start your protocol",
+    href: "/start",
+    note: "Charged only after your protocol is approved. Cancel anytime.",
+  },
+  accordion: [
+    {
+      title: "What it is",
+      body: "REPAIR is a four-peptide protocol formulated to support the body's natural tissue repair systems through complementary pathways. Running these four peptides together covers the full repair cycle rather than acting on a single stage alone:",
+    },
+    {
+      title: "How it's used",
+      body: "REPAIR is typically administered as a subcutaneous injection, timing and frequency set by your clinician based on your intake — injury, training load, or the specific recovery pattern the protocol is targeting. Cycles run with structured breaks; some presentations warrant a shorter, more intensive cycle, others a longer, lower-dose arc. Everything you need to reconstitute and inject is included, with instructions in your care portal.",
+    },
+    {
+      title: "What's in the vial",
+      body: "Pharmaceutical-grade BPC-157, TB-500, KPV, and GHK-Cu, compounded together at a licensed US 503A pharmacy in the concentrations your clinician prescribes. Buffers and diluent are standard for injectable peptide preparations. Every batch is third-party tested — full potency, sterility, pH, and endotoxin results in the Quality panel below.",
+    },
+    {
+      title: "How SYNC ensures quality",
+      body: "Every SYNC protocol is compounded to prescription at a licensed US 503A/503B pharmacy and clinician-reviewed before it ships. Full third-party batch testing details are in the Quality panel below.",
+    },
+  ],
+  safetyLabel: "Important Safety Information",
+  safetyHref: "/important-safety-information/repair",
+  why: {
+    heading: "Why REPAIR",
+    features: [
+      {
+        icon: "/images/pdp/icon-cellular.svg",
+        title: "Accelerated Recovery",
+        description: "Restore tissue faster after training, injury, and the accumulated load the body carries.",
+      },
+      {
+        icon: "/images/pdp/icon-tissue.svg",
+        title: "Calmed Inflammation",
+        description: "Regulate the inflammatory response so the body resolves damage instead of holding it.",
+      },
+      {
+        icon: "/images/pdp/icon-optimized.svg",
+        title: "Reinforced Connective Tissue",
+        description: "Rebuild the collagen and structural tissue that carry the strain of everyday movement.",
+      },
+      {
+        icon: "/images/pdp/icon-research.svg",
+        title: "Systemic Repair Support",
+        description: "Cover the full repair cycle across four pathways instead of targeting one site at a time.",
+      },
+    ],
+  },
+  qualityTest: bpc157Product.qualityTest,
+  howItWorks: bpc157Product.howItWorks,
+  faq: {
+    ...bpc157Product.faq,
+    items: [
+      {
+        question: "Why the blend instead of running BPC-157 on its own?",
+        answer: "BPC-157 is the most-researched of the four and the peptide most people already know for recovery — it's the anchor of the stack, not the whole of it. What BPC-157 does well is signaling: telling the body where and how to start repair. What it doesn't do alone is cover the full cycle. TB-500 supports the cell migration and tissue flexibility that comes after the signal. KPV addresses the inflammatory response that determines how cleanly repair actually resolves. GHK-Cu drives the collagen and connective tissue rebuilding in the later phase. Run alone, BPC-157 is a strong single. Run in REPAIR, it's the first move in a four-stage protocol that covers the full arc rather than one site or one stage.",
+      },
+      {
+        question: "How is this different from just running the Wolverine Stack (BPC-157 + TB-500)?",
+        answer: "The Wolverine Stack — BPC-157 with TB-500 — is the most common two-peptide recovery protocol and it works well for localized injury. REPAIR adds two things the Wolverine Stack doesn't: KPV, which addresses inflammatory response systemically and particularly through the gut lining, and GHK-Cu, which handles the collagen and connective tissue phase that comes after acute repair. If the presentation is a single acute injury, BPC-157 + TB-500 is often enough — and your clinician may recommend that path. REPAIR is the protocol for systemic wear, multiple sites, or the later-stage rebuilding that acute stacks don't reach.",
+      },
+      {
+        question: "Can I stack REPAIR with other peptides or medications?",
+        answer: "Some peptides stack cleanly with REPAIR — PERFORM for GH-axis support runs on separate pathways and typically layers without interaction, and REPAIR can also be run alongside single molecules like Sermorelin or NAD+ when your clinician determines the presentation warrants it. Others need clinical review, particularly anti-inflammatories, blood thinners, and anything affecting immune function. If you're on NSAIDs regularly, steroids, immunomodulators, or blood-thinning medication, tell us at intake. Copper-sensitivity is screened separately because of GHK-Cu. Your clinician reviews the full picture before prescribing and will flag anything worth adjusting.",
+      },
+      {
+        question: "What are the side effects?",
+        answer: "Most people run REPAIR without notable side effects. What's reported: mild injection site tenderness in the first few weeks, occasional water retention early in the cycle, transient fatigue or headache during the first few days as the body adjusts, and, less commonly, mild digestive changes as gut lining repair begins. Any component contraindication — active malignancy, active infection, pregnancy, copper sensitivity — is screened at intake.",
+      },
+      {
+        question: "What happens when I stop?",
+        answer: "Because REPAIR works by supporting the body's own repair systems rather than replacing anything, there's no dependence, no withdrawal, no rebound. Tissue changes built during the cycle hold — collagen and connective tissue remodeling doesn't unwind when the peptides clear. Some people run REPAIR as a single 90–120 day annual cycle, others run shorter cycles more frequently around training load or specific presentations. Your clinician sets the rhythm at check-in.",
+      },
+      {
+        question: "Can I pause, change, or cancel?",
+        answer: "Any time, from your account. If your goals change, message us and we'll adjust your protocol with you. No calls, no retention scripts, no penalty for pausing between cycles.",
+      },
+      {
+        question: "What if I run out mid-cycle?",
+        answer: "Message us and we'll expedite a replacement — most reorders ship the same day. Your subscription is timed so this shouldn't happen, but if life gets in the way, we've got you.",
+      },
+      {
+        question: "Insurance / HSA / FSA?",
+        answer: "No insurance — SYNC is cash-pay, which lets us build every protocol around your body rather than around what an insurer will approve. HSA and FSA support is rolling out soon through our payment partner, and we'll email you when it goes live.",
+      },
+    ],
+  },
+};
+
+export const defineProduct: ProductContent = {
+  slug: "define",
+  eyebrow: "Metabolic",
+  name: "DEFINE",
+  description:
+    "DEFINE combines AOD-9604, MOTS-c, and Tesamorelin to optimize fat mobilization, cellular energy, and visceral fat reduction. Engineered to refine body composition rather than suppress appetite, DEFINE is a sophisticated protocol for those who have moved past standard weight loss and into true recomposition. It offers a metabolic approach that works with the body's natural energy systems, rather than overriding them.",
+  tagline: "AOD-9604, MOTS-c and Tesamorelin for body recomposition.",
+  gallery: bpc157Product.gallery,
+  trust: bpc157Product.trust,
+  methodLabel: "Injection method",
+  methods: bpc157Product.methods,
+  // Pending pharmacy spec. Empty hides the price and plan selector.
+  price: { amount: "", period: "" },
+  planLabel: "",
+  plans: [],
+  cta: {
+    label: "Start your protocol",
+    href: "/start",
+    note: "Charged only after your protocol is approved. Cancel anytime.",
+  },
+  accordion: [
+    {
+      title: "What it is",
+      body: "DEFINE is a three-peptide protocol formulated to support the body's metabolic composition systems through complementary pathways. Running these three peptides together works across the fat mobilization, cellular energy, and visceral fat reduction levers rather than acting on a single mechanism alone:",
+    },
+    {
+      title: "How it's used",
+      body: "DEFINE is typically administered as a subcutaneous injection, timing and frequency set by your clinician based on your intake — composition goals, prior GLP-1 history, training load, and bloods where relevant. Cycles typically run longer than shorter-acting protocols; Tesamorelin's clinical evidence supports arcs of several months for meaningful composition change. Everything you need to reconstitute and inject is included, with instructions in your care portal.",
+    },
+    {
+      title: "What's in the vial",
+      body: "Pharmaceutical-grade AOD-9604, MOTS-c, and Tesamorelin, compounded together at a licensed US 503A pharmacy in the concentrations your clinician prescribes. Buffers and diluent are standard for injectable peptide preparations. Every batch is third-party tested — full potency, sterility, pH, and endotoxin results in the Quality panel below.",
+    },
+    {
+      title: "How SYNC ensures quality",
+      body: "Every SYNC protocol is compounded to prescription at a licensed US 503A/503B pharmacy and clinician-reviewed before it ships. Full third-party batch testing details are in the Quality panel below.",
+    },
+  ],
+  safetyLabel: "Important Safety Information",
+  safetyHref: "/important-safety-information/define",
+  why: {
+    heading: "Why DEFINE",
+    features: [
+      {
+        icon: "/images/pdp/icon-cellular.svg",
+        title: "Targeted Fat Mobilization",
+        description: "Release stored fat for use as energy without impacting appetite or gastric slowing.",
+      },
+      {
+        icon: "/images/pdp/icon-tissue.svg",
+        title: "Cellular Energy Support",
+        description: "Optimize how mitochondria produce and utilize fuel directly at the cellular level.",
+      },
+      {
+        icon: "/images/pdp/icon-optimized.svg",
+        title: "Visceral Fat Reduction",
+        description: "Target the deep, stubborn abdominal fat surrounding organs to lower metabolic risk.",
+      },
+      {
+        icon: "/images/pdp/icon-research.svg",
+        title: "Composition Over Weight",
+        description: "Refine what is underneath the scale — the true sculpting work that comes after weight loss.",
+      },
+    ],
+  },
+  qualityTest: bpc157Product.qualityTest,
+  howItWorks: bpc157Product.howItWorks,
+  faq: {
+    ...bpc157Product.faq,
+    items: [
+      {
+        question: "How is DEFINE different from a GLP-1 like Semaglutide or Tirzepatide?",
+        answer: "Different mechanism, different outcome. GLP-1s work by suppressing appetite and slowing gastric emptying — the body loses weight because you eat less. DEFINE works on the metabolic machinery underneath — mobilizing stored fat for use as energy, supporting how cells produce and use fuel, and specifically reducing the visceral fat that drives metabolic risk. GLP-1s move the number on the scale. DEFINE moves what's under the number. That's why they're not usually competitors — they solve different problems for different presentations. Some people run DEFINE after a GLP-1 cycle to refine what's left. Some run them concurrently at clinician direction. Some run DEFINE instead of a GLP-1 because they don't want appetite suppression as the mechanism of change.",
+      },
+      {
+        question: "Why the blend instead of running Tesamorelin, AOD-9604, or MOTS-c on their own?",
+        answer: "Each peptide addresses a distinct metabolic lever: AOD-9604 signals fat cells to mobilize stored fat, MOTS-c supports how the mitochondria produce and use energy, Tesamorelin specifically reduces visceral fat through the growth hormone axis. Run alone, each is a legitimate single with a specific target. Tesamorelin has the strongest clinical evidence of the three and is often the right starting point when the presentation warrants it. Run in DEFINE, the three levers work in the same direction across the same cycle — fat mobilization, cellular energy, and visceral reduction — rather than moving one at a time.",
+      },
+      {
+        question: "Can I stack DEFINE with other peptides or medications?",
+        answer: "Some peptides stack cleanly with DEFINE — REPAIR for tissue support runs on separate pathways and typically layers without interaction, and DEFINE can also be run alongside single molecules like BPC-157 or NAD+ when your clinician determines the presentation warrants it. GLP-1s are a specific case: DEFINE can run alongside Semaglutide or Tirzepatide, but the combined protocol requires clinical review of dose, timing, and blood work. If you're on GLP-1s, TRT, thyroid medication, or diabetes management, tell us at intake. Your clinician reviews the full picture before prescribing and will flag anything worth adjusting.",
+      },
+      {
+        question: "What are the side effects?",
+        answer: "Most people run DEFINE without notable side effects. What's reported: mild injection site tenderness in the first few weeks, occasional water retention early in the cycle, transient joint stiffness or mild peripheral swelling (most commonly associated with Tesamorelin's growth hormone axis effects), and, less commonly, mild glucose or IGF-1 shifts that are monitored through bloods where relevant. Any component contraindication — active malignancy, uncontrolled diabetes, pituitary or hypothalamic disease, pregnancy — is screened at intake.",
+      },
+      {
+        question: "What happens when I stop?",
+        answer: "Because DEFINE works by supporting the body's own metabolic machinery rather than suppressing appetite or replacing hormones, the mechanisms that changed during the cycle don't reverse the moment the peptides clear. The composition changes built during the cycle hold better than the scale changes from an appetite-suppression protocol — you kept the composition because the body changed how it uses fat, not how much you eat. Visceral fat that was reduced during a Tesamorelin cycle tends to stay reduced without ongoing dosing, though clinical response varies. DEFINE typically runs longer than shorter-acting protocols — twelve to twenty-four weeks is common, with some presentations running arcs of up to a year. Your clinician sets the arc at intake and adjusts at check-in.",
+      },
+      {
+        question: "Can I pause, change, or cancel?",
+        answer: "Any time, from your account. If your goals change, message us and we'll adjust your protocol with you. No calls, no retention scripts, no penalty for pausing between cycles.",
+      },
+      {
+        question: "What if I run out mid-cycle?",
+        answer: "Message us and we'll expedite a replacement — most reorders ship the same day. Your subscription is timed so this shouldn't happen, but if life gets in the way, we've got you.",
+      },
+      {
+        question: "Insurance / HSA / FSA?",
+        answer: "No insurance — SYNC is cash-pay, which lets us build every protocol around your body rather than around what an insurer will approve. HSA and FSA support is rolling out soon through our payment partner, and we'll email you when it goes live.",
+      },
+    ],
+  },
+};
+
+export const restoreProduct: ProductContent = {
+  slug: "restore",
+  eyebrow: "Skin & Longevity",
+  name: "RESTORE",
+  description:
+    "RESTORE pairs GHK-Cu and Epitalon to bridge the gap between visible rejuvenation and cellular longevity. Formulated as a paired protocol for surface and system, RESTORE addresses the visible markers of skin and hair alongside the internal biological rhythms that carry them. It offers a sophisticated longevity approach grounded in real mechanism—engineered for those who demand evidence-backed, systemic renewal rather than surface-level quick fixes.",
+  tagline: "GHK-Cu and Epitalon for skin renewal and cellular longevity.",
+  gallery: bpc157Product.gallery,
+  trust: bpc157Product.trust,
+  methodLabel: "Injection method",
+  methods: bpc157Product.methods,
+  // Pending pharmacy spec. Empty hides the price and plan selector.
+  price: { amount: "", period: "" },
+  planLabel: "",
+  plans: [],
+  cta: {
+    label: "Start your protocol",
+    href: "/start",
+    note: "Charged only after your protocol is approved. Cancel anytime.",
+  },
+  accordion: [
+    {
+      title: "What it is",
+      body: "RESTORE is a two-peptide protocol formulated to support the body's natural repair and regulation systems through complementary pathways. Running these two peptides together addresses the visible and systemic sides of healthy aging rather than either alone:",
+    },
+    {
+      title: "How it's used",
+      body: "RESTORE is typically administered as a subcutaneous injection, timing and frequency set by your clinician based on your intake — visible goals, sleep and circadian patterns, prior peptide history, and bloods where relevant. Cycle structure varies more with RESTORE than shorter-acting protocols; some presentations run continuous arcs, others run shorter intensive courses repeated periodically. Everything you need to reconstitute and inject is included, with instructions in your care portal.",
+    },
+    {
+      title: "What's in the vial",
+      body: "Pharmaceutical-grade GHK-Cu and Epitalon, compounded together at a licensed US 503A pharmacy in the concentrations your clinician prescribes. Buffers and diluent are standard for injectable peptide preparations. Every batch is third-party tested — full potency, sterility, pH, and endotoxin results in the Quality panel below.",
+    },
+    {
+      title: "How SYNC ensures quality",
+      body: "Every SYNC protocol is compounded to prescription at a licensed US 503A/503B pharmacy and clinician-reviewed before it ships. Full third-party batch testing details are in the Quality panel below.",
+    },
+  ],
+  safetyLabel: "Important Safety Information",
+  safetyHref: "/important-safety-information/restore",
+  why: {
+    heading: "Why RESTORE",
+    features: [
+      {
+        icon: "/images/pdp/icon-cellular.svg",
+        title: "Skin & Collagen Renewal",
+        description: "Support the natural pathways that produce collagen and elastin — the structural proteins behind firm, resilient skin.",
+      },
+      {
+        icon: "/images/pdp/icon-tissue.svg",
+        title: "Hair & Connective Tissue Support",
+        description: "Reinforce hair follicle activity and the connective tissue integrity that naturally softens and thins with age.",
+      },
+      {
+        icon: "/images/pdp/icon-optimized.svg",
+        title: "Circadian & Sleep Rhythm",
+        description: "Support the body's natural sleep signals and the deep phases where overnight repair actually happens.",
+      },
+      {
+        icon: "/images/pdp/icon-research.svg",
+        title: "Surface Meets System",
+        description: "Address the visible markers of aging alongside the internal rhythms that carry them, all in the same cycle.",
+      },
+    ],
+  },
+  qualityTest: bpc157Product.qualityTest,
+  howItWorks: bpc157Product.howItWorks,
+  faq: {
+    ...bpc157Product.faq,
+    items: [
+      {
+        question: "Why the blend instead of running GHK-Cu on its own?",
+        answer: "GHK-Cu is the strongest-evidence peptide in the stack and the visible side of the protocol — the skin, hair, and connective tissue work most people already know it for. Epitalon works on the systemic side — sleep architecture, circadian regulation, and the cellular signaling associated with healthy aging over decades of clinical use. Run alone, GHK-Cu addresses the surface. Run in RESTORE, GHK-Cu and Epitalon address the visible markers and the internal rhythms that carry them in the same cycle. Some clinicians start with GHK-Cu alone for a first cycle and add Epitalon at cycle two if the response justifies it — that's a clinical call your provider makes on your intake.",
+      },
+      {
+        question: "What can I actually expect from the Epitalon side of the protocol?",
+        answer: "Sleep is the most reliable and most reported change — sleep onset, deep sleep phases, and reduced nighttime waking. Daytime energy tends to follow. Beyond that, Epitalon has decades of clinical use supporting cellular signaling associated with healthy aging, though the response markers on the systemic side are subtler and slower than the visible skin work GHK-Cu drives. If you're expecting a measurable biological age reversal or DNA-level outcome, that's not what this protocol claims. If you're looking for sleep architecture and circadian support alongside GHK-Cu's visible work, that's what the evidence holds.",
+      },
+      {
+        question: "Can I stack RESTORE with other peptides or medications?",
+        answer: "Some peptides stack cleanly with RESTORE — REPAIR for tissue support runs on complementary pathways, and RESTORE can also be run alongside single molecules like NAD+ or BPC-157 when your clinician determines the presentation warrants it. Copper sensitivity is screened separately because of GHK-Cu — copper metabolism disorders like Wilson's disease are contraindicated, and high-dose zinc supplementation can affect copper balance. If you're on hormone therapy, thyroid medication, or ongoing melatonin supplementation, tell us at intake. Your clinician reviews the full picture before prescribing and will flag anything worth adjusting.",
+      },
+      {
+        question: "What are the side effects?",
+        answer: "Most people run RESTORE without notable side effects. What's reported: mild injection site tenderness in the first few weeks, vivid dreams during the first ten days of an Epitalon course (usually settling within two weeks), occasional morning grogginess if injection timing is off, and, less commonly, mild fatigue or headache during the first few days as the body adjusts. Any component contraindication — active malignancy, copper metabolism disorders, pregnancy — is screened at intake.",
+      },
+      {
+        question: "What happens when I stop?",
+        answer: "Because RESTORE works by supporting the body's own repair and regulation systems rather than replacing anything, there's no dependence, no withdrawal, no rebound. Skin and connective tissue changes built during the cycle hold — collagen remodeling doesn't unwind when the peptides clear. Sleep and circadian benefits from an Epitalon course tend to hold for weeks to months after the course completes, though clinical response varies. RESTORE's cycle structure varies more than shorter-acting protocols; some presentations run continuous arcs, others run shorter intensive courses repeated periodically through the year. Your clinician sets the rhythm at check-in.",
+      },
+      {
+        question: "Can I pause, change, or cancel?",
+        answer: "Any time, from your account. If your goals change, message us and we'll adjust your protocol with you. No calls, no retention scripts, no penalty for pausing between cycles.",
+      },
+      {
+        question: "What if I run out mid-cycle?",
+        answer: "Message us and we'll expedite a replacement — most reorders ship the same day. Your subscription is timed so this shouldn't happen, but if life gets in the way, we've got you.",
+      },
+      {
+        question: "Insurance / HSA / FSA?",
+        answer: "No insurance — SYNC is cash-pay, which lets us build every protocol around your body rather than around what an insurer will approve. HSA and FSA support is rolling out soon through our payment partner, and we'll email you when it goes live.",
+      },
+    ],
+  },
+};
+
 export const productsBySlug: Record<string, ProductContent> = {
   "bpc-157": bpc157Product,
   sermorelin: sermorelinProduct,
@@ -2687,6 +3333,12 @@ export const productsBySlug: Record<string, ProductContent> = {
   tirzepatide: tirzepatideProduct,
   dsip: dsipProduct,
   "mots-c": motsCProduct,
+  semax: semaxProduct,
+  selank: selankProduct,
+  perform: performProduct,
+  repair: repairProduct,
+  define: defineProduct,
+  restore: restoreProduct,
 };
 
 export const allProducts: ProductContent[] = [
@@ -2699,6 +3351,12 @@ export const allProducts: ProductContent[] = [
   tirzepatideProduct,
   dsipProduct,
   motsCProduct,
+  semaxProduct,
+  selankProduct,
+  performProduct,
+  repairProduct,
+  defineProduct,
+  restoreProduct,
 ];
 
 /* ------------------------------ Formulary (/start) ---------------------- */
@@ -2765,7 +3423,7 @@ export const formulary: FormularyContent = {
     eyebrow: "Not sure where to start",
     heading: "Let a clinician decide.",
     subtext:
-      "Answer the intake and a licensed US clinician will tell you which compound fits — or that none of them do. Both are real answers, and neither costs you anything until a protocol is approved.",
+      "Answer the intake and a licensed US clinician will tell you which compound fits or that none of them do. Both are real answers, and neither costs you anything until a protocol is approved.",
     label: "Start your protocol",
     href: "/products/bpc-157",
   },
