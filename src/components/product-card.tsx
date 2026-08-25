@@ -17,7 +17,7 @@ export function ProductCard({
 }) {
   return (
     <article
-      className={`group flex flex-col gap-1.5 rounded-2xl border border-ink/[0.08] p-1 sm:gap-2 sm:rounded-[32px] sm:p-2 ${className}`}
+      className={`group relative flex flex-col gap-1.5 rounded-2xl border border-ink/[0.08] p-1 sm:gap-2 sm:rounded-[32px] sm:p-2 ${className}`}
       style={{ background: CARD_BG }}
     >
       <div className="relative aspect-square w-full overflow-hidden rounded-xl sm:rounded-3xl">
@@ -55,10 +55,16 @@ export function ProductCard({
                 mono uppercase, growing to a filled ink button on card hover.
                 Ink at every breakpoint; the featured card used to render coral
                 here on mobile only, which read as a mistake next to its
-                neighbours. */}
+                neighbours.
+
+                The `after` overlay stretches this one link across the whole
+                card, so the image and copy are clickable too. Done this way
+                rather than wrapping the card in a second anchor: nesting
+                anchors is invalid, and two links per card would mean screen
+                readers and tab order hitting every product twice. */}
             <Link
               href={product.ctaHref}
-              className="flex w-full items-center justify-center whitespace-nowrap rounded-full border border-ink px-4 py-2 text-sm text-ink transition-all duration-300 sm:w-auto sm:grow-0 sm:justify-start sm:px-5 sm:py-3 sm:font-mono sm:text-base sm:uppercase sm:group-hover:grow sm:group-hover:bg-ink sm:group-hover:text-white"
+              className="flex w-full items-center justify-center whitespace-nowrap rounded-full border border-ink px-4 py-2 text-sm text-ink transition-all duration-300 after:absolute after:inset-0 after:rounded-2xl after:content-[''] sm:w-auto sm:grow-0 sm:justify-start sm:px-5 sm:py-3 sm:font-mono sm:text-base sm:uppercase sm:after:rounded-[32px] sm:group-hover:grow sm:group-hover:bg-ink sm:group-hover:text-white"
             >
               {product.ctaLabel}
             </Link>
