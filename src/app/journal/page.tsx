@@ -37,8 +37,13 @@ export default async function JournalRoute({
     },
     version,
   );
+  // The cards authored on the journal story win, so the index stays the grid
+  // the design calls for and the client can order and edit it. Auto-listing
+  // every article_page story is the fallback for when that list is emptied;
+  // it used to take priority, which collapsed the six-card grid down to the
+  // single article that exists so far.
   const dynamic = stories.map(mapArticleStoryCard).filter((a) => a.title);
-  const content = dynamic.length ? { ...base, articles: dynamic } : base;
+  const content = base.articles.length ? base : { ...base, articles: dynamic };
 
   return (
     <main className="min-h-screen overflow-clip bg-white">
