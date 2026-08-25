@@ -785,14 +785,6 @@ export const blog: BlogContent = {
       image: "/images/blog/routine.png",
       href: "/journal/wellness-routine",
     },
-    {
-      category: "Science",
-      title:
-        "The science behind compounded peptides & why sourcing matters.",
-      meta: "6 min read · Apr 2026",
-      image: "/images/blog/science.png",
-      href: "/journal/compounded-peptides",
-    },
   ],
   ctaLabel: "View all articles",
   ctaHref: "/journal",
