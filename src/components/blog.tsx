@@ -1,18 +1,24 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect } from "react";
 import type { Article, BlogContent } from "@/lib/content";
 import { ArrowIcon } from "@/components/arrow-icon";
+import { LOOP_COPIES, useLoopedTrack } from "@/lib/use-looped-track";
 
 /* eslint-disable @next/next/no-img-element */
 
 const CARD_WIDTH = 424;
 const GAP = 32;
 
-function ArticleCard({ article }: { article: Article }) {
+/** `clone` marks one of the duplicate copies that make the track loop. Clones
+    are hidden from assistive tech and skipped by tab, so the same article is
+    only ever announced or focusable once. */
+function ArticleCard({ article, clone }: { article: Article; clone?: boolean }) {
   return (
     <a
       href={article.href}
+      aria-hidden={clone}
+      tabIndex={clone ? -1 : undefined}
       className="group flex w-[300px] shrink-0 flex-col gap-5 sm:w-[360px] lg:w-[424px]"
       style={{ scrollSnapAlign: "start" }}
     >
@@ -45,9 +51,20 @@ export function Blog({
   content,
   ...rest
 }: { content: BlogContent } & Omit<React.ComponentPropsWithoutRef<"section">, "content">) {
-  const trackRef = useRef<HTMLDivElement>(null);
+  const count = content.articles.length;
+  const { ref: trackRef, recenter, setWidth } = useLoopedTrack(count);
 
+  // Open on the middle copy so there is a copy of the list to travel into in
+  // either direction. Visually identical to opening on the first card.
+  useEffect(() => {
+    trackRef.current?.scrollTo({ left: setWidth(), behavior: "instant" });
+  }, [trackRef, setWidth]);
+
+  // Always step from inside the middle copy, so a step never runs out of
+  // track. The card it lands on is a duplicate; the hook shunts back once the
+  // scroll settles, which is what makes the last card lead into the first.
   const scroll = (dir: 1 | -1) => {
+    recenter();
     trackRef.current?.scrollBy({
       left: dir * (CARD_WIDTH + GAP),
       behavior: "smooth",
@@ -107,9 +124,15 @@ export function Blog({
             ref={trackRef}
             className="-mx-5 flex w-[calc(100%+40px)] snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth scroll-px-5 px-5 pb-2 [scrollbar-width:none] sm:mx-0 sm:w-full sm:scroll-px-0 sm:gap-8 sm:px-0 [&::-webkit-scrollbar]:hidden"
           >
-            {content.articles.map((article, i) => (
-              <ArticleCard key={i} article={article} />
-            ))}
+            {Array.from({ length: LOOP_COPIES }).flatMap((_, copy) =>
+              content.articles.map((article, i) => (
+                <ArticleCard
+                  key={`${copy}-${i}`}
+                  article={article}
+                  clone={copy !== 1}
+                />
+              )),
+            )}
           </div>
 
           {/* CTA — solid dark ink (Figma), consistent across breakpoints. */}

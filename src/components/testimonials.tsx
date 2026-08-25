@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import type { Testimonial, TestimonialsContent } from "@/lib/content";
 import { ArrowIcon } from "@/components/arrow-icon";
+import { LOOP_COPIES, useLoopedTrack } from "@/lib/use-looped-track";
 
 /* eslint-disable @next/next/no-img-element */
 
@@ -87,10 +88,10 @@ export function Testimonials({
   content,
   ...rest
 }: { content: TestimonialsContent } & Omit<React.ComponentPropsWithoutRef<"section">, "content">) {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const middle = Math.floor(content.testimonials.length / 2);
-  const [active, setActive] = useState(middle);
-  const last = content.testimonials.length - 1;
+  const count = content.testimonials.length;
+  const { ref: trackRef, recenter, setWidth } = useLoopedTrack(count);
+  // Indices run across all copies; the middle copy starts at `count`.
+  const [active, setActive] = useState(count + Math.floor(count / 2));
 
   // Scroll the track (only) so card `idx` is centred — no page jump.
   const centerOn = (idx: number, smooth: boolean) => {
@@ -99,14 +100,17 @@ export function Testimonials({
     if (!track || !child) return;
     track.scrollTo({
       left: child.offsetLeft - (track.clientWidth - child.clientWidth) / 2,
-      behavior: smooth ? "smooth" : "auto",
+      // "instant" rather than "auto": the track sets scroll-smooth in CSS and
+      // "auto" defers to it, which would animate the jumps meant to be silent.
+      behavior: smooth ? "smooth" : "instant",
     });
   };
 
-  // Keep `active` in sync with whichever card sits nearest the centre.
-  const onScroll = () => {
+  /** Index of whichever card currently sits nearest the centre. Read from the
+      DOM rather than from `active`, which lags a frame behind a recenter. */
+  const nearestIndex = () => {
     const track = trackRef.current;
-    if (!track) return;
+    if (!track) return active;
     const center = track.scrollLeft + track.clientWidth / 2;
     let best = 0;
     let bestDist = Infinity;
@@ -118,15 +122,31 @@ export function Testimonials({
         best = i;
       }
     });
-    setActive(best);
+    return best;
   };
 
+  // Every step starts from inside the middle copy, so the next card along
+  // always exists. Past the last testimonial that card is a duplicate of the
+  // first, and the hook shunts the track back once the scroll settles.
+  const step = (delta: number) => {
+    recenter();
+    centerOn(nearestIndex() + delta, true);
+  };
+
+  const onScroll = () => setActive(nearestIndex());
+
   // On mount: desktop centres the middle testimonial; mobile starts at the
-  // first card, left-aligned (Figma).
+  // first card, left-aligned (Figma). One copy in, either way.
   useEffect(() => {
     const desktop = window.matchMedia("(min-width: 640px)").matches;
-    centerOn(desktop ? middle : 0, false);
-    if (!desktop) setActive(0);
+    if (desktop) {
+      centerOn(count + Math.floor(count / 2), false);
+    } else {
+      // setWidth() lands the middle copy's first card exactly where the very
+      // first card would sit, preserving the left-aligned opening.
+      trackRef.current?.scrollTo({ left: setWidth(), behavior: "instant" });
+      setActive(count);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -163,9 +183,13 @@ export function Testimonials({
           onScroll={onScroll}
           className="-mx-5 flex w-[calc(100%+40px)] snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth scroll-px-5 px-5 pb-2 [scrollbar-width:none] sm:mx-0 sm:w-full sm:scroll-px-0 sm:gap-[120px] sm:px-0 [&::-webkit-scrollbar]:hidden"
         >
-          {content.testimonials.map((item, i) => (
+          {Array.from({ length: LOOP_COPIES }).flatMap((_, copy) =>
+            content.testimonials.map((item, i) => (
             <div
-              key={i}
+              key={`${copy}-${i}`}
+              // Duplicate copies exist only to make the track loop, so they are
+              // hidden from assistive tech and each quote is announced once.
+              aria-hidden={copy !== 1}
               className="w-[300px] shrink-0 snap-start sm:w-full sm:snap-center lg:w-[817px]"
             >
               {/* Mobile: compact card (Figma). Desktop: quote + portrait pair. */}
@@ -173,30 +197,29 @@ export function Testimonials({
                 <CompactCard item={item} />
               </div>
               <div className="hidden h-full sm:block">
-                <Pair item={item} active={i === active} />
+                <Pair item={item} active={copy * count + i === active} />
               </div>
             </div>
-          ))}
+            )),
+          )}
         </div>
 
-        {/* Nav arrows */}
+        {/* Nav arrows — the carousel wraps, so neither ever dead-ends. */}
         <div className="flex w-full justify-center sm:justify-start lg:pl-[114px]">
           <div className="flex items-center gap-1">
             <button
               type="button"
-              onClick={() => centerOn(Math.max(0, active - 1), true)}
-              disabled={active === 0}
+              onClick={() => step(-1)}
               aria-label="Previous testimonial"
-              className="flex size-11 items-center justify-center rounded-full bg-[#EAECEC] transition-opacity hover:opacity-80 disabled:opacity-40"
+              className="flex size-11 items-center justify-center rounded-full bg-[#EAECEC] transition-opacity hover:opacity-80"
             >
               <ArrowIcon className="size-5 -scale-x-100 text-ink" />
             </button>
             <button
               type="button"
-              onClick={() => centerOn(Math.min(last, active + 1), true)}
-              disabled={active === last}
+              onClick={() => step(1)}
               aria-label="Next testimonial"
-              className="flex size-11 items-center justify-center rounded-full bg-[#EAECEC] transition-opacity hover:opacity-80 disabled:opacity-40"
+              className="flex size-11 items-center justify-center rounded-full bg-[#EAECEC] transition-opacity hover:opacity-80"
             >
               <ArrowIcon className="size-5 text-ink" />
             </button>
