@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sync. Backend Integration with Bask Health</title>
+<style>
+  @page { size: A4; margin: 20mm 18mm; }
+
+  :root {
+    --ink: #1a1a1a;
+    --muted: #55555f;
+    --rule: #d8d5cd;
+    --soft: #f5f3ee;
+    --accent: #b4471f;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  body {
+    margin: 0 auto;
+    max-width: 860px;
+    padding: 32px 28px 64px;
+    background: #fff;
+    color: var(--ink);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 11.2pt;
+    line-height: 1.6;
+  }
+
+  h2, h3, h4 {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    color: var(--ink);
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  h2 {
+    font-size: 14pt;
+    letter-spacing: -0.01em;
+    margin: 34px 0 12px;
+    padding-bottom: 7px;
+    border-bottom: 1.5px solid var(--ink);
+  }
+
+  h2:first-of-type { margin-top: 0; }
+
+  h3 {
+    font-size: 11.5pt;
+    margin: 22px 0 8px;
+  }
+
+  h4 {
+    font-size: 10.5pt;
+    margin: 16px 0 6px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  p { margin: 0 0 12px; }
+
+  ul, ol { margin: 0 0 12px; padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  li > ul, li > ol { margin-top: 6px; }
+
+  strong { font-weight: 700; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0 18px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 9.5pt;
+    line-height: 1.45;
+  }
+
+  caption {
+    caption-side: top;
+    text-align: left;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 9pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    padding-bottom: 7px;
+  }
+
+  th, td {
+    border: 1px solid var(--rule);
+    padding: 7px 9px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    background: var(--soft);
+    font-weight: 700;
+  }
+
+  tr { break-inside: avoid; page-break-inside: avoid; }
+
+  table.keep { break-inside: avoid; page-break-inside: avoid; }
+
+  .lede {
+    font-size: 11.8pt;
+    line-height: 1.65;
+    color: var(--muted);
+    border-left: 3px solid var(--accent);
+    padding: 2px 0 2px 16px;
+    margin: 0 0 26px;
+  }
+
+  .note {
+    background: var(--soft);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    margin: 16px 0;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .note p:last-child { margin-bottom: 0; }
+
+  .note-label {
+    display: block;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 8.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 5px;
+  }
+
+  .flow {
+    margin: 16px 0 20px;
+    padding: 0;
+    list-style: none;
+    counter-reset: flow;
+  }
+
+  .flow li {
+    position: relative;
+    padding-left: 34px;
+    margin-bottom: 10px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .flow li::before {
+    counter-increment: flow;
+    content: counter(flow);
+    position: absolute;
+    left: 0;
+    top: 1px;
+    width: 22px;
+    height: 22px;
+    border: 1.5px solid var(--ink);
+    border-radius: 50%;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 9pt;
+    font-weight: 700;
+    line-height: 19px;
+    text-align: center;
+  }
+
+  .tag {
+    display: inline-block;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 7.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 2px 6px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  .tag-ok { background: #e6ede5; color: #2f5330; border: 1px solid #b9ccb7; }
+  .tag-tbc { background: #f6ecdf; color: #8a5518; border: 1px solid #e0c9a9; }
+  .tag-block { background: #f4e2e0; color: #8c2f22; border: 1px solid #ddb8b2; }
+  .tag-bask { background: #e4e9f0; color: #2c4763; border: 1px solid #b6c3d3; }
+  .tag-client { background: #ece7f0; color: #4d3a63; border: 1px solid #c8bdd4; }
+
+  .qgroup { margin: 20px 0 0; }
+
+  .qgroup h3 { margin-top: 0; }
+
+  ol.q { list-style: none; padding-left: 0; margin: 0 0 6px; }
+
+  ol.q > li {
+    position: relative;
+    padding-left: 46px;
+    margin-bottom: 11px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  ol.q > li > .qn {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 9pt;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .why {
+    display: block;
+    font-size: 10pt;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .sys {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 9.5pt;
+    font-weight: 700;
+  }
+
+  section { break-inside: auto; }
+
+  .kv { margin: 0 0 14px; }
+  .kv dt {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 9.5pt;
+    font-weight: 700;
+    margin-top: 10px;
+  }
+  .kv dd { margin: 3px 0 0; padding-left: 0; }
+
+  code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    font-size: 9.5pt;
+    background: var(--soft);
+    padding: 1px 4px;
+    border-radius: 2px;
+  }
+</style>
+</head>
+<body>
+<p class="lede">
+  This document sets out how the Sync. website will source, process and submit data once Bask Health
+  is connected as the commerce and clinical backend. It answers three things: what Bask owns, how add
+  to cart and checkout work against it, and what the frontend is responsible for once the backend is
+  doing the heavy lifting. It closes with the eight decisions we need from you.
+</p>
+
+<section>
+<h2>The model in one paragraph</h2>
+
+<p>
+  The Sync. site is a headless build. Three systems are involved and each owns exactly one thing.
+  <strong>Storyblok</strong> owns marketing content: copy, imagery and the composition of each page.
+  <strong>Bask Health</strong> owns commerce and clinical data: the product catalogue, pricing, plans,
+  orders, payments, patient records, prescriptions and pharmacy routing.
+  <strong>The Next.js frontend</strong> owns presentation and nothing of record. It reads from both
+  systems and writes to Bask through server side calls. It holds no database of its own and is never
+  the source of truth for anything a customer is charged for.
+</p>
+
+<table>
+  <caption>System of record by data domain</caption>
+  <thead>
+    <tr>
+      <th style="width:31%">Data</th>
+      <th style="width:24%">System of record</th>
+      <th>How the site obtains it</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Marketing copy, imagery, page composition</td>
+      <td class="sys">Storyblok</td>
+      <td>Read from the Storyblok CDN on the server at request time. Already live.</td>
+    </tr>
+    <tr>
+      <td>Product catalogue and identifiers</td>
+      <td class="sys">Bask Health</td>
+      <td>REST API call from our server. Not yet connected.</td>
+    </tr>
+    <tr>
+      <td>Pricing, plans, subscription intervals, discounts</td>
+      <td class="sys">Bask Health</td>
+      <td>REST API call from our server. Rendered directly, never copied into the CMS.</td>
+    </tr>
+    <tr>
+      <td>Cart contents before purchase</td>
+      <td class="sys">Browser, then Bask at checkout</td>
+      <td>Held in the browser, validated against Bask before any charge.</td>
+    </tr>
+    <tr>
+      <td>Orders, payments, refunds, subscription state</td>
+      <td class="sys">Bask Health</td>
+      <td>Created by our server through the API, updated by Bask webhooks.</td>
+    </tr>
+    <tr>
+      <td>Patient records, intake answers, prescriptions</td>
+      <td class="sys">Bask Health</td>
+      <td>Submitted server side only. Never stored or logged by the frontend.</td>
+    </tr>
+    <tr>
+      <td>Analytics and marketing events</td>
+      <td class="sys">GA4 through Google Tag Manager</td>
+      <td>Client side, gated behind consent, with health identifiers stripped.</td>
+    </tr>
+  </tbody>
+</table>
+</section>
+
+<section>
+<h2>What Bask owns</h2>
+
+<p>Confirmed from Bask's public documentation:</p>
+
+<ul>
+  <li>The product catalogue. The brand operator configures what is offered, covering over the counter
+      medication, prescription medication and devices, inside the Bask dashboard.</li>
+  <li>Checkout and payment processing, including a PCI compliant vault for stored cards,
+      subscriptions, billing plans, coupons, disputes and payout settings.</li>
+  <li>Prescription routing into a network of more than thirty pharmacies, including 503A and 503B
+      compounding pharmacies.</li>
+  <li>A REST API with separate test and live keys, event webhooks, and JavaScript and React SDKs.</li>
+  <li>Both a hosted checkout and a fully custom checkout built on that API.</li>
+</ul>
+
+<div class="note">
+  <span class="note-label">One point to settle on inventory</span>
+  <p>
+    Bask is the single source of truth for catalogue and pricing, and the site should fetch both
+    rather than duplicate them. Inventory is the exception. In compounded telehealth there is normally
+    no retail stock counter, because the constraint is the pharmacy's ability to fill a prescription
+    rather than units on a shelf, and Bask's documentation does not describe one. The design should
+    therefore avoid stock messaging such as "in stock" or "only two left" unless Bask turns out to
+    expose it.
+  </p>
+</div>
+</section>
+
+<section>
+<h2>How content is processed from the backend</h2>
+
+<p>
+  Every page renders on the server, per request. There is no build step that bakes in prices and no
+  cache that could serve a stale figure. For a product page:
+</p>
+
+<ol class="flow">
+  <li>The visitor requests the page and Next.js begins rendering on the server.</li>
+  <li>The server reads that page's marketing content from Storyblok: headings, body copy, imagery,
+      section order.</li>
+  <li>In parallel, the server calls the Bask API for the catalogue entry and its pricing, using an API
+      key held only on the server.</li>
+  <li>The two are merged. Storyblok supplies the words and pictures, Bask supplies the product
+      identity, price and available plans.</li>
+  <li>Finished HTML is returned. The Bask key never reaches the browser.</li>
+</ol>
+
+<p>Three rules govern this:</p>
+
+<ul>
+  <li><strong>Anything sensitive stays server side.</strong> Every Bask call carrying a key or patient
+      information runs inside a server component or route handler, so no credential is shipped to the
+      browser and no clinical data passes through client JavaScript where an analytics tag could
+      observe it.</li>
+  <li><strong>Price always comes from Bask.</strong> Prices render from the live API response rather
+      than a CMS field, so a content edit cannot contradict what is actually charged.</li>
+  <li><strong>The site degrades rather than fails.</strong> If Bask is unreachable, the page still
+      renders its marketing content and the purchase action is disabled with a clear message.</li>
+</ul>
+</section>
+
+<section>
+<h2>Add to cart</h2>
+
+<p>
+  Today the cart is entirely browser side. Adding a product writes a line item into browser storage,
+  so the cart survives refreshes and navigation, recording the product, the selected plan and the
+  quantity. No server is involved, because Bask is not yet connected.
+</p>
+
+<p>
+  Once Bask is connected the cart stays where it is, with one change: each line item references a Bask
+  product and price identifier rather than a piece of CMS text. Nothing is created in Bask until the
+  customer begins checkout, at which point the cart is posted to our own server route, revalidated
+  against live Bask pricing, and turned into an order. If Bask turns out to expose a server side cart
+  we will use it instead, which would also give us abandoned cart recovery.
+</p>
+
+<div class="note">
+  <span class="note-label">The rule that holds either way</span>
+  <p>
+    The amount charged is always the amount Bask returns at checkout, never the amount the browser
+    submitted. The browser cart is a convenience for the customer, not a binding instruction to the
+    payment system, and that is what prevents a tampered or simply stale cart from producing a wrong
+    charge.
+  </p>
+</div>
+</section>
+
+<section>
+<h2>Checkout</h2>
+
+<p>Bask offers two checkout routes, and the choice determines whether the checkout already built to the Sync. design is used at all.</p>
+
+<table class="keep">
+  <caption>Checkout options compared</caption>
+  <thead>
+    <tr>
+      <th style="width:22%">Option</th>
+      <th style="width:39%">What it means</th>
+      <th>Trade off</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="sys">Hosted checkout</td>
+      <td>The customer leaves the Sync. site and completes payment on a page hosted by Bask.</td>
+      <td>Fastest to launch and the smallest compliance surface for us. The Sync. checkout design is
+          not used, and the customer sees a branding and domain change at the most sensitive moment of
+          the journey.</td>
+    </tr>
+    <tr>
+      <td class="sys">Custom checkout <span class="tag tag-ok">Recommended</span></td>
+      <td>The checkout already built to the Sync. design is driven by Bask's API and SDK, with card
+          entry handled by Bask hosted payment fields embedded in our page.</td>
+      <td>Full control of the experience and no loss of the work already completed. Raw card numbers
+          never reach Sync. servers, so PCI scope stays with Bask. More integration work and a longer
+          test cycle.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>
+  Custom checkout is our recommendation. It preserves the design, keeps the customer on the Sync.
+  domain, and matches the reassurance already written into the checkout copy, which tells the customer
+  that card details are handled by Bask and that Sync. never sees the card number.
+</p>
+
+<h3>Checkout in this category is not retail checkout</h3>
+
+<p>
+  This is the part most often missed when a telehealth build is scoped like a normal store. A purchase
+  is not complete when payment succeeds. The full sequence is:
+</p>
+
+<ol class="flow">
+  <li>The customer selects a product and a plan.</li>
+  <li>The customer completes the intake questionnaire. This is clinical information, submitted to Bask
+      and not retained by the frontend.</li>
+  <li>The customer provides shipping and payment details and gives the consents shown in the design,
+      including consent to a telehealth consultation.</li>
+  <li>Bask creates the order and authorises payment.</li>
+  <li>A licensed provider reviews the intake. This happens after checkout and is asynchronous.</li>
+  <li>If approved, Bask issues the prescription and routes it to a pharmacy. If declined, Bask handles
+      the cancellation or refund.</li>
+  <li>Bask emits a webhook at each state change. Our server receives these, updates order status and
+      triggers the appropriate customer messaging.</li>
+</ol>
+
+<div class="note">
+  <span class="note-label">Design consequence</span>
+  <p>
+    The confirmation page cannot say the order is on its way. It has to say the order is pending
+    clinical review, and the customer needs somewhere to see the outcome afterwards. There is also no
+    intake step anywhere in the current design. It sits between product selection and payment, and it
+    will need designing and building.
+  </p>
+</div>
+</section>
+
+<section>
+<h2>What the frontend is for</h2>
+
+<p>
+  Bask supplies infrastructure. It does not supply a website. The following are entirely the
+  frontend's responsibility and none of them are solved by connecting an API.
+</p>
+
+<dl class="kv">
+  <dt>The brand and the marketing site</dt>
+  <dd>Home, product pages, the journal, about, contact and the policy pages. None of this is commerce
+      and none of it exists inside Bask. Bask's own storefront is a template product, so using it
+      would mean discarding the Sync. design entirely.</dd>
+
+  <dt>Client editable content</dt>
+  <dd>Storyblok is what lets the client change copy, imagery and section order without a developer.
+      Bask has no equivalent for marketing content.</dd>
+
+  <dt>Search visibility</dt>
+  <dd>URLs, page titles, metadata, structured data and page speed live in the frontend and directly
+      affect acquisition cost. A hosted storefront gives away control of all of them.</dd>
+
+  <dt>The intake experience</dt>
+  <dd>Bask holds the questionnaire logic and the clinical record, but how that questionnaire looks,
+      how many steps it takes and how many people finish it is a frontend problem. It is one of the
+      highest leverage points in the whole funnel.</dd>
+
+  <dt>Consent, privacy and tracking control</dt>
+  <dd>The consent platform, the tag manager and the rules governing what is allowed to reach Meta and
+      Google sit in the frontend. In a category where a URL can itself disclose a health condition,
+      that is a compliance requirement rather than a preference.</dd>
+
+  <dt>Cart and checkout experience</dt>
+  <dd>Plan switching, quantity handling, upsells, the order summary, error states and the recovery
+      paths when something goes wrong.</dd>
+</dl>
+
+<p>
+  In short, Bask is the system of record and the regulated engine underneath. The frontend is the
+  product the customer actually experiences, and it is where conversion, brand and compliance are won
+  or lost.
+</p>
+</section>
+
+<section>
+<h2>Current state of the build</h2>
+
+<ul>
+  <li>Every page renders on the server per request and reads its content from Storyblok, with a code
+      level fallback if Storyblok is unreachable. This is live.</li>
+  <li>Product pages, price displays and plan selectors are built and fully content driven, currently
+      sourced from Storyblok rather than Bask.</li>
+  <li>The cart is complete on the client side: add, change quantity, switch plan, remove, and a
+      persistent subtotal that survives navigation.</li>
+  <li>The checkout page is built to the design, including consents and payment method selection, but
+      it has no submit action and calls no payment or order API.</li>
+  <li>There is no Bask code and no Bask credentials in the project.</li>
+</ul>
+
+<p>
+  The commerce layer therefore exists as a complete interface waiting for the backend it will talk to.
+  Connecting Bask means replacing local data sources with API calls and adding a submit path, not
+  rebuilding the front of the site.
+</p>
+</section>
+
+<section>
+<h2>What we need in order to proceed</h2>
+
+<ol>
+  <li><strong>A Bask account with dashboard and documentation access.</strong> The technical reference
+      sits behind a Bask login. Until we can read the endpoint contracts, any estimate for this
+      integration is a guess rather than a plan. This blocks everything else.</li>
+  <li><strong>Test and live API keys</strong>, plus a sandbox with data usable enough to run a full
+      order through, including a simulated clinical approval and decline.</li>
+  <li><strong>A technical contact at Bask</strong>, so integration questions are answered once rather
+      than discovered one at a time during the build.</li>
+  <li><strong>Access to the existing Shopify store and Klaviyo account</strong>, since both are live on
+      the domain today and both affect the cutover.</li>
+</ol>
+</section>
+
+<section>
+<h2>Decisions we need from you</h2>
+
+<p>
+  The technical specifics of this integration are ours to resolve. Endpoint contracts, how the cart
+  resource works, rate limits and caching, tax and shipping calculation, discount validation, webhook
+  semantics and idempotency will all be answered by Bask's API reference the moment we have access to
+  it, and we will not be asking you about any of them.
+</p>
+
+<p>
+  The following eight are different. They are commercial, clinical or legal decisions that we cannot
+  make on your behalf, and each one changes what gets built.
+</p>
+
+<div class="qgroup">
+<ol class="q">
+  <li><span class="qn">1</span><strong>Who owns the catalogue?</strong>
+      <span class="why">Do the nine products already exist in Bask, or does someone need to create
+      them there. Once live, when a product is added, repriced or withdrawn in Bask, who is
+      responsible for keeping the matching Storyblok entry in step. Two systems each holding half of
+      a product will drift unless one person owns the routine.</span></li>
+
+  <li><span class="qn">2</span><strong>Which products can be sold, to whom, and where?</strong>
+      <span class="why">Telehealth is licensed state by state and compounded products are commonly
+      restricted, so we need the list of what can be sold in which states. We also need to know
+      whether any age or identity verification is required before purchase, and whether the offering
+      is United States only. There is no eligibility check anywhere in the current design. A customer
+      discovering after payment that they cannot be treated is the worst version of this, so it has to
+      be handled on the product page or early in checkout.</span></li>
+
+  <li><span class="qn">3</span><strong>Can a customer buy more than one prescription product in a
+      single order?</strong>
+      <span class="why">The cart already supports several line items. If each prescription requires
+      its own clinical review and therefore its own order, the cart either splits into multiple orders
+      or should not offer multiple items at all. We also need to know whether a prescription item and
+      an over the counter item can travel together, since one can ship immediately and the other
+      cannot.</span></li>
+
+  <li><span class="qn">4</span><strong>How should the money work around clinical review?</strong>
+      <span class="why">The checkout currently promises customers in writing that their card is
+      authorised at purchase and charged only if a clinician approves. We need that confirmed as the
+      intended commercial behaviour, along with what happens when a clinician declines: full refund,
+      or a retained consultation fee. Whatever is decided has to match the refund policy page word for
+      word.</span></li>
+
+  <li><span class="qn">5</span><strong>Who builds the intake questionnaire, and where does it
+      sit?</strong>
+      <span class="why">Either Bask hosts the questionnaire and we hand off to it, or Bask provides
+      the questions and we build the experience inside the Sync. journey. The second is significantly
+      more work and needs design before it needs code. We also need to know whether intake comes
+      before or after payment, whether a live consultation is ever required rather than an
+      asynchronous review, and what the genuine review turnaround is, since the site currently tells
+      customers most reviews complete within one to two hours.</span></li>
+
+  <li><span class="qn">6</span><strong>Does Bask's patient portal cover customer accounts, or do we
+      build them?</strong>
+      <span class="why">Subscriptions are being sold from launch, which means customers need somewhere
+      to sign in, see order status while a review is pending, view history, and pause, skip or cancel
+      a plan and update a card. If Bask's portal handles all of that we link to it. If it does not,
+      this is a substantial additional build that is not in the current design or estimate.</span></li>
+
+  <li><span class="qn">7</span><strong>What is the compliance position?</strong>
+      <span class="why">Two parts. First, whether a business associate agreement is required and
+      between which parties, because the site's own privacy policy already tells customers that
+      infrastructure vendors are bound by them. Second, what is permitted to reach Google and Meta,
+      given that a product level purchase event discloses a health condition and the product URLs
+      currently contain compound names. We will build to whichever line is drawn, but the line is a
+      legal call rather than an engineering one.</span></li>
+
+  <li><span class="qn">8</span><strong>What happens to the store that is live on the domain
+      today?</strong>
+      <span class="why">The domain currently runs a Shopify store with Klaviyo attached. We need to
+      know whether it is being retired, whether there are existing customers, orders or active
+      subscriptions that have to move, which existing URLs need redirecting, who sends transactional
+      email after cutover so customers do not receive duplicates, and when the domain is expected to
+      point at the new site. Active subscriptions in particular do not simply transfer between
+      processors.</span></li>
+</ol>
+</div>
+</section>
+
+<section>
+<h2>What would change the shape of this</h2>
+
+<p>
+  Three answers above carry enough weight to change the size of the work rather than just its detail,
+  and they are worth flagging separately:
+</p>
+
+<ul>
+  <li><strong>Intake and accounts are unscoped today.</strong> If Bask hosts the questionnaire and its
+      patient portal covers subscription management, both are small. If we are building either, each
+      is a significant piece of design and build that is not in the current estimate.</li>
+  <li><strong>Delayed capture is already promised in writing.</strong> The checkout tells customers
+      their card is authorised now and charged on approval. If Bask cannot work that way, the copy is
+      inaccurate and has to change before launch.</li>
+  <li><strong>The domain already runs a live store.</strong> If there are existing customers or active
+      subscriptions on it, this becomes a migration rather than a launch, with its own timeline and
+      its own owner.</li>
+</ul>
+</section>
+
+<section>
+<h2>Summary</h2>
+
+<ul>
+  <li>Bask manages the catalogue, pricing, plans, payments, orders, patients, prescriptions and
+      pharmacy fulfilment. The site fetches all of it through the API and stores none of it.</li>
+  <li>Add to cart stays in the browser and is validated against live Bask pricing at checkout.</li>
+  <li>Checkout should be custom, driven by Bask's API with Bask hosted card fields, so the design
+      survives and PCI scope stays with Bask.</li>
+  <li>Checkout is not the end of the purchase. Clinical review follows it, and the frontend has to
+      represent that honestly.</li>
+  <li>The frontend is not made redundant by Bask. It carries the brand, the marketing site, the
+      editable content, search visibility, the intake experience, consent and privacy control, and the
+      entire cart and checkout experience.</li>
+  <li>The immediate blocker is Bask account and documentation access. Everything else follows from it,
+      including the eight decisions above.</li>
+</ul>
+</section>
+
+</body>
+</html>
