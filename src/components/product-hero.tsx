@@ -7,6 +7,11 @@ import { ArrowDown, ArrowUpRight, ChevronDown } from "lucide-react";
 import { useCart } from "@/components/cart-provider";
 import type { ProductContent, ProductPlan } from "@/lib/content";
 
+/** Shared by the two CTA shapes so the priced button and the unpriced link
+    are pixel-identical. */
+const CTA_CLASS =
+  "flex w-full items-center justify-center rounded-full bg-ink px-6 py-5 font-mono text-base uppercase leading-6 text-white transition-opacity hover:opacity-90";
+
 function Radio({ active }: { active: boolean }) {
   // 24px frame with a 20px disc. Selected: white disc with a coral tick.
   // Unselected: 1.5px ink/48 outline ring.
@@ -191,6 +196,14 @@ export function ProductHero({
   const [openItem, setOpenItem] = useState<number | null>(null);
   const { addItem } = useCart();
 
+  // Compounds awaiting a pharmacy price ship without a figure or a plan
+  // selector. Nothing priceable means nothing addable: the cart totals every
+  // line from its selected plan, so an empty plan list would break the
+  // subtotal. The CTA becomes a link to the intake instead, which is the
+  // honest action for a protocol you cannot yet put a number against.
+  const isPriced =
+    content.plans.length > 0 && content.price.amount.trim() !== "";
+
   const addToCart = () => {
     addItem({
       id: content.slug,
@@ -328,14 +341,17 @@ export function ProductHero({
           {/* Price. 32px is the desktop figure; on a phone it lands within a
               few px of the 40px product name and the two compete, so the
               amount steps down until the two-column layout starts at sm. */}
+          {isPriced && (
           <p className="font-medium text-ink">
             <span className="text-2xl leading-8 tracking-[-0.02em] sm:text-[32px] sm:leading-10">
               {content.price.amount}
             </span>
             <span className="text-base text-ink/80">{content.price.period}</span>
           </p>
+          )}
 
           {/* Plan selector — mobile: dropdown (Figma); desktop: plan cards */}
+          {isPriced && (
           <div className="sm:hidden">
             <PlanDropdown
               plans={content.plans}
@@ -344,7 +360,9 @@ export function ProductHero({
               onSelect={setActivePlan}
             />
           </div>
+          )}
 
+          {isPriced && (
           <div className="hidden flex-col gap-2 sm:flex">
             <p className="text-lg leading-[1.5] text-ink/80">
               {content.planLabel}
@@ -405,24 +423,39 @@ export function ProductHero({
             })}
             </div>
           </div>
+          )}
 
-          {/* CTA — opens the cart drawer (add-to-cart) */}
+          {/* CTA — adds to the cart when the protocol is priced, otherwise
+              sends the visitor to the intake. */}
           <div className="flex flex-col gap-2">
             {/* Ink fill with a white label is the Figma default. Storyblok can
                 override both per product (ctaColor / ctaTextColor); the inline
                 style wins over the classes, and an unset field stays undefined
                 so the default holds. */}
-            <button
-              type="button"
-              onClick={addToCart}
-              className="flex w-full items-center justify-center rounded-full bg-ink px-6 py-5 font-mono text-base uppercase leading-6 text-white transition-opacity hover:opacity-90"
-              style={{
-                background: content.cta.color || undefined,
-                color: content.cta.textColor || undefined,
-              }}
-            >
-              {content.cta.label}
-            </button>
+            {isPriced ? (
+              <button
+                type="button"
+                onClick={addToCart}
+                className={CTA_CLASS}
+                style={{
+                  background: content.cta.color || undefined,
+                  color: content.cta.textColor || undefined,
+                }}
+              >
+                {content.cta.label}
+              </button>
+            ) : (
+              <Link
+                href={content.cta.href}
+                className={CTA_CLASS}
+                style={{
+                  background: content.cta.color || undefined,
+                  color: content.cta.textColor || undefined,
+                }}
+              >
+                {content.cta.label}
+              </Link>
+            )}
             <p className="text-center text-xs leading-[1.4] text-ink/80">
               {content.cta.note}
             </p>
