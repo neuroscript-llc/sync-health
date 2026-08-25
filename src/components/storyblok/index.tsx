@@ -20,6 +20,7 @@ import { HowItWorks } from "@/components/how-it-works";
 import { Protocols } from "@/components/protocols";
 import { Quality } from "@/components/quality";
 import { Catalog } from "@/components/catalog";
+import { Formulary } from "@/components/formulary";
 import { Compare } from "@/components/compare";
 import { Testimonials } from "@/components/testimonials";
 import { Blog } from "@/components/blog";
@@ -401,6 +402,48 @@ export function CatalogBlok({ blok }: { blok: SbBlokData }) {
   );
 }
 
+export function FormularyBlok({ blok }: { blok: SbBlokData }) {
+  const toggleOptions = arr(blok.toggleOptions).map((o) => str(o.text));
+  const sortOptions = arr(blok.sortOptions).map((o) => str(o.text));
+  return (
+    <div {...storyblokEditable(blok)}>
+      <Formulary
+        content={{
+          eyebrow: str(blok.eyebrow),
+          heading: str(blok.heading),
+          subtext: str(blok.subtext),
+          allLabel: str(blok.allLabel) || "All",
+          sortLabel: str(blok.sortLabel),
+          // The component reads sortOptions[0] as the initial sort, so an
+          // empty list would leave the select with nothing to select.
+          sortOptions: sortOptions.length ? sortOptions : ["Recommended"],
+          toggle: {
+            options: toggleOptions,
+            active: str(blok.toggleActive) || toggleOptions[0] || "",
+          },
+          products: arr(blok.products).map((p) => ({
+            category: str(p.category),
+            name: str(p.name),
+            description: str(p.description),
+            image: img(p.image),
+            ctaLabel: str(p.ctaLabel),
+            ctaHref: str(p.ctaHref),
+            featured: bool(p.featured),
+            tier: str(p.tier),
+          })),
+          cta: {
+            eyebrow: str(blok.ctaEyebrow),
+            heading: str(blok.ctaHeading),
+            subtext: str(blok.ctaSubtext),
+            label: str(blok.ctaLabel),
+            href: str(blok.ctaHref),
+          },
+        }}
+      />
+    </div>
+  );
+}
+
 function mapCell(c: SbBlokData): CompareCell {
   const type = str(c.type);
   if (type === "text") return { type: "text", text: str(c.text) };
@@ -550,6 +593,9 @@ export function FooterBlok({ blok }: { blok: SbBlokData }) {
 const PAGE_BACKGROUNDS: Record<string, string> = {
   cream: "linear-gradient(180deg,#F0F0E7 0%,#FFFFFF 100%)",
   warm: "linear-gradient(180deg,#FCF8F1 0%,#FFFFFF 620px)",
+  // Same wash as `warm` but running much further down, for the long
+  // formulary listing on /start.
+  sand: "linear-gradient(180deg,#FCF8F1 0%,#FFFFFF 1080px)",
 };
 
 /** Top-level page: renders its `body` list of section bloks in order. */
@@ -587,6 +633,7 @@ export const storyblokComponents = {
   protocols: ProtocolsBlok,
   quality: QualityBlok,
   catalog: CatalogBlok,
+  formulary: FormularyBlok,
   compare: CompareBlok,
   testimonials: TestimonialsBlok,
   blog: BlogBlok,
