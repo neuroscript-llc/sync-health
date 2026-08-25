@@ -51,15 +51,14 @@ export function ProductCard({
           {/* Row wrapper keeps the desktop button hugging left (w-auto) instead
               of stretching in the parent column. */}
           <div className="flex">
-            {/* Mobile (Figma): outlined pill, Satoshi 14px, coral on the
-                featured card. Desktop: mono uppercase, hover fills coral. */}
+            {/* Mobile: outlined ink pill, Satoshi 14px. Desktop: same pill in
+                mono uppercase, growing to a filled ink button on card hover.
+                Ink at every breakpoint; the featured card used to render coral
+                here on mobile only, which read as a mistake next to its
+                neighbours. */}
             <Link
               href={product.ctaHref}
-              className={`flex w-full items-center justify-center whitespace-nowrap rounded-full border px-4 py-2 text-sm transition-all duration-300 sm:w-auto sm:grow-0 sm:justify-start sm:border-ink sm:px-5 sm:py-3 sm:font-mono sm:text-base sm:uppercase sm:text-ink sm:group-hover:grow sm:group-hover:bg-ink sm:group-hover:text-white ${
-                product.featured
-                  ? "border-brand text-brand"
-                  : "border-ink text-ink"
-              }`}
+              className="flex w-full items-center justify-center whitespace-nowrap rounded-full border border-ink px-4 py-2 text-sm text-ink transition-all duration-300 sm:w-auto sm:grow-0 sm:justify-start sm:px-5 sm:py-3 sm:font-mono sm:text-base sm:uppercase sm:group-hover:grow sm:group-hover:bg-ink sm:group-hover:text-white"
             >
               {product.ctaLabel}
             </Link>
