@@ -5,7 +5,7 @@ import { Footer } from "@/components/footer";
 import { ArticlePage } from "@/components/article-page";
 import { siteHeader, article, footer } from "@/lib/content";
 import { getStoryContent, resolveVersion } from "@/lib/storyblok";
-import { mapArticle } from "@/lib/storyblok-map";
+import { mapArticle, journalCardImage, img } from "@/lib/storyblok-map";
 
 export const dynamic = "force-dynamic";
 
@@ -26,10 +26,21 @@ export default async function ArticleRoute({
   const { slug } = await params;
   const sp = await searchParams;
   const { isEnabled } = await draftMode();
-  const content = mapArticle(
-    await getStoryContent(`article-${slug}`, resolveVersion(sp, isEnabled)),
-    article,
-  );
+  const version = resolveVersion(sp, isEnabled);
+
+  const story = await getStoryContent(`article-${slug}`, version);
+  const mapped = mapArticle(story, article);
+
+  // The hero and the index thumbnail must be the same picture. When the
+  // article carries its own cover both already read it, so they agree. When it
+  // doesn't, the index falls back to the linking card's image, so the hero
+  // does too rather than dropping to the built-in default and disagreeing.
+  const ownCover = img(story?.cover);
+  const cover =
+    ownCover ||
+    journalCardImage(await getStoryContent("journal", version), `/journal/${slug}`) ||
+    mapped.cover;
+  const content = { ...mapped, cover };
 
   return (
     <main className="min-h-screen overflow-clip bg-white">

@@ -106,6 +106,20 @@ export function articleCoversByHref(
   return covers;
 }
 
+/** The picture the journal index shows for a given article URL, taken from
+    whichever card links to it. Used as the article hero's fallback so the
+    thumbnail and the hero cannot disagree on an article that has no cover of
+    its own. Empty when no card points there. */
+export function journalCardImage(content: Blok | null, href: string): string {
+  if (!content) return "";
+  const featured = arr(content.featured)[0];
+  if (featured && str(featured.href) === href) return img(featured.image);
+  for (const card of arr(content.articles)) {
+    if (str(card.href) === href) return img(card.image);
+  }
+  return "";
+}
+
 export function mapJournal(
   content: Blok | null,
   fallback: JournalContent,
