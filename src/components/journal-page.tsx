@@ -36,13 +36,13 @@ function FilterPill({
   );
 }
 
+const PILL_CLASS =
+  "inline-flex w-fit items-center justify-center rounded-full border border-ink px-5 py-3 font-mono text-base uppercase leading-6 text-ink transition-colors group-hover:bg-ink group-hover:text-white hover:bg-ink hover:text-white";
+
 /** Outlined pill used for "Read more" and "Load more articles". */
 function OutlinePill({ label, href }: { label: string; href: string }) {
   return (
-    <Link
-      href={href}
-      className="inline-flex w-fit items-center justify-center rounded-full border border-ink px-5 py-3 font-mono text-base uppercase leading-6 text-ink transition-colors hover:bg-ink hover:text-white"
-    >
+    <Link href={href} className={PILL_CLASS}>
       {label}
     </Link>
   );
@@ -50,12 +50,18 @@ function OutlinePill({ label, href }: { label: string; href: string }) {
 
 function FeaturedCard({ featured }: { featured: JournalContent["featured"] }) {
   return (
-    <div className="flex flex-col gap-5 rounded-3xl lg:flex-row lg:items-center lg:gap-5">
+    // The title carries the one link and stretches it over the whole card, so
+    // the cover, the heading and the pill all open the article. Done this way
+    // rather than making each of the three its own anchor: that would be three
+    // tab stops and three announcements for one destination, and nesting them
+    // is invalid. Hanging it off the title also makes the article name the
+    // link's accessible name, which "Read more" alone would not be.
+    <div className="group relative flex flex-col gap-5 rounded-3xl lg:flex-row lg:items-center lg:gap-5">
       <div className="relative aspect-[620/420] w-full overflow-hidden rounded-2xl bg-[#EAECEC] lg:aspect-auto lg:h-[420px] lg:w-[620px] lg:shrink-0 lg:rounded-[18px]">
         <img
           src={featured.image}
           alt=""
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
         />
       </div>
       <div className="flex flex-1 flex-col justify-center gap-[18px] lg:p-5">
@@ -64,14 +70,20 @@ function FeaturedCard({ featured }: { featured: JournalContent["featured"] }) {
             {featured.eyebrow}
           </p>
           <h2 className="text-[28px] font-medium leading-[1.1] tracking-[-0.01em] text-ink sm:text-[40px] sm:leading-[44px]">
-            {featured.title}
+            <Link
+              href={featured.href}
+              className="after:absolute after:inset-0 after:rounded-3xl after:content-['']"
+            >
+              {featured.title}
+            </Link>
           </h2>
           <p className="text-base leading-6 text-ink/70">{featured.excerpt}</p>
           <p className="font-mono text-sm uppercase tracking-[0.02em] text-ink/80">
             {featured.meta}
           </p>
         </div>
-        <OutlinePill label={featured.readMoreLabel} href={featured.href} />
+        {/* Visual only: the stretched title link above already covers it. */}
+        <span className={PILL_CLASS}>{featured.readMoreLabel}</span>
       </div>
     </div>
   );
