@@ -39,23 +39,28 @@ export function Compare({
 }: { content: CompareContent } & Omit<React.ComponentPropsWithoutRef<"section">, "content">) {
   return (
     <section
-      className="relative overflow-x-clip px-5 py-12 sm:px-9 sm:py-12"
+      className="relative overflow-x-clip px-5 py-12 sm:px-9 sm:py-20"
       style={{ background: SECTION_BG }}
       {...rest}
     >
       {/* Coral mesh glow — shared with the testimonials section below. In Figma
-          this gradient (2495×1347, 50% opacity) lives in the compare frame at
-          x:13, y:153 and is tall enough to bleed down past the section into
-          testimonials. The compare frame does not clip, so we mustn't either. */}
+          this gradient (2495x1347, 50% opacity) lives in the compare frame at
+          left 13px, top calc(50% - 1347/2 + 302.5), and is tall enough to bleed
+          down past the section into testimonials. The compare frame does not
+          clip, so we mustn't either.
+
+          Desktop anchors off the section's own centre the way Figma does, so
+          the glow keeps its place as the table grows, lifted a further 10% of
+          the section height on request. Mobile has its own frame and keeps the
+          older top-of-section placement. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-[0.9%] top-0 z-0 w-[173.3%] max-w-none select-none"
+        className="pointer-events-none absolute left-[0.9%] top-0 z-0 w-[173.3%] max-w-none select-none sm:top-[calc(40%-371px)]"
       >
         <img
           src="/images/compare/section-glow.png"
           alt=""
-          className="block w-full"
-          style={{ marginTop: "6.13%" }}
+          className="mt-[6.13%] block w-full sm:mt-0"
         />
       </div>
 
