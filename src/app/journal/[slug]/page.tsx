@@ -3,9 +3,14 @@ import { draftMode } from "next/headers";
 import { SiteHeader } from "@/components/site-header";
 import { Footer } from "@/components/footer";
 import { ArticlePage } from "@/components/article-page";
-import { siteHeader, article, footer } from "@/lib/content";
+import { siteHeader, article, journal, footer } from "@/lib/content";
 import { getStoryContent, resolveVersion } from "@/lib/storyblok";
-import { mapArticle, journalCardImage, img } from "@/lib/storyblok-map";
+import {
+  mapArticle,
+  mapJournal,
+  journalCardImage,
+  img,
+} from "@/lib/storyblok-map";
 
 export const dynamic = "force-dynamic";
 
@@ -31,15 +36,15 @@ export default async function ArticleRoute({
   const story = await getStoryContent(`article-${slug}`, version);
   const mapped = mapArticle(story, article);
 
-  // The hero and the index thumbnail must be the same picture. When the
-  // article carries its own cover both already read it, so they agree. When it
-  // doesn't, the index falls back to the linking card's image, so the hero
-  // does too rather than dropping to the built-in default and disagreeing.
+  // The hero and the index thumbnail must be the same picture. When the article
+  // carries its own cover both read it, so they agree. When it doesn't, the
+  // hero takes whatever the index is showing for this URL, resolved through the
+  // same mapping the index uses so it sees the image after fallbacks rather
+  // than only what is set on the blok.
   const ownCover = img(story?.cover);
+  const index = mapJournal(await getStoryContent("journal", version), journal);
   const cover =
-    ownCover ||
-    journalCardImage(await getStoryContent("journal", version), `/journal/${slug}`) ||
-    mapped.cover;
+    ownCover || journalCardImage(index, `/journal/${slug}`) || mapped.cover;
   const content = { ...mapped, cover };
 
   return (
