@@ -5,7 +5,11 @@ import { Footer } from "@/components/footer";
 import { JournalPage } from "@/components/journal-page";
 import { siteHeader, journal, footer } from "@/lib/content";
 import { getStoryContent, getStories, resolveVersion } from "@/lib/storyblok";
-import { mapJournal, mapArticleStoryCard } from "@/lib/storyblok-map";
+import {
+  mapJournal,
+  mapArticleStoryCard,
+  articleCoversByHref,
+} from "@/lib/storyblok-map";
 
 export const dynamic = "force-dynamic";
 
@@ -43,7 +47,23 @@ export default async function JournalRoute({
   // it used to take priority, which collapsed the six-card grid down to the
   // single article that exists so far.
   const dynamic = stories.map(mapArticleStoryCard).filter((a) => a.title);
-  const content = base.articles.length ? base : { ...base, articles: dynamic };
+
+  // Thumbnails follow the article's own hero image. Publishing a blog with a
+  // cover is the whole job: the card it links to picks the image up, so the
+  // same file never has to be uploaded twice. Cards pointing at an article
+  // that has no cover yet keep the image set on them.
+  const covers = articleCoversByHref(stories);
+  const withCover = <T extends { href: string; image: string }>(card: T): T => {
+    const cover = covers.get(card.href);
+    return cover ? { ...card, image: cover } : card;
+  };
+
+  const listed = base.articles.length ? base.articles : dynamic;
+  const content = {
+    ...base,
+    featured: withCover(base.featured),
+    articles: listed.map(withCover),
+  };
 
   return (
     <main className="min-h-screen overflow-clip bg-white">

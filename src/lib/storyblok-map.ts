@@ -89,6 +89,23 @@ export function mapArticleStoryCard(story: {
   };
 }
 
+/** Hero image of each published article, keyed by the journal URL that points
+    at it. Lets an index card take its thumbnail straight from the article, so
+    publishing a blog is the only step and nobody has to upload a second copy
+    onto the journal story. Articles with no cover are left out of the map, so
+    those cards keep whatever image they were given. */
+export function articleCoversByHref(
+  stories: { slug?: string; content?: Blok | null }[],
+): Map<string, string> {
+  const covers = new Map<string, string>();
+  for (const story of stories) {
+    const cover = img(((story.content ?? {}) as Blok).cover);
+    if (!cover) continue;
+    covers.set(`/journal/${str(story.slug).replace(/^article-/, "")}`, cover);
+  }
+  return covers;
+}
+
 export function mapJournal(
   content: Blok | null,
   fallback: JournalContent,
