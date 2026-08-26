@@ -9,7 +9,12 @@ export function FinalCta({
     // The coral mesh glow bleeds down from here into the footer below (they read
     // as one backdrop). overflow-x-clip kills the gradient's horizontal bleed
     // without cutting the vertical flow into the footer.
-    <section className="relative overflow-x-clip bg-white px-5 py-12 sm:px-9 sm:py-12" {...rest}>
+    // 80px of top padding from sm up, 48 below it. Mobile stays at 48 because
+    // that is what the 390 frame specifies.
+    <section
+      className="relative overflow-x-clip bg-white px-5 py-12 sm:px-9 sm:pb-12 sm:pt-20"
+      {...rest}
+    >
       {/* Coral mesh, placed to Figma's own transforms. Both frames use the same
           export but position it very differently, so the two are separate.
 
