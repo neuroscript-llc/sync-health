@@ -13,12 +13,14 @@ export function Faq({
 
   return (
     // Lifted above the closing CTA's glow, which sits in the section below and
-    // is only clipped horizontally. Without this the accordion cards pick up a
-    // pink tint from a gradient that belongs to the next section.
-    <section
-      className="relative z-10 bg-white px-5 py-12 sm:px-9 sm:py-12"
-      {...rest}
-    >
+    // is only clipped horizontally. z-10 keeps the accordion cards clear of it
+    // without a pink tint.
+    //
+    // No background of its own, deliberately. An opaque one covered the part of
+    // that glow which reaches up past the section boundary, cutting it off at a
+    // hard horizontal line instead of letting it fade out. The page behind is
+    // already the colour this was painting.
+    <section className="relative z-10 px-5 py-12 sm:px-9 sm:py-12" {...rest}>
       <div className="mx-auto flex max-w-[1368px] flex-col justify-between gap-10 lg:flex-row lg:gap-16">
         {/* Left column */}
         <div className="flex w-full max-w-[396px] flex-col gap-4 lg:gap-[18px]">

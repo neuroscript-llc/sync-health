@@ -50,17 +50,18 @@ export function Compare({
           clip, so we mustn't either.
 
           Desktop anchors off the section's own centre the way Figma does, so
-          the glow keeps its place as the table grows, lifted a further 10% of
-          the section height on request. Mobile has its own frame and keeps the
-          older top-of-section placement. */}
+          the glow keeps its place as the table grows, lifted a further 25% of
+          the section height on request. Dropped entirely below sm: at phone
+          width the table already scrolls sideways under it and the wash landed
+          across the middle of the rows. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-[0.9%] top-0 z-0 w-[173.3%] max-w-none select-none sm:top-[calc(40%-371px)]"
+        className="pointer-events-none absolute left-[0.9%] z-0 hidden w-[173.3%] max-w-none select-none sm:top-[calc(25%-371px)] sm:block"
       >
         <img
           src="/images/compare/section-glow.png"
           alt=""
-          className="mt-[6.13%] block w-full sm:mt-0"
+          className="block w-full"
         />
       </div>
 
