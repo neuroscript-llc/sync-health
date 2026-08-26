@@ -8,7 +8,7 @@ export type NavGroup = {
 
 export const LEARN_LINKS = [
   { label: "Journal", href: "/journal" },
-  { label: "Blog", href: "/journal" },
+  { label: "About us", href: "/about" },
 ];
 
 /**
