@@ -59,9 +59,9 @@ export function MobileMenu({ content }: { content: SiteHeaderContent }) {
   // just opened back into view.
   const rows = useRef<Record<string, HTMLDivElement | null>>({});
 
-  // Seven categories fill a phone screen, so the last one — Learn — opens its
-  // links below the fold of the scrolling list, where they read as missing
-  // rather than as something to scroll to. `nearest` scrolls only when the row
+  // The rows fill a phone screen, so the last one — Learn — opens its links
+  // below the fold of the scrolling list, where they read as missing rather
+  // than as something to scroll to. `nearest` scrolls only when the row
   // (sub-links included) doesn't already fit, so the rows near the top stay put.
   useEffect(() => {
     if (!expanded) return;

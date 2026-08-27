@@ -67,6 +67,13 @@ export const PROTOCOL_CATEGORIES: NavGroup[] = [
     label: "Hormonal Health",
     children: [{ label: "PT-141", href: "/products/pt-141" }],
   },
+  {
+    label: "Cognitive",
+    children: [
+      { label: "Semax", href: "/products/semax" },
+      { label: "Selank", href: "/products/selank" },
+    ],
+  },
 ].map((c) => ({ ...c, moreHref: `/start?category=${categorySlug(c.label)}` }));
 
 /** Mobile menu rows: every category, plus Learn. */
@@ -91,7 +98,8 @@ export function menuForLabel(label: string): {
 } | null {
   // The Figma draws only five categories here and puts Weight on the mobile
   // drawer alone (190:2797), which left semaglutide and tirzepatide with no
-  // path from the desktop nav — so both menus now list all six.
+  // path from the desktop nav — so both menus list every category instead.
+  // Cognitive arrived after the Figma and is not drawn there at all.
   if (label === "Protocols")
     return { eyebrow: "Resources", groups: PROTOCOL_CATEGORIES };
   if (label === "Learn") return { eyebrow: "Learn", groups: LEARN_LINKS };
