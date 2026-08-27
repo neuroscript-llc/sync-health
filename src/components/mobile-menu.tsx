@@ -5,7 +5,11 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { ArrowIcon } from "@/components/arrow-icon";
-import { MOBILE_MENU_LINKS, MOBILE_MENU_PROMO } from "@/components/nav-links";
+import {
+  MENU_CATEGORY_LIMIT,
+  MOBILE_MENU_LINKS,
+  MOBILE_MENU_PROMO,
+} from "@/components/nav-links";
 import type { SiteHeaderContent } from "@/lib/content";
 
 /** Account glyph used on the Login pill (matches the header's login icon). */
@@ -126,6 +130,11 @@ export function MobileMenu({ content }: { content: SiteHeaderContent }) {
               <nav className="flex flex-col gap-1">
                 {MOBILE_MENU_LINKS.map((link) => {
                   const isOpen = expanded === link.label;
+                  // Same cut-off as the desktop mega-menu, so a category does
+                  // not read as two different lists depending on the device.
+                  const shown = link.children.slice(0, MENU_CATEGORY_LIMIT);
+                  const overflows =
+                    link.children.length > MENU_CATEGORY_LIMIT;
                   return (
                     <div
                       key={link.label}
@@ -153,7 +162,7 @@ export function MobileMenu({ content }: { content: SiteHeaderContent }) {
 
                       {isOpen && (
                         <ul className="flex flex-col pb-2">
-                          {link.children.map((child) => (
+                          {shown.map((child) => (
                             <li key={`${child.label}-${child.href}`}>
                               <Link
                                 href={child.href}
@@ -164,6 +173,18 @@ export function MobileMenu({ content }: { content: SiteHeaderContent }) {
                               </Link>
                             </li>
                           ))}
+                          {overflows && link.moreHref && (
+                            <li>
+                              <Link
+                                href={link.moreHref}
+                                onClick={close}
+                                className="flex items-center gap-1.5 py-2 text-lg leading-7 text-brand"
+                              >
+                                See more
+                                <ArrowIcon className="size-5 shrink-0" />
+                              </Link>
+                            </li>
+                          )}
                         </ul>
                       )}
                     </div>

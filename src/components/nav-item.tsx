@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import { ArrowIcon } from "@/components/arrow-icon";
-import { menuForLabel } from "@/components/nav-links";
+import { MENU_CATEGORY_LIMIT, menuForLabel } from "@/components/nav-links";
 import type { NavGroup } from "@/components/nav-links";
 
 /** How long the panel survives the mouse leaving, so the diagonal trip from
@@ -36,6 +36,11 @@ function MenuGroup({
     );
   }
 
+  // Past the limit the menu shows the first few and hands the rest to the
+  // formulary, already filtered to this category.
+  const shown = group.children.slice(0, MENU_CATEGORY_LIMIT);
+  const overflows = group.children.length > MENU_CATEGORY_LIMIT;
+
   return (
     <div className="flex flex-col">
       <button
@@ -55,7 +60,7 @@ function MenuGroup({
 
       {open && (
         <ul className="mt-2 flex flex-col gap-2 border-l border-ink/[0.12] pl-4">
-          {group.children.map((child) => (
+          {shown.map((child) => (
             <li key={`${child.label}-${child.href}`}>
               <Link
                 href={child.href}
@@ -66,6 +71,18 @@ function MenuGroup({
               </Link>
             </li>
           ))}
+          {overflows && group.moreHref && (
+            <li>
+              <Link
+                href={group.moreHref}
+                onClick={onNavigate}
+                className="group/more flex items-center gap-1.5 text-base leading-6 text-brand transition-opacity hover:opacity-80"
+              >
+                See more
+                <ArrowIcon className="size-4 transition-transform duration-200 group-hover/more:-rotate-45" />
+              </Link>
+            </li>
+          )}
         </ul>
       )}
     </div>

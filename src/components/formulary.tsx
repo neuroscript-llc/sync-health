@@ -2,21 +2,59 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import { ArrowIcon } from "@/components/arrow-icon";
 import { FilterPill } from "@/components/filter-pill";
 import { ProductCard } from "@/components/product-card";
 import { TierToggle } from "@/components/tier-toggle";
+import { categorySlug } from "@/lib/category-slug";
 import type { FormularyContent } from "@/lib/content";
 
 export function Formulary({ content }: { content: FormularyContent }) {
   const { allLabel } = content;
+  const requested = useSearchParams().get("category");
 
-  const [category, setCategory] = useState(allLabel);
-  const [tier, setTier] = useState(
-    content.toggle.active || content.toggle.options[0] || "",
-  );
+  // Once a category outgrows the nav menu it links here as ?category=<slug>.
+  // Resolve the slug back to the pill it names; anything unrecognised falls
+  // through to All rather than showing an empty grid.
+  const linkedCategory = useMemo(() => {
+    if (!requested) return allLabel;
+    const match = content.products.find(
+      (p) => categorySlug(p.category) === requested,
+    );
+    return match?.category ?? allLabel;
+  }, [requested, content.products, allLabel]);
+
+  // Landing on the wrong tab reads as a broken link, so a deep link opens on
+  // whichever tab actually holds that category. Weight, for one, is Advanced
+  // only, and would otherwise arrive empty under the Single default.
+  const linkedTier = useMemo(() => {
+    const preferred = content.toggle.active || content.toggle.options[0] || "";
+    if (linkedCategory === allLabel) return preferred;
+    const holds = (t: string) =>
+      content.products.some(
+        (p) => p.category === linkedCategory && (!p.tier || p.tier === t),
+      );
+    return holds(preferred)
+      ? preferred
+      : (content.toggle.options.find(holds) ?? preferred);
+  }, [content.products, content.toggle, linkedCategory, allLabel]);
+
+  const [category, setCategory] = useState(linkedCategory);
+  const [tier, setTier] = useState(linkedTier);
   const [sort, setSort] = useState(content.sortOptions[0] ?? "Recommended");
+
+  // Following a "See more" link while already on this page re-renders in place
+  // rather than remounting, so the initial state above would go stale. Reset it
+  // during render, which React discards and redoes in one pass: an effect would
+  // paint the previous filter first and correct it a frame later.
+  const [lastRequested, setLastRequested] = useState(requested);
+  if (lastRequested !== requested) {
+    setLastRequested(requested);
+    setCategory(linkedCategory);
+    setTier(linkedTier);
+  }
 
   // Categories come from the products themselves, so adding a PDP adds its
   // filter automatically.
