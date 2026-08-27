@@ -2183,6 +2183,52 @@ function makeProduct(p: {
   };
 }
 
+/**
+ * What a product created in Storyblok falls back to, field by field, for
+ * anything its editor has not filled in yet.
+ *
+ * The shared furniture is here in full, because it reads the same on every
+ * compound and nobody should have to retype it: the trust badges, the
+ * injection methods, the quality panel, how it works, the FAQ header, the
+ * safety link. Everything specific to a compound is left empty, and the route
+ * drops the sections that would otherwise render as a heading with nothing
+ * under it. Compounds defined in this file keep falling back to their own
+ * object, so nothing about them changes.
+ *
+ * No price and no plans on purpose: the product hero reads that as "not
+ * priceable yet" and points the button at the intake instead of the cart,
+ * which is the honest state for a product still being written.
+ */
+export const blankProduct: ProductContent = {
+  slug: "",
+  eyebrow: "",
+  name: "",
+  description: "",
+  tagline: "",
+  gallery: PDP_GALLERY,
+  trust: PDP_TRUST,
+  methodLabel: "Injection method",
+  methods: PDP_METHODS,
+  price: { amount: "", period: "" },
+  planLabel: "Select a plan",
+  plans: [],
+  cta: PDP_CTA,
+  accordion: [],
+  safetyLabel: "Important Safety Information",
+  safetyHref: "/important-safety-information",
+  why: { heading: "", features: [] },
+  qualityTest: PDP_QUALITY,
+  howItWorks,
+  faq: {
+    eyebrow: "FAQ",
+    heading: "Everything worth asking.",
+    subtext: "Protocols, prescriptions, and what happens after you order.",
+    ctaLabel: "Contact our care team",
+    ctaHref: "/contact",
+    items: [],
+  },
+};
+
 export const sermorelinProduct: ProductContent = makeProduct({
   slug: "sermorelin",
   eyebrow: "Performance",

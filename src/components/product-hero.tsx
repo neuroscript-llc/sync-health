@@ -461,8 +461,11 @@ export function ProductHero({
             </p>
           </div>
 
-          {/* Accordion */}
-          <div className="border-b border-[#D2D2D1]">
+          {/* Accordion. The wrapper draws a hairline of its own, so an empty
+              list has to drop it rather than leave a stray rule behind. */}
+          <div
+            className={content.accordion.length ? "border-b border-[#D2D2D1]" : ""}
+          >
             {content.accordion.map((item, i) => {
               const open = openItem === i;
               return (

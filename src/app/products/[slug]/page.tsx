@@ -14,7 +14,7 @@ import { FinalCta } from "@/components/final-cta";
 import { Footer } from "@/components/footer";
 import {
   siteHeader,
-  bpc157Product,
+  blankProduct,
   productsBySlug,
   testimonials,
   catalog,
@@ -30,31 +30,39 @@ export const dynamic = "force-dynamic";
 /**
  * The product behind a URL, or null when nothing claims that slug.
  *
+ * Products live in the Storyblok "products" folder, so a story's own path is
+ * already the public one and an editor never has to set a real path by hand.
+ * The flat `product-<slug>` name is still accepted, for any story that has not
+ * been moved into the folder.
+ *
  * A slug with neither a story nor a content.ts entry is a typo or a product
  * that has been deleted, and used to render a complete BPC-157 page under the
  * wrong name. Local products never 404, so a Storyblok outage can't take the
  * built-in catalogue down with it.
  *
- * The URL also wins over the story's own `slug` field, because that field is
- * the cart's key for the line item: a story duplicated from another product
- * carries the original's slug, and two products sharing a key merge into one
+ * A product that only exists in Storyblok falls back to `blankProduct` rather
+ * than to BPC-157, so a half-written page shows its own gaps instead of
+ * quietly borrowing another compound's copy.
+ *
+ * The URL also wins over the story's own slug, because that value is the
+ * cart's key for the line item, and two products sharing a key merge into one
  * basket line.
  *
- * The fetch is memoised per request, so calling this from both generateMetadata
- * and the page body costs one round trip.
+ * The fetches are memoised per request, so calling this from both
+ * generateMetadata and the page body costs one round trip each.
  */
 async function resolveProduct(
   slug: string,
   searchParams: Promise<Record<string, string | string[] | undefined>>,
 ) {
   const { isEnabled } = await draftMode();
+  const version = resolveVersion(await searchParams, isEnabled);
   const local = productsBySlug[slug];
-  const story = await getStoryContent(
-    `product-${slug}`,
-    resolveVersion(await searchParams, isEnabled),
-  );
+  const story =
+    (await getStoryContent(`products/${slug}`, version)) ??
+    (await getStoryContent(`product-${slug}`, version));
   if (!story && !local) return null;
-  return { ...mapProduct(story, local ?? bpc157Product), slug };
+  return { ...mapProduct(story, local ?? blankProduct), slug };
 }
 
 export async function generateMetadata({
@@ -88,13 +96,15 @@ export default async function ProductPage({
         <SiteHeader content={siteHeader} />
       </div>
       <ProductHero content={product} />
-      <ProductWhy content={product} />
+      {/* A product still being written has no benefits or questions yet, and
+          both sections are a heading over an empty column until it does. */}
+      {product.why.features.length > 0 && <ProductWhy content={product} />}
       <HowItWorks content={product.howItWorks} variant="product" />
       <ProductQuality content={product} />
       <Testimonials content={testimonials} />
       <Catalog content={catalog} />
       <Blog content={blog} />
-      <Faq content={product.faq} />
+      {product.faq.items.length > 0 && <Faq content={product.faq} />}
       <FinalCta content={finalCta} />
       <Footer content={footer} />
     </main>
