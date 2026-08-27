@@ -30,6 +30,16 @@ export const img = (v: unknown): string =>
   v && typeof v === "object" && "filename" in v
     ? str((v as { filename?: unknown }).filename)
     : str(v);
+/**
+ * Multi-asset field → URL list. Also reads the shape these fields had before
+ * they became asset pickers: a bloks list of `text_item`, each holding a path.
+ * Published content stays in the old shape until an editor republishes the
+ * story, so both have to keep working side by side.
+ */
+export const imgList = (v: unknown): string[] =>
+  arr(v)
+    .map((a) => img(a) || str(a.text))
+    .filter(Boolean);
 
 /* -------------------------------------------------------------------------- */
 /*  Legal pages (Terms, Privacy)                                               */
@@ -441,7 +451,8 @@ export function mapProduct(
   const methods = arr(content.methods);
   const accordion = arr(content.accordion);
   const whyFeatures = arr(content.whyFeatures);
-  const thumbs = arr(content.galleryThumbnails);
+  const thumbs = imgList(content.galleryThumbnails);
+  const collage = imgList(q?.collage);
   const fq = arr(content.faq)[0];
 
   return {
@@ -452,9 +463,7 @@ export function mapProduct(
     tagline: str(content.tagline) || fb.tagline,
     gallery: {
       main: img(content.galleryMain) || fb.gallery.main,
-      thumbnails: thumbs.length
-        ? thumbs.map((t) => str(t.text))
-        : fb.gallery.thumbnails,
+      thumbnails: thumbs.length ? thumbs : fb.gallery.thumbnails,
     },
     trust: trust.length
       ? trust.map((t) => ({ icon: img(t.icon), label: str(t.label) }))
@@ -519,9 +528,7 @@ export function mapProduct(
     qualityTest: q
       ? {
           heading: str(q.heading),
-          collage: arr(q.collage).length
-            ? arr(q.collage).map((t) => str(t.text))
-            : fb.qualityTest.collage,
+          collage: collage.length ? collage : fb.qualityTest.collage,
           lead: str(q.lead),
           body: str(q.body),
           tests: arr(q.tests).length
