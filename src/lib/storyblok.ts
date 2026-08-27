@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { storyblokInit, apiPlugin } from "@storyblok/react/rsc";
 import { storyblokComponents } from "@/components/storyblok";
 
@@ -36,8 +37,12 @@ export function resolveVersion(
  * Fetch a single story's `content` blok by slug, or null when Storyblok is
  * unconfigured or the fetch fails. Every page uses this and falls back to the
  * local content.ts object, so the site renders even if the CMS is unreachable.
+ *
+ * Memoised per request, so a route that needs the same story twice — the
+ * product page reads it in generateMetadata and again while rendering — pays
+ * for one round trip rather than two.
  */
-export async function getStoryContent(
+export const getStoryContent = cache(async function getStoryContent(
   slug: string,
   version: "draft" | "published",
 ): Promise<Record<string, unknown> | null> {
@@ -55,7 +60,7 @@ export async function getStoryContent(
     console.error(`[storyblok] failed to load story "${slug}":`, err);
     return null;
   }
-}
+});
 
 /**
  * Fetch a list of stories (e.g. every `article_page` for the Journal index).

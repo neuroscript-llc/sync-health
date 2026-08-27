@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { draftMode } from "next/headers";
+import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { ProductHero } from "@/components/product-hero";
 import { ProductWhy } from "@/components/product-why";
@@ -26,14 +27,48 @@ import { mapProduct } from "@/lib/storyblok-map";
 
 export const dynamic = "force-dynamic";
 
+/**
+ * The product behind a URL, or null when nothing claims that slug.
+ *
+ * A slug with neither a story nor a content.ts entry is a typo or a product
+ * that has been deleted, and used to render a complete BPC-157 page under the
+ * wrong name. Local products never 404, so a Storyblok outage can't take the
+ * built-in catalogue down with it.
+ *
+ * The URL also wins over the story's own `slug` field, because that field is
+ * the cart's key for the line item: a story duplicated from another product
+ * carries the original's slug, and two products sharing a key merge into one
+ * basket line.
+ *
+ * The fetch is memoised per request, so calling this from both generateMetadata
+ * and the page body costs one round trip.
+ */
+async function resolveProduct(
+  slug: string,
+  searchParams: Promise<Record<string, string | string[] | undefined>>,
+) {
+  const { isEnabled } = await draftMode();
+  const local = productsBySlug[slug];
+  const story = await getStoryContent(
+    `product-${slug}`,
+    resolveVersion(await searchParams, isEnabled),
+  );
+  if (!story && !local) return null;
+  return { ...mapProduct(story, local ?? bpc157Product), slug };
+}
+
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const p = productsBySlug[slug] ?? bpc157Product;
-  return { title: `${p.name} — Sync.`, description: p.description };
+  const product = await resolveProduct(slug, searchParams);
+  // Nothing to describe: the page below 404s.
+  if (!product) return {};
+  return { title: `${product.name} — Sync.`, description: product.description };
 }
 
 export default async function ProductPage({
@@ -44,13 +79,8 @@ export default async function ProductPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { slug } = await params;
-  const sp = await searchParams;
-  const { isEnabled } = await draftMode();
-  // Per-slug content.ts fallback; unknown slugs fall back to BPC-157.
-  const product = mapProduct(
-    await getStoryContent(`product-${slug}`, resolveVersion(sp, isEnabled)),
-    productsBySlug[slug] ?? bpc157Product,
-  );
+  const product = await resolveProduct(slug, searchParams);
+  if (!product) notFound();
 
   return (
     <main className="min-h-screen overflow-x-clip bg-[linear-gradient(180deg,#f0f0e6_0%,#ffffff_100%)]">
