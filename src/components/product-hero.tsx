@@ -507,14 +507,18 @@ export function ProductHero({
             })}
           </div>
 
-          {/* Safety information */}
-          <Link
-            href={content.safetyHref}
-            className="inline-flex items-center gap-2 self-start border-b border-ink pb-1 pt-2 font-mono text-sm font-medium uppercase leading-5 text-ink transition-colors hover:border-brand hover:text-brand"
-          >
-            {content.safetyLabel}
-            <ArrowUpRight className="size-5 shrink-0" strokeWidth={1.5} aria-hidden />
-          </Link>
+          {/* Safety information. Needs somewhere to go: a product whose story
+              leaves the link empty would otherwise render an underlined label
+              that does nothing when clicked. */}
+          {content.safetyHref && (
+            <Link
+              href={content.safetyHref}
+              className="inline-flex items-center gap-2 self-start border-b border-ink pb-1 pt-2 font-mono text-sm font-medium uppercase leading-5 text-ink transition-colors hover:border-brand hover:text-brand"
+            >
+              {content.safetyLabel}
+              <ArrowUpRight className="size-5 shrink-0" strokeWidth={1.5} aria-hidden />
+            </Link>
+          )}
         </div>
       </div>
     </section>
