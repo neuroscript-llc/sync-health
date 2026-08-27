@@ -516,7 +516,13 @@ export function mapProduct(
     safetyLabel: str(content.safetyLabel) || fb.safetyLabel,
     safetyHref: str(content.safetyHref) || fb.safetyHref,
     why: {
-      heading: str(content.whyHeading) || fb.why.heading,
+      // Falls back to "Why <compound>" so a product written from scratch reads
+      // correctly without anyone typing the name a second time. An explicit
+      // heading still wins, which is what a duplicated story carries.
+      heading:
+        str(content.whyHeading) ||
+        fb.why.heading ||
+        (str(content.name) ? `Why ${str(content.name)}` : ""),
       features: whyFeatures.length
         ? whyFeatures.map((f) => ({
             icon: img(f.icon),
