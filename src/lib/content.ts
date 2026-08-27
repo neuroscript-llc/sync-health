@@ -2219,7 +2219,10 @@ export const blankProduct: ProductContent = {
   cta: PDP_CTA,
   accordion: [],
   safetyLabel: "Important Safety Information",
-  safetyHref: "/important-safety-information",
+  // No default destination: there is no safety page behind that path, and a
+  // product created in the CMS should show no link rather than a dead one.
+  // Fill the field on the story once a real page exists.
+  safetyHref: "",
   why: { heading: "", features: [] },
   qualityTest: PDP_QUALITY,
   howItWorks,
