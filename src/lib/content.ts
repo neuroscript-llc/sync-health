@@ -2025,11 +2025,14 @@ const PDP_GALLERY: ProductContent["gallery"] = {
   ],
 };
 
+/** Stands in when an editor adds a trust line and leaves the icon empty. */
+export const TRUST_ICON = "/images/pdp/check.svg";
+
 const PDP_TRUST: ProductTrust[] = [
-  { icon: "/images/pdp/check.svg", label: "Physician-supervised" },
-  { icon: "/images/pdp/check.svg", label: "Licensed US compounding pharmacy" },
-  { icon: "/images/pdp/check.svg", label: "Third-party tested" },
-  { icon: "/images/pdp/check.svg", label: "Prescription-only" },
+  { icon: TRUST_ICON, label: "Physician-supervised" },
+  { icon: TRUST_ICON, label: "Licensed US compounding pharmacy" },
+  { icon: TRUST_ICON, label: "Third-party tested" },
+  { icon: TRUST_ICON, label: "Prescription-only" },
 ];
 
 const PDP_METHODS: ProductMethod[] = [
@@ -2108,7 +2111,8 @@ const PDP_QUALITY: ProductQualityContent = {
   ],
 };
 
-const PDP_WHY_ICONS = [
+/** Cycled through the benefit cards when an editor leaves an icon empty. */
+export const PDP_WHY_ICONS = [
   "/images/pdp/icon-cellular.svg",
   "/images/pdp/icon-tissue.svg",
   "/images/pdp/icon-optimized.svg",

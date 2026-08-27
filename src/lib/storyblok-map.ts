@@ -5,6 +5,7 @@
  * partially-filled one still renders. Field technical names in Storyblok match
  * the content.ts keys.
  */
+import { PDP_WHY_ICONS, TRUST_ICON } from "@/lib/content";
 import type {
   LegalContent,
   JournalContent,
@@ -465,8 +466,13 @@ export function mapProduct(
       main: img(content.galleryMain) || fb.gallery.main,
       thumbnails: thumbs.length ? thumbs : fb.gallery.thumbnails,
     },
+    // A trust line added in the CMS with no icon still gets the tick, rather
+    // than an empty box where the icon should be.
     trust: trust.length
-      ? trust.map((t) => ({ icon: img(t.icon), label: str(t.label) }))
+      ? trust.map((t) => ({
+          icon: img(t.icon) || TRUST_ICON,
+          label: str(t.label),
+        }))
       : fb.trust,
     methodLabel: str(content.methodLabel) || fb.methodLabel,
     methods: methods.length
@@ -524,8 +530,12 @@ export function mapProduct(
         fb.why.heading ||
         (str(content.name) ? `Why ${str(content.name)}` : ""),
       features: whyFeatures.length
-        ? whyFeatures.map((f) => ({
-            icon: img(f.icon),
+        ? whyFeatures.map((f, i) => ({
+            // Same idea as the trust row: cycle the house icons when the
+            // editor has not picked one, which is what the compounds written
+            // in this file do anyway.
+            icon:
+              img(f.icon) || PDP_WHY_ICONS[i % PDP_WHY_ICONS.length] || "",
             title: str(f.title),
             description: str(f.description),
           }))
