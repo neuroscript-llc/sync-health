@@ -32,6 +32,10 @@ export const LEARN_LINKS = [
  * (rather than derived from `content.ts`) so the client bundle doesn't pull in
  * the whole content module for a nav menu. Each one gets a "See more" target
  * pointing at itself in the formulary.
+ *
+ * Ordered finished-copy first within each category: only the first
+ * MENU_CATEGORY_LIMIT show, so the pages still awaiting copy sit behind
+ * "See more" rather than leading the menu.
  */
 export const PROTOCOL_CATEGORIES: NavGroup[] = [
   {
@@ -39,15 +43,25 @@ export const PROTOCOL_CATEGORIES: NavGroup[] = [
     children: [
       { label: "BPC-157", href: "/products/bpc-157" },
       { label: "DSIP", href: "/products/dsip" },
+      { label: "REPAIR", href: "/products/repair" },
+      { label: "TB-500", href: "/products/tb-500" },
+      { label: "REBUILD", href: "/products/rebuild" },
     ],
   },
   {
     label: "Performance",
-    children: [{ label: "Sermorelin", href: "/products/sermorelin" }],
+    children: [
+      { label: "Sermorelin", href: "/products/sermorelin" },
+      { label: "PERFORM", href: "/products/perform" },
+    ],
   },
   {
     label: "Metabolic",
-    children: [{ label: "MOTS-C", href: "/products/mots-c" }],
+    children: [
+      { label: "MOTS-C", href: "/products/mots-c" },
+      { label: "DEFINE", href: "/products/define" },
+      { label: "Tesamorelin", href: "/products/tesamorelin" },
+    ],
   },
   {
     label: "Weight",
@@ -61,17 +75,22 @@ export const PROTOCOL_CATEGORIES: NavGroup[] = [
     children: [
       { label: "NAD+", href: "/products/nad" },
       { label: "GHK-Cu", href: "/products/ghk-cu" },
+      { label: "RESTORE", href: "/products/restore" },
     ],
   },
   {
     label: "Hormonal Health",
-    children: [{ label: "PT-141", href: "/products/pt-141" }],
+    children: [
+      { label: "PT-141", href: "/products/pt-141" },
+      { label: "Kisspeptin", href: "/products/kisspeptin" },
+    ],
   },
   {
     label: "Cognitive",
     children: [
       { label: "Semax", href: "/products/semax" },
       { label: "Selank", href: "/products/selank" },
+      { label: "SEMAX/SELANK", href: "/products/semax-selank" },
     ],
   },
 ].map((c) => ({ ...c, moreHref: `/start?category=${categorySlug(c.label)}` }));
