@@ -12,6 +12,22 @@
   --font-heading: var(--font-satoshi);
   --font-manrope: var(--font-manrope);
 
+  /* One motion rule for the platform. Every `transition-*` utility that does
+     not name its own timing lands here, so a hover on a nav link, a button and
+     a card all move at the same speed and on the same curve. The curve is
+     near-linear leaving and eased arriving, which reads as responsive rather
+     than floaty at this duration. A handful of deliberately slower moments
+     (image zooms, the protocol pill fill, the testimonial crossfade) keep
+     their own timing.
+
+     The tiers, so later work has a rule rather than a guess:
+       180ms  hover, focus, and anything that reacts to the pointer
+       300ms  opening and closing - accordions, menus, the cart drawer
+       420ms  a section settling in the first time it is scrolled to
+       500ms+ deliberate, slow moments that are part of a specific design */
+  --default-transition-duration: 180ms;
+  --default-transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+
   /* Sync. brand tokens (from Figma) */
   --color-brand: var(--brand);
   --color-brand-foreground: var(--brand-foreground);
@@ -262,7 +278,40 @@ body {
   animation: nav-drop 220ms ease-out;
 }
 
+/* Sections settle into place the first time they are scrolled to: a short
+   fade with an 8px rise, then never again. Hidden by default and revealed by
+   <Reveal>; the <noscript> block in the layout unhides everything if the
+   script never runs, so the page is never blank without JS. `transform: none`
+   rather than translateY(0) so a settled section stops being a containing
+   block for anything positioned inside it. */
+.reveal {
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 420ms var(--default-transition-timing-function),
+    transform 420ms var(--default-transition-timing-function);
+}
+
+.reveal[data-visible] {
+  opacity: 1;
+  transform: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  /* Everything still changes state, it just stops moving to get there. Only
+     transitions are touched: the named animations below opt out separately,
+     and collapsing their duration here would make them jump instead. */
+  *,
+  *::before,
+  *::after {
+    transition-duration: 1ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
   .animate-marquee,
   .animate-marquee-slow,
   .animate-vial-float,

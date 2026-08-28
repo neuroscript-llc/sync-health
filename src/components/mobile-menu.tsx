@@ -154,7 +154,7 @@ export function MobileMenu({ content }: { content: SiteHeaderContent }) {
                         </span>
                         {/* The Figma's right arrow, swung down while open. */}
                         <ArrowIcon
-                          className={`size-9 shrink-0 transition-transform duration-200 ${
+                          className={`size-9 shrink-0 transition-transform ${
                             isOpen ? "rotate-90" : ""
                           }`}
                         />
@@ -233,7 +233,7 @@ export function MobileMenu({ content }: { content: SiteHeaderContent }) {
                   className="group inline-flex items-center gap-2 rounded-full bg-brand py-3 pl-5 pr-4 text-base leading-6 text-brand-foreground"
                 >
                   {content.ctaLabel}
-                  <ArrowIcon className="size-6 shrink-0 transition-transform duration-200 group-hover:-rotate-45" />
+                  <ArrowIcon className="size-6 shrink-0 transition-transform group-hover:-rotate-45" />
                 </Link>
               </div>
             </div>

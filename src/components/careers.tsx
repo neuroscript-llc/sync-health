@@ -39,10 +39,10 @@ export function Careers({ content }: { content: CareersContent }) {
             />
             <Link
               href={content.ctaHref}
-              className="group inline-flex items-center gap-2 self-start rounded-full bg-ink py-3 pl-5 pr-4 font-mono text-base uppercase leading-6 text-white transition-opacity duration-300 hover:opacity-90 sm:py-4 sm:pl-6 sm:pr-5 sm:text-xl sm:leading-8"
+              className="group inline-flex items-center gap-2 self-start rounded-full bg-ink py-3 pl-5 pr-4 font-mono text-base uppercase leading-6 text-white transition-opacity hover:opacity-90 sm:py-4 sm:pl-6 sm:pr-5 sm:text-xl sm:leading-8"
             >
               {content.ctaLabel}
-              <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />
+              <ArrowIcon className="size-6 transition-transform group-hover:-rotate-45" />
             </Link>
           </div>
         </div>

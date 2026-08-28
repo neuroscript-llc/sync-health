@@ -149,7 +149,7 @@ export function Footer({
                   className="group flex items-center gap-2 self-start rounded-full bg-ink py-3 pl-5 pr-4 font-mono text-base uppercase tracking-[0.02em] text-white transition-opacity hover:opacity-90"
                 >
                   {content.newsletter.ctaLabel}
-                  <ArrowIcon className="size-5 transition-transform duration-200 group-hover:-rotate-45" />
+                  <ArrowIcon className="size-5 transition-transform group-hover:-rotate-45" />
                 </button>
               </form>
             </div>

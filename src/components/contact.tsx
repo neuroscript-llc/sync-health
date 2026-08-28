@@ -31,7 +31,7 @@ function Channel({ channel }: { channel: ContactChannel }) {
       {channel.cta && (
         <Link
           href={channel.cta.href}
-          className="mt-1 inline-flex items-center gap-2 self-start rounded-full bg-ink py-3 pl-6 pr-5 font-mono text-base uppercase leading-6 text-white transition-opacity duration-300 hover:opacity-90"
+          className="mt-1 inline-flex items-center gap-2 self-start rounded-full bg-ink py-3 pl-6 pr-5 font-mono text-base uppercase leading-6 text-white transition-opacity hover:opacity-90"
         >
           {channel.cta.label}
         </Link>
@@ -147,7 +147,7 @@ export function Contact({ content }: { content: ContactContent }) {
             <button
               type="submit"
               disabled={status === "sending" || status === "sent"}
-              className="w-full rounded-full bg-ink px-5 py-3 font-mono text-base uppercase leading-6 text-white transition-opacity duration-300 hover:opacity-90 disabled:opacity-60 sm:py-4 sm:text-xl sm:leading-8"
+              className="w-full rounded-full bg-ink px-5 py-3 font-mono text-base uppercase leading-6 text-white transition-opacity hover:opacity-90 disabled:opacity-60 sm:py-4 sm:text-xl sm:leading-8"
             >
               {status === "sending" ? "Sending…" : form.submitLabel}
             </button>

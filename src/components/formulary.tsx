@@ -205,10 +205,10 @@ export function Formulary({ content }: { content: FormularyContent }) {
 
         <Link
           href={content.cta.href}
-          className="group inline-flex items-center gap-2 rounded-full bg-ink py-4 pl-6 pr-5 font-mono text-base uppercase leading-6 text-white transition-opacity duration-300 hover:opacity-90 sm:text-xl sm:leading-8"
+          className="group inline-flex items-center gap-2 rounded-full bg-ink py-4 pl-6 pr-5 font-mono text-base uppercase leading-6 text-white transition-opacity hover:opacity-90 sm:text-xl sm:leading-8"
         >
           {content.cta.label}
-          <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />
+          <ArrowIcon className="size-6 transition-transform group-hover:-rotate-45" />
         </Link>
       </section>
     </>

@@ -138,10 +138,10 @@ export function Blog({
           {/* CTA — solid dark ink (Figma), consistent across breakpoints. */}
           <a
             href={content.ctaHref}
-            className="group flex items-center gap-2 self-start rounded-full bg-ink py-3 pl-5 pr-4 font-mono text-base uppercase text-white transition-colors duration-300 hover:bg-ink/90"
+            className="group flex items-center gap-2 self-start rounded-full bg-ink py-3 pl-5 pr-4 font-mono text-base uppercase text-white transition-colors hover:bg-ink/90"
           >
             {content.ctaLabel}
-            <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />
+            <ArrowIcon className="size-6 transition-transform group-hover:-rotate-45" />
           </a>
         </div>
       </div>

@@ -27,6 +27,7 @@ import { Blog } from "@/components/blog";
 import { Faq } from "@/components/faq";
 import { FinalCta } from "@/components/final-cta";
 import { Footer } from "@/components/footer";
+import { Reveal } from "@/components/reveal";
 
 import type {
   SiteHeaderContent,
@@ -620,8 +621,19 @@ export function PageBlok({ blok }: { blok: SbBlokData }) {
   );
 }
 
-/** Registry passed to storyblokInit (server + client). */
-export const storyblokComponents = {
+/**
+ * Sections that must not animate in. The page wrapper would fade the whole
+ * document at once rather than section by section; the header and footer are
+ * chrome and should simply be there; and the hero is the first thing painted,
+ * so fading it in delays the page looking loaded for no gain.
+ */
+const NEVER_REVEAL = new Set(["page", "site_header", "footer", "hero"]);
+
+type BlokComponent = ((props: { blok: SbBlokData }) => React.ReactNode) & {
+  displayName?: string;
+};
+
+const SECTION_BLOKS: Record<string, BlokComponent> = {
   page: PageBlok,
   hero: HeroBlok,
   site_header: SiteHeaderBlok,
@@ -647,3 +659,23 @@ export const storyblokComponents = {
   final_cta: FinalCtaBlok,
   footer: FooterBlok,
 };
+
+/**
+ * Every section is wrapped so it settles into place the first time it is
+ * scrolled to. Doing it here rather than inside each section means a blok
+ * added later gets the behaviour without anyone remembering to ask for it.
+ */
+/** Registry passed to storyblokInit (server + client). */
+export const storyblokComponents: Record<string, BlokComponent> =
+  Object.fromEntries(
+    Object.entries(SECTION_BLOKS).map(([name, Blok]) => {
+      if (NEVER_REVEAL.has(name)) return [name, Blok];
+      const Revealed: BlokComponent = (props) => (
+        <Reveal>
+          <Blok {...props} />
+        </Reveal>
+      );
+      Revealed.displayName = `Reveal(${name})`;
+      return [name, Revealed];
+    }),
+  );

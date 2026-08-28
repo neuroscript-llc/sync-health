@@ -24,6 +24,7 @@ import {
 } from "@/lib/content";
 import { getStoryContent, resolveVersion } from "@/lib/storyblok";
 import { mapProduct } from "@/lib/storyblok-map";
+import { Reveal } from "@/components/reveal";
 
 export const dynamic = "force-dynamic";
 
@@ -95,17 +96,40 @@ export default async function ProductPage({
       <div className="p-3">
         <SiteHeader content={siteHeader} />
       </div>
+      {/* The hero is the first paint, so it is there rather than arriving.
+          Everything below settles in as it is scrolled to, the same as the
+          CMS-driven pages. */}
       <ProductHero content={product} />
       {/* A product still being written has no benefits or questions yet, and
           both sections are a heading over an empty column until it does. */}
-      {product.why.features.length > 0 && <ProductWhy content={product} />}
-      <HowItWorks content={product.howItWorks} variant="product" />
-      <ProductQuality content={product} />
-      <Testimonials content={testimonials} />
-      <Catalog content={catalog} />
-      <Blog content={blog} />
-      {product.faq.items.length > 0 && <Faq content={product.faq} />}
-      <FinalCta content={finalCta} />
+      {product.why.features.length > 0 && (
+        <Reveal>
+          <ProductWhy content={product} />
+        </Reveal>
+      )}
+      <Reveal>
+        <HowItWorks content={product.howItWorks} variant="product" />
+      </Reveal>
+      <Reveal>
+        <ProductQuality content={product} />
+      </Reveal>
+      <Reveal>
+        <Testimonials content={testimonials} />
+      </Reveal>
+      <Reveal>
+        <Catalog content={catalog} />
+      </Reveal>
+      <Reveal>
+        <Blog content={blog} />
+      </Reveal>
+      {product.faq.items.length > 0 && (
+        <Reveal>
+          <Faq content={product.faq} />
+        </Reveal>
+      )}
+      <Reveal>
+        <FinalCta content={finalCta} />
+      </Reveal>
       <Footer content={footer} />
     </main>
   );

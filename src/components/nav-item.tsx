@@ -52,7 +52,7 @@ function MenuGroup({
         <span className="flex-1">{group.label}</span>
         <ChevronDown
           aria-hidden
-          className={`size-4 shrink-0 text-ink/40 transition-transform duration-200 ${
+          className={`size-4 shrink-0 text-ink/40 transition-transform ${
             open ? "rotate-180" : ""
           }`}
         />
@@ -79,7 +79,7 @@ function MenuGroup({
                 className="group/more flex items-center gap-1.5 text-base leading-6 text-brand transition-opacity hover:opacity-80"
               >
                 See more
-                <ArrowIcon className="size-4 transition-transform duration-200 group-hover/more:-rotate-45" />
+                <ArrowIcon className="size-4 transition-transform group-hover/more:-rotate-45" />
               </Link>
             </li>
           )}
@@ -180,7 +180,7 @@ export function NavItem({
         {label}
         <ChevronDown
           aria-hidden
-          className={`size-5 text-ink/50 transition-transform duration-200 ${
+          className={`size-5 text-ink/50 transition-transform ${
             open ? "rotate-180" : ""
           }`}
         />
@@ -190,7 +190,7 @@ export function NavItem({
           order while closed. The pt-3 bridges the gap to the nav item so the
           pointer doesn't cross dead space on the way down. */}
       <div
-        className={`absolute left-0 top-full z-50 pt-3 transition-all duration-200 ${
+        className={`absolute left-0 top-full z-50 pt-3 transition-all ${
           open ? "visible opacity-100" : "pointer-events-none invisible opacity-0"
         }`}
       >
@@ -220,7 +220,7 @@ export function NavItem({
               className="group/cta inline-flex items-center gap-2 self-start rounded-full bg-brand py-4 pl-6 pr-5 font-mono text-base font-medium uppercase leading-6 text-white"
             >
               {cta.label}
-              <ArrowIcon className="size-6 transition-transform duration-200 group-hover/cta:-rotate-45" />
+              <ArrowIcon className="size-6 transition-transform group-hover/cta:-rotate-45" />
             </Link>
           </div>
 
@@ -253,7 +253,7 @@ export function NavItem({
               <div className="h-px w-full bg-ink/[0.08]" />
               <span className="flex items-center gap-2 text-base text-ink">
                 Learn more
-                <ArrowIcon className="size-6 transition-transform duration-200 group-hover/card:-rotate-45" />
+                <ArrowIcon className="size-6 transition-transform group-hover/card:-rotate-45" />
               </span>
             </div>
           </Link>

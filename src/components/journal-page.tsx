@@ -164,7 +164,7 @@ function Newsletter({
             className="group flex shrink-0 items-center justify-center gap-2 rounded-full bg-ink px-6 py-3 font-mono text-base uppercase leading-6 text-white transition-colors hover:bg-ink/90"
           >
             {newsletter.ctaLabel}
-            <ArrowIcon className="size-5 transition-transform duration-200 group-hover:-rotate-45" />
+            <ArrowIcon className="size-5 transition-transform group-hover:-rotate-45" />
           </button>
         </form>
       </div>

@@ -51,10 +51,10 @@ export function Hero({
 
             <Link
               href={content.ctaHref}
-              className="group inline-flex items-center gap-2 rounded-full bg-ink/80 py-4 pl-5 pr-4 font-mono text-base uppercase tracking-wide text-white shadow-[0_10px_30px_rgba(29,29,27,0.35)] transition-colors duration-200 hover:bg-ink/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-ink sm:bg-ink sm:py-5 sm:pl-6 sm:pr-5 sm:text-lg lg:text-xl"
+              className="group inline-flex items-center gap-2 rounded-full bg-ink/80 py-4 pl-5 pr-4 font-mono text-base uppercase tracking-wide text-white shadow-[0_10px_30px_rgba(29,29,27,0.35)] transition-colors hover:bg-ink/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-ink sm:bg-ink sm:py-5 sm:pl-6 sm:pr-5 sm:text-lg lg:text-xl"
             >
               {content.ctaLabel}
-              <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />
+              <ArrowIcon className="size-6 transition-transform group-hover:-rotate-45" />
             </Link>
           </div>
         </div>

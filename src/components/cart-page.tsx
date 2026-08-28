@@ -186,7 +186,7 @@ export function CartPageBody({
               className="group inline-flex items-center gap-2 rounded-full bg-ink py-3 pl-5 pr-4 font-mono text-base uppercase leading-6 text-white transition-colors hover:bg-ink/90"
             >
               {content.emptyCtaLabel}
-              <ArrowIcon className="size-5 transition-transform duration-200 group-hover:-rotate-45" />
+              <ArrowIcon className="size-5 transition-transform group-hover:-rotate-45" />
             </Link>
           </div>
         ) : (

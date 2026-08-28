@@ -121,7 +121,7 @@ function PlanDropdown({
             <PriceText price={selected.price} period={selected.period} />
           </span>
           <ChevronDown
-            className={`size-6 shrink-0 text-ink transition-transform duration-200 ${
+            className={`size-6 shrink-0 text-ink transition-transform ${
               open ? "rotate-180" : ""
             }`}
             aria-hidden
@@ -481,7 +481,7 @@ export function ProductHero({
                       {item.title}
                     </span>
                     <ArrowDown
-                      className={`size-6 shrink-0 text-ink transition-transform duration-200 ${
+                      className={`size-6 shrink-0 text-ink transition-transform ${
                         open ? "rotate-180" : ""
                       }`}
                       strokeWidth={1.5}

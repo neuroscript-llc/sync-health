@@ -33,6 +33,14 @@ export default async function RootLayout({
       lang="en"
       className={`${satoshi.variable} ${sourceCode.variable} ${manrope.variable} h-full antialiased`}
     >
+      <head>
+        {/* Sections start hidden and are revealed on scroll by <Reveal>. If the
+            script never runs there is nothing to reveal them, so without this
+            the page would render blank. */}
+        <noscript>
+          <style>{".reveal{opacity:1;transform:none}"}</style>
+        </noscript>
+      </head>
       <body className="min-h-full flex flex-col font-sans">
         <StoryblokProvider>
           <StoryblokLivePreview />

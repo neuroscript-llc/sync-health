@@ -119,10 +119,10 @@ export function Catalog({
         {/* CTA */}
         <Link
           href={content.ctaHref}
-          className="group inline-flex items-center gap-2 rounded-full bg-ink py-3 pl-5 pr-4 font-mono text-base uppercase leading-6 tracking-wide text-white transition-colors duration-300 hover:bg-ink/90 sm:py-4 sm:pl-6 sm:pr-5 sm:text-lg sm:leading-8 lg:text-xl"
+          className="group inline-flex items-center gap-2 rounded-full bg-ink py-3 pl-5 pr-4 font-mono text-base uppercase leading-6 tracking-wide text-white transition-colors hover:bg-ink/90 sm:py-4 sm:pl-6 sm:pr-5 sm:text-lg sm:leading-8 lg:text-xl"
         >
           {content.ctaLabel}
-          <ArrowIcon className="size-6 transition-transform duration-200 group-hover:-rotate-45" />
+          <ArrowIcon className="size-6 transition-transform group-hover:-rotate-45" />
         </Link>
       </div>
     </section>
