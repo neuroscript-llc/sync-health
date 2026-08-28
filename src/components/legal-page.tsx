@@ -1,5 +1,6 @@
 import type { LegalContent } from "@/lib/content";
 import { Rich } from "@/components/rich";
+import { LegalContents } from "@/components/legal-contents";
 
 export function LegalPage({ content }: { content: LegalContent }) {
   const c = content;
@@ -28,25 +29,7 @@ export function LegalPage({ content }: { content: LegalContent }) {
         <div className="flex flex-col gap-10 lg:flex-row lg:gap-16">
           {/* Contents — desktop only */}
           <aside className="hidden lg:block lg:w-[280px] lg:shrink-0">
-            <div className="lg:sticky lg:top-24 flex flex-col gap-3">
-              <p className="font-mono text-xs font-medium uppercase tracking-[0.02em] text-ink/80">
-                {c.contentsLabel}
-              </p>
-              <nav className="flex flex-col gap-3">
-                {c.clauses.map((clause) => (
-                  <a
-                    key={clause.id}
-                    href={`#${clause.id}`}
-                    className="flex gap-2 text-sm leading-5 text-ink/80 transition-colors hover:text-ink"
-                  >
-                    <span className="shrink-0 font-mono text-brand">
-                      {clause.number}
-                    </span>
-                    <span>{clause.title}</span>
-                  </a>
-                ))}
-              </nav>
-            </div>
+            <LegalContents label={c.contentsLabel} clauses={c.clauses} />
           </aside>
 
           {/* Clauses */}
