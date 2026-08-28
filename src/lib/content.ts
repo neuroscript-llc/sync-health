@@ -3461,7 +3461,9 @@ export const formulary: FormularyContent = {
   allLabel: "All",
   sortLabel: "Sort by:",
   sortOptions: ["Recommended", "Name A–Z", "Category"],
-  toggle: { options: ["Single", "Advanced"], active: "Single" },
+  // "All" drops the tier filter; category deep links land on it so a
+  // category that spans both tiers arrives whole.
+  toggle: { options: ["All", "Single", "Advanced"], active: "Single" },
   // Derived from the product pages so a new PDP appears here automatically.
   products: allProducts.map((p, i) => ({
     category: p.eyebrow,

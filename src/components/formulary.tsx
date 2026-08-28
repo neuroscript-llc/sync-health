@@ -26,12 +26,16 @@ export function Formulary({ content }: { content: FormularyContent }) {
     return match?.category ?? allLabel;
   }, [requested, content.products, allLabel]);
 
-  // Landing on the wrong tab reads as a broken link, so a deep link opens on
-  // whichever tab actually holds that category. Weight, for one, is Advanced
-  // only, and would otherwise arrive empty under the Single default.
+  // A category link promises that whole category, but the tier toggle would
+  // still hide half of it: Recovery spans both tabs, so arriving on Single
+  // dropped REPAIR and REBUILD even though the menu had just listed them.
+  // Land on the tier that filters nothing instead. Content whose toggle has no
+  // such option keeps the older behaviour of picking a tab that at least holds
+  // the category, so the grid is never empty.
   const linkedTier = useMemo(() => {
     const preferred = content.toggle.active || content.toggle.options[0] || "";
     if (linkedCategory === allLabel) return preferred;
+    if (content.toggle.options.includes(allLabel)) return allLabel;
     const holds = (t: string) =>
       content.products.some(
         (p) => p.category === linkedCategory && (!p.tier || p.tier === t),
@@ -67,8 +71,10 @@ export function Formulary({ content }: { content: FormularyContent }) {
     const list = content.products.filter(
       (p) =>
         (category === allLabel || p.category === category) &&
-        // Untagged products show under both tabs.
-        (!p.tier || p.tier === tier),
+        // Untagged products show under every tab, and the "show everything"
+        // tier drops the filter altogether. It shares the category pill's
+        // label so one word means the same thing on both axes.
+        (tier === allLabel || !p.tier || p.tier === tier),
     );
     if (sort === "Name A–Z") {
       return [...list].sort((a, b) => a.name.localeCompare(b.name));
