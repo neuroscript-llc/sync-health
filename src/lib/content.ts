@@ -3,6 +3,8 @@
  * Each type maps 1:1 to a Storyblok blok so wiring the CMS later is a drop-in.
  */
 
+import type { RichTextValue } from "@/lib/richtext";
+
 export type NavLink = {
   label: string;
   href: string;
@@ -179,10 +181,11 @@ export type JournalContent = {
 
 /** A block in the article prose. `h2` carries an `id` for TOC anchoring. */
 export type ArticleProseBlock =
-  | { type: "lead"; text: string }
+  | { type: "lead"; text: RichTextValue }
+  // Headings stay plain: the text doubles as the anchor label in the contents.
   | { type: "h2"; text: string; id: string }
-  | { type: "p"; text: string }
-  | { type: "quote"; text: string }
+  | { type: "p"; text: RichTextValue }
+  | { type: "quote"; text: RichTextValue }
   | { type: "image"; image: string; caption?: string };
 
 export type ArticleContent = {
@@ -199,8 +202,8 @@ export type ArticleContent = {
   tocLabel: string;
   toc: { label: string; id: string }[];
   prose: ArticleProseBlock[];
-  disclaimer: { label: string; text: string };
-  reviewer: { label: string; name: string; note: string; avatar: string };
+  disclaimer: { label: string; text: RichTextValue };
+  reviewer: { label: string; name: string; note: RichTextValue; avatar: string };
   related: { eyebrow: string; heading: string; articles: JournalArticle[] };
 };
 
@@ -208,21 +211,21 @@ export type LegalClause = {
   number: string;
   title: string;
   id: string;
-  body: string;
+  body: RichTextValue;
 };
 
 export type LegalContent = {
   eyebrow: string;
   title: string;
   lastUpdated: string;
-  intro: string;
+  intro: RichTextValue;
   contentsLabel: string;
   clauses: LegalClause[];
 };
 
 export type FaqItem = {
   question: string;
-  answer: string;
+  answer: RichTextValue;
 };
 
 export type FaqContent = {
@@ -270,7 +273,7 @@ export type ContactContent = {
     messageLabel: string;
     messagePlaceholder: string;
     submitLabel: string;
-    disclaimer: string;
+    disclaimer: RichTextValue;
     successHeading: string;
     successBody: string;
     /** Shown when the send fails — points at a channel that always works. */
@@ -279,8 +282,7 @@ export type ContactContent = {
   channels: ContactChannel[];
   emergency: {
     eyebrow: string;
-    /** The literal "911" in this copy is rendered as a tel: link. */
-    body: string;
+    body: RichTextValue;
   };
 };
 
@@ -318,7 +320,7 @@ export type FooterContent = {
     placeholder: string;
     ctaLabel: string;
   };
-  disclaimer: string;
+  disclaimer: RichTextValue;
   payments: PaymentLogo[];
 };
 
@@ -372,7 +374,7 @@ export type ProductPlan = {
 
 export type ProductAccordionItem = {
   title: string;
-  body?: string;
+  body?: RichTextValue;
 };
 
 export type ProductWhyFeature = {
@@ -1421,7 +1423,7 @@ export const hero: HeroContent = {
 export type AboutHeroContent = {
   eyebrow: string;
   heading: string;
-  body: string;
+  body: RichTextValue;
   image: { src: string; alt: string };
 };
 
@@ -1438,7 +1440,7 @@ export type FounderNotesContent = {
   notes: FounderNote[];
 };
 
-export type TimelineStep = { year: string; title: string; body: string };
+export type TimelineStep = { year: string; title: string; body: RichTextValue };
 
 export type TimelineContent = {
   eyebrow: string;
@@ -1447,7 +1449,7 @@ export type TimelineContent = {
   steps: TimelineStep[];
 };
 
-export type Principle = { number: string; title: string; body: string };
+export type Principle = { number: string; title: string; body: RichTextValue };
 
 export type PrinciplesContent = {
   eyebrow: string;
@@ -1483,7 +1485,7 @@ export type TeamContent = {
 export type CareersContent = {
   eyebrow: string;
   heading: string;
-  body: string;
+  body: RichTextValue;
   ctaLabel: string;
   ctaHref: string;
   /** Pre-composed artwork — the staggered grid and its edge fade are baked in. */
@@ -3629,7 +3631,7 @@ export const cartPage: CartPageContent = {
   stackedHeading: "The architecture of in sync.",
 };
 
-export type CheckoutConsent = { title: string; body: string };
+export type CheckoutConsent = { title: string; body: RichTextValue };
 export type CheckoutPayRow = {
   id: string;
   label: string;
@@ -3698,7 +3700,7 @@ export type CheckoutContent = {
     taxNote: string;
   };
   payNow: string;
-  payDisclaimer: string;
+  payDisclaimer: RichTextValue;
   footerLinks: CheckoutFooterLink[];
 };
 

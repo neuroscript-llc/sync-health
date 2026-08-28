@@ -1,5 +1,6 @@
 import type { FooterContent, SocialLink } from "@/lib/content";
 import { ArrowIcon } from "@/components/arrow-icon";
+import { Rich } from "@/components/rich";
 
 /* eslint-disable @next/next/no-img-element */
 
@@ -156,9 +157,11 @@ export function Footer({
         </div>
 
         {/* Disclaimer */}
-        <p className="max-w-[716px] text-xs leading-4 text-[#EAECEC]/60">
-          {content.disclaimer}
-        </p>
+        <Rich
+          value={content.disclaimer}
+          className="max-w-[716px] text-xs leading-4 text-[#EAECEC]/60"
+          tone="invert"
+        />
 
         {/* Payment logos — two even rows on mobile (grid), single spread row ≥sm. */}
         <div className="grid grid-cols-5 items-center justify-items-center gap-x-2 gap-y-6 sm:flex sm:flex-wrap sm:justify-between sm:gap-x-6">

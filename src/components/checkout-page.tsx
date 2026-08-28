@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ChevronDown, Search, Check } from "lucide-react";
 import { useCart } from "@/components/cart-provider";
 import type { CheckoutContent } from "@/lib/content";
+import { Rich } from "@/components/rich";
 
 const SUMMARY_BG =
   "linear-gradient(0deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), linear-gradient(180deg, #D03516 0%, #FFC439 100%)";
@@ -466,9 +467,10 @@ export function CheckoutPage({ content }: { content: CheckoutContent }) {
                 <span className="text-base font-medium leading-6 text-ink">
                   {item.title}
                 </span>
-                <span className="text-sm leading-5 text-ink/80">
-                  {item.body}
-                </span>
+                <Rich
+                  value={item.body}
+                  className="text-sm leading-5 text-ink/80"
+                />
               </span>
             </button>
           ))}
@@ -600,9 +602,10 @@ export function CheckoutPage({ content }: { content: CheckoutContent }) {
           >
             {c.payNow}
           </button>
-          <p className="text-center text-sm leading-5 text-ink/80">
-            {c.payDisclaimer}
-          </p>
+          <Rich
+            value={c.payDisclaimer}
+            className="text-center text-sm leading-5 text-ink/80"
+          />
         </div>
 
         <div className="h-px w-full bg-ink/[0.12]" />

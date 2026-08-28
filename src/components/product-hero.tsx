@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowDown, ArrowUpRight, ChevronDown } from "lucide-react";
 import { useCart } from "@/components/cart-provider";
 import type { ProductContent, ProductPlan } from "@/lib/content";
+import { Rich } from "@/components/rich";
 
 /** Shared by the two CTA shapes so the priced button and the unpriced link
     are pixel-identical. */
@@ -496,9 +497,10 @@ export function ProductHero({
                       }`}
                     >
                       <div className="overflow-hidden">
-                        <p className="text-sm leading-[1.5] text-ink/80">
-                          {item.body}
-                        </p>
+                        <Rich
+                          value={item.body}
+                          className="text-sm leading-[1.5] text-ink/80"
+                        />
                       </div>
                     </div>
                   )}

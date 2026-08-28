@@ -6,6 +6,7 @@
  * the content.ts keys.
  */
 import { PDP_WHY_ICONS, TRUST_ICON } from "@/lib/content";
+import { isRichDoc, richToPlain, type RichTextValue } from "@/lib/richtext";
 import type {
   LegalContent,
   JournalContent,
@@ -26,6 +27,12 @@ const str = (v: unknown): string => (typeof v === "string" ? v : "");
 const num = (v: unknown): number => (Number(v) ? Number(v) : 0);
 const bool = (v: unknown): boolean => v === true || v === "true";
 export const arr = (v: unknown): Blok[] => (Array.isArray(v) ? (v as Blok[]) : []);
+/**
+ * Rich text field → the editor's document. Falls back to the plain string the
+ * field held before it could be formatted, which is what a story still returns
+ * until someone re-saves it.
+ */
+export const rich = (v: unknown): RichTextValue => (isRichDoc(v) ? v : str(v));
 /** Storyblok asset field → URL string; plain string path passes through. */
 export const img = (v: unknown): string =>
   v && typeof v === "object" && "filename" in v
@@ -56,14 +63,14 @@ export function mapLegal(
     eyebrow: str(content.eyebrow) || fallback.eyebrow,
     title: str(content.title) || fallback.title,
     lastUpdated: str(content.lastUpdated) || fallback.lastUpdated,
-    intro: str(content.intro) || fallback.intro,
+    intro: rich(content.intro) || fallback.intro,
     contentsLabel: str(content.contentsLabel) || fallback.contentsLabel,
     clauses: clauses.length
       ? clauses.map((c) => ({
           number: str(c.number),
           title: str(c.title),
           id: str(c.id),
-          body: str(c.body),
+          body: rich(c.body),
         }))
       : fallback.clauses,
   };
@@ -174,12 +181,12 @@ export function mapJournal(
 /* -------------------------------------------------------------------------- */
 
 function mapProse(b: Blok): ArticleProseBlock {
-  const text = str(b.text);
+  const text = rich(b.text);
   switch (str(b.type)) {
     case "lead":
       return { type: "lead", text };
     case "h2":
-      return { type: "h2", text, id: str(b.id) };
+      return { type: "h2", text: richToPlain(text), id: str(b.id) };
     case "quote":
       return { type: "quote", text };
     case "image":
@@ -228,12 +235,12 @@ export function mapArticle(
     prose: prose.length ? prose.map(mapProse) : fallback.prose,
     disclaimer: {
       label: str(content.disclaimerLabel) || fallback.disclaimer.label,
-      text: str(content.disclaimerText) || fallback.disclaimer.text,
+      text: rich(content.disclaimerText) || fallback.disclaimer.text,
     },
     reviewer: {
       label: str(content.reviewerLabel) || fallback.reviewer.label,
       name: str(content.reviewerName) || fallback.reviewer.name,
-      note: str(content.reviewerNote) || fallback.reviewer.note,
+      note: rich(content.reviewerNote) || fallback.reviewer.note,
       avatar: img(content.reviewerAvatar) || fallback.reviewer.avatar,
     },
     related: {
@@ -301,7 +308,7 @@ export function mapCheckout(
           items: arr(consent.items).length
             ? arr(consent.items).map((i) => ({
                 title: str(i.title),
-                body: str(i.body),
+                body: rich(i.body),
               }))
             : fb.consent.items,
         }
@@ -355,7 +362,7 @@ export function mapCheckout(
         }
       : fb.summary,
     payNow: str(content.payNow) || fb.payNow,
-    payDisclaimer: str(content.payDisclaimer) || fb.payDisclaimer,
+    payDisclaimer: rich(content.payDisclaimer) || fb.payDisclaimer,
     footerLinks: footerLinks.length
       ? footerLinks.map((l) => ({ label: str(l.label), href: str(l.href) }))
       : fb.footerLinks,
@@ -516,7 +523,7 @@ export function mapProduct(
     accordion: accordion.length
       ? accordion.map((a) => ({
           title: str(a.title),
-          ...(str(a.body) ? { body: str(a.body) } : {}),
+          ...(rich(a.body) ? { body: rich(a.body) } : {}),
         }))
       : fb.accordion,
     safetyLabel: str(content.safetyLabel) || fb.safetyLabel,
@@ -584,7 +591,7 @@ export function mapProduct(
           items: arr(fq.items).length
             ? arr(fq.items).map((i) => ({
                 question: str(i.question),
-                answer: str(i.answer),
+                answer: rich(i.answer),
               }))
             : fb.faq.items,
         }

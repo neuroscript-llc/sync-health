@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowIcon } from "@/components/arrow-icon";
 import type { CareersContent } from "@/lib/content";
+import { Rich } from "@/components/rich";
 
 /**
  * Hiring band (Figma 1115:10270). The collage ships pre-composed: the
@@ -32,9 +33,10 @@ export function Careers({ content }: { content: CareersContent }) {
             <h2 className="text-5xl font-medium leading-[1.16] tracking-[-0.03em] text-ink lg:text-[56px] lg:leading-[64px] lg:tracking-[-0.02em]">
               {content.heading}
             </h2>
-            <p className="text-base leading-[1.5] text-ink/80 sm:text-lg">
-              {content.body}
-            </p>
+            <Rich
+              value={content.body}
+              className="text-base leading-[1.5] text-ink/80 sm:text-lg"
+            />
             <Link
               href={content.ctaHref}
               className="group inline-flex items-center gap-2 self-start rounded-full bg-ink py-3 pl-5 pr-4 font-mono text-base uppercase leading-6 text-white transition-opacity duration-300 hover:opacity-90 sm:py-4 sm:pl-6 sm:pr-5 sm:text-xl sm:leading-8"

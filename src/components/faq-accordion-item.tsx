@@ -1,6 +1,7 @@
 "use client";
 
 import type { FaqItem } from "@/lib/content";
+import { Rich } from "@/components/rich";
 
 function ToggleIcon({ open }: { open: boolean }) {
   // Open state shows a coral minus; closed shows a dark plus (Figma 444:4925).
@@ -64,7 +65,10 @@ export function FaqAccordionItem({
         }`}
       >
         <div className="overflow-hidden">
-          <p className="text-base leading-[1.4] text-ink/80">{item.answer}</p>
+          <Rich
+            value={item.answer}
+            className="text-base leading-[1.4] text-ink/80"
+          />
         </div>
       </div>
     </div>

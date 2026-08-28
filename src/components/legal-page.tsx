@@ -1,26 +1,5 @@
 import type { LegalContent } from "@/lib/content";
-
-/** Render clause body text, turning any email address into a coral mailto link. */
-function ClauseBody({ text }: { text: string }) {
-  const parts = text.split(/([\w.+-]+@[\w.-]+\.[a-z]{2,})/gi);
-  return (
-    <p className="text-base leading-6 text-ink/80">
-      {parts.map((part, i) =>
-        /^[\w.+-]+@[\w.-]+\.[a-z]{2,}$/i.test(part) ? (
-          <a
-            key={i}
-            href={`mailto:${part}`}
-            className="text-brand underline underline-offset-2"
-          >
-            {part}
-          </a>
-        ) : (
-          part
-        ),
-      )}
-    </p>
-  );
-}
+import { Rich } from "@/components/rich";
 
 export function LegalPage({ content }: { content: LegalContent }) {
   const c = content;
@@ -39,9 +18,10 @@ export function LegalPage({ content }: { content: LegalContent }) {
           <p className="font-mono text-xs uppercase tracking-[0.02em] text-ink/80">
             {c.lastUpdated}
           </p>
-          <p className="max-w-[822px] text-base leading-[1.5] text-ink/80 sm:text-lg">
-            {c.intro}
-          </p>
+          <Rich
+            value={c.intro}
+            className="max-w-[822px] text-base leading-[1.5] text-ink/80 sm:text-lg"
+          />
         </div>
 
         {/* Body: sticky contents + clauses */}
@@ -83,7 +63,10 @@ export function LegalPage({ content }: { content: LegalContent }) {
                 <h2 className="text-2xl font-medium leading-8 text-ink">
                   {clause.title}
                 </h2>
-                <ClauseBody text={clause.body} />
+                <Rich
+                  value={clause.body}
+                  className="text-base leading-6 text-ink/80"
+                />
               </div>
             ))}
           </div>

@@ -1,4 +1,5 @@
 import type { TimelineContent } from "@/lib/content";
+import { Rich } from "@/components/rich";
 
 /**
  * "The road here". The rail turns with the layout: a horizontal run of coral
@@ -43,9 +44,10 @@ export function Timeline({ content }: { content: TimelineContent }) {
                 <h3 className="text-[40px] font-medium leading-[44px] tracking-[-0.03em] text-ink">
                   {step.title}
                 </h3>
-                <p className="text-base leading-[1.5] text-ink/80">
-                  {step.body}
-                </p>
+                <Rich
+                  value={step.body}
+                  className="text-base leading-[1.5] text-ink/80"
+                />
               </div>
             ))}
           </div>
@@ -70,7 +72,7 @@ export function Timeline({ content }: { content: TimelineContent }) {
               <h3 className="text-[32px] font-medium leading-10 tracking-[-0.03em] text-ink">
                 {step.title}
               </h3>
-              <p className="text-sm leading-[1.4] text-ink/80">{step.body}</p>
+              <Rich value={step.body} className="text-sm leading-[1.4] text-ink/80" />
             </div>
           ))}
         </div>

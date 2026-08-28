@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { AboutHeroContent } from "@/lib/content";
+import { Rich } from "@/components/rich";
 
 /** Opening block: eyebrow, headline, lede, then a full-width 640px photo. */
 export function AboutHero({ content }: { content: AboutHeroContent }) {
@@ -15,9 +16,10 @@ export function AboutHero({ content }: { content: AboutHeroContent }) {
               {content.heading}
             </h1>
           </div>
-          <p className="max-w-[822px] text-base leading-[1.5] text-ink/80 sm:text-lg">
-            {content.body}
-          </p>
+          <Rich
+            value={content.body}
+            className="max-w-[822px] text-base leading-[1.5] text-ink/80 sm:text-lg"
+          />
         </div>
 
         {/* Tall on mobile too — the Figma gives it 560px there (1302:5817). */}

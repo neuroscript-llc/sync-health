@@ -32,6 +32,7 @@ import type {
   SiteHeaderContent,
   CompareCell,
 } from "@/lib/content";
+import { isRichDoc, type RichTextValue } from "@/lib/richtext";
 
 /* ------------------------------------------------------------------ *
  * Small helpers to read loosely-typed Storyblok blok fields safely.
@@ -40,6 +41,11 @@ const str = (v: unknown): string => (typeof v === "string" ? v : "");
 const num = (v: unknown): number => (Number(v) ? Number(v) : 0);
 const bool = (v: unknown): boolean => v === true || v === "true";
 const arr = (v: unknown): SbBlokData[] => (Array.isArray(v) ? v : []);
+/**
+ * Rich text field → the editor's document, or the plain string the field held
+ * before it could be formatted (a story keeps that until it is re-saved).
+ */
+const rich = (v: unknown): RichTextValue => (isRichDoc(v) ? v : str(v));
 
 /** Storyblok asset field → a plain URL string (empty when unset). */
 const img = (v: unknown): string => {
@@ -172,7 +178,7 @@ export function AboutHeroBlok({ blok }: { blok: SbBlokData }) {
       content={{
         eyebrow: str(blok.eyebrow),
         heading: str(blok.heading),
-        body: str(blok.body),
+        body: rich(blok.body),
         image: {
           src: img(blok.image),
           alt: alt(blok.image) || str(blok.imageAlt),
@@ -211,7 +217,7 @@ export function TimelineBlok({ blok }: { blok: SbBlokData }) {
         steps: arr(blok.steps).map((s) => ({
           year: str(s.year),
           title: str(s.title),
-          body: str(s.body),
+          body: rich(s.body),
         })),
       }}
     />
@@ -232,7 +238,7 @@ export function PrinciplesBlok({ blok }: { blok: SbBlokData }) {
         principles: arr(blok.principles).map((p) => ({
           number: str(p.number),
           title: str(p.title),
-          body: str(p.body),
+          body: rich(p.body),
         })),
       }}
     />
@@ -281,7 +287,7 @@ export function CareersBlok({ blok }: { blok: SbBlokData }) {
       content={{
         eyebrow: str(blok.eyebrow),
         heading: str(blok.heading),
-        body: str(blok.body),
+        body: rich(blok.body),
         ctaLabel: str(blok.ctaLabel),
         ctaHref: str(blok.ctaHref),
         collage: {
@@ -311,7 +317,7 @@ export function ContactBlok({ blok }: { blok: SbBlokData }) {
           messageLabel: str(form.messageLabel),
           messagePlaceholder: str(form.messagePlaceholder),
           submitLabel: str(form.submitLabel),
-          disclaimer: str(form.disclaimer),
+          disclaimer: rich(form.disclaimer),
           successHeading: str(form.successHeading),
           successBody: str(form.successBody),
           errorBody: str(form.errorBody),
@@ -328,7 +334,7 @@ export function ContactBlok({ blok }: { blok: SbBlokData }) {
         })),
         emergency: {
           eyebrow: str(blok.emergencyEyebrow),
-          body: str(blok.emergencyBody),
+          body: rich(blok.emergencyBody),
         },
       }}
     />
@@ -347,7 +353,7 @@ export function FaqBrowserBlok({ blok }: { blok: SbBlokData }) {
         items: arr(blok.items).map((i) => ({
           category: str(i.category),
           question: str(i.question),
-          answer: str(i.answer),
+          answer: rich(i.answer),
         })),
       }}
     />
@@ -527,7 +533,7 @@ export function FaqBlok({ blok }: { blok: SbBlokData }) {
         ctaHref: str(blok.ctaHref),
         items: arr(blok.items).map((i) => ({
           question: str(i.question),
-          answer: str(i.answer),
+          answer: rich(i.answer),
         })),
       }}
     />
@@ -574,7 +580,7 @@ export function FooterBlok({ blok }: { blok: SbBlokData }) {
           placeholder: str(blok.newsletterPlaceholder),
           ctaLabel: str(blok.newsletterCta),
         },
-        disclaimer: str(blok.disclaimer),
+        disclaimer: rich(blok.disclaimer),
         payments: arr(blok.payments).map((p) => ({
           src: img(p.image),
           alt: str(p.alt) || alt(p.image),

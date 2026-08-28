@@ -3,30 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import type { ContactChannel, ContactContent } from "@/lib/content";
+import { Rich } from "@/components/rich";
 
 const FIELD_BOX =
   "w-full rounded-xl border border-ink/20 bg-[#FCFCFC] px-4 py-3 text-base leading-6 text-ink outline-none transition-colors placeholder:text-ink/40 focus:border-ink/40";
 
 const LABEL =
   "font-mono text-sm font-medium uppercase tracking-[0.02em] text-ink/80";
-
-/**
- * Renders the emergency copy with its "911" as a live tel: link — the Figma
- * underlines that word specifically.
- */
-function EmergencyCopy({ body }: { body: string }) {
-  const [before, ...rest] = body.split("911");
-  if (rest.length === 0) return <p className="text-sm leading-5 text-white/80">{body}</p>;
-  return (
-    <p className="text-sm leading-5 text-white/80">
-      {before}
-      <a href="tel:911" className="underline underline-offset-2">
-        911
-      </a>
-      {rest.join("911")}
-    </p>
-  );
-}
 
 function Channel({ channel }: { channel: ContactChannel }) {
   return (
@@ -186,7 +169,10 @@ export function Contact({ content }: { content: ContactContent }) {
               </p>
             )}
 
-            <p className="text-xs leading-5 text-ink/80">{form.disclaimer}</p>
+            <Rich
+              value={form.disclaimer}
+              className="text-xs leading-5 text-ink/80"
+            />
           </form>
 
           <div className="flex w-full flex-col gap-6 lg:w-[440px] lg:shrink-0 lg:gap-4">
@@ -198,7 +184,11 @@ export function Contact({ content }: { content: ContactContent }) {
               <p className="font-mono text-xs font-medium uppercase tracking-[0.06em] text-brand">
                 {content.emergency.eyebrow}
               </p>
-              <EmergencyCopy body={content.emergency.body} />
+              <Rich
+                value={content.emergency.body}
+                className="text-sm leading-5 text-white/80"
+                tone="invert"
+              />
             </div>
           </div>
         </div>

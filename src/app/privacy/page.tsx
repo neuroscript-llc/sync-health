@@ -6,12 +6,13 @@ import { LegalPage } from "@/components/legal-page";
 import { siteHeader, privacyPolicy, footer } from "@/lib/content";
 import { getStoryContent, resolveVersion } from "@/lib/storyblok";
 import { mapLegal } from "@/lib/storyblok-map";
+import { richToPlain } from "@/lib/richtext";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Privacy Policy — Sync.",
-  description: privacyPolicy.intro,
+  description: richToPlain(privacyPolicy.intro),
 };
 
 export default async function PrivacyRoute({

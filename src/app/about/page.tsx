@@ -5,13 +5,14 @@ import type { ISbStoryData } from "@storyblok/react/rsc";
 import { getStoryblok, isStoryblokConfigured } from "@/lib/storyblok";
 import { AboutFallback } from "@/components/about-fallback";
 import { aboutHero } from "@/lib/content";
+import { richToPlain } from "@/lib/richtext";
 
 // Draft content (Visual Editor / preview) must render fresh on every request.
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "About — Sync.",
-  description: aboutHero.body,
+  description: richToPlain(aboutHero.body),
 };
 
 async function fetchStory(

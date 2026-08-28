@@ -6,12 +6,13 @@ import { LegalPage } from "@/components/legal-page";
 import { siteHeader, refundPolicy, footer } from "@/lib/content";
 import { getStoryContent, resolveVersion } from "@/lib/storyblok";
 import { mapLegal } from "@/lib/storyblok-map";
+import { richToPlain } from "@/lib/richtext";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Refund Policy — Sync.",
-  description: refundPolicy.intro,
+  description: richToPlain(refundPolicy.intro),
 };
 
 export default async function RefundPolicyRoute({

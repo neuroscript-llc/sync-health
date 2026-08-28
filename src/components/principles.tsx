@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { PrinciplesContent } from "@/lib/content";
+import { Rich } from "@/components/rich";
 
 /**
  * "Four rules we don't bend" — a tall photo on the left and a stack of
@@ -47,7 +48,7 @@ export function Principles({ content }: { content: PrinciplesContent }) {
                 <h3 className="text-[32px] font-medium leading-10 text-ink">
                   {p.title}
                 </h3>
-                <p className="text-sm leading-5 text-ink/80">{p.body}</p>
+                <Rich value={p.body} className="text-sm leading-5 text-ink/80" />
               </div>
             ))}
           </div>

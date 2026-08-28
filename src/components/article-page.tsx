@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ArticleContent } from "@/lib/content";
 import { ArticleCard } from "@/components/journal-page";
 import { ArticleToc } from "@/components/article-toc";
+import { Rich } from "@/components/rich";
 
 /* eslint-disable @next/next/no-img-element */
 
@@ -128,12 +129,11 @@ export function ArticlePage({ content }: { content: ArticleContent }) {
               switch (block.type) {
                 case "lead":
                   return (
-                    <p
+                    <Rich
                       key={i}
+                      value={block.text}
                       className="text-lg leading-[1.6] text-ink/80 sm:text-xl sm:leading-8"
-                    >
-                      {block.text}
-                    </p>
+                    />
                   );
                 case "h2":
                   return (
@@ -151,7 +151,7 @@ export function ArticlePage({ content }: { content: ArticleContent }) {
                       key={i}
                       className="border-l-[3px] border-brand py-2 pl-7 text-xl font-medium leading-8 text-ink sm:text-2xl"
                     >
-                      {block.text}
+                      <Rich value={block.text} />
                     </blockquote>
                   );
                 case "image":
@@ -172,9 +172,11 @@ export function ArticlePage({ content }: { content: ArticleContent }) {
                   );
                 default:
                   return (
-                    <p key={i} className="text-base leading-6 text-ink/80">
-                      {block.text}
-                    </p>
+                    <Rich
+                      key={i}
+                      value={block.text}
+                      className="text-base leading-6 text-ink/80"
+                    />
                   );
               }
             })}
@@ -184,7 +186,10 @@ export function ArticlePage({ content }: { content: ArticleContent }) {
               <p className="font-mono text-xs tracking-[0.06em] text-brand">
                 {a.disclaimer.label}
               </p>
-              <p className="text-sm leading-5 text-ink/80">{a.disclaimer.text}</p>
+              <Rich
+                value={a.disclaimer.text}
+                className="text-sm leading-5 text-ink/80"
+              />
             </div>
 
             {/* Clinical reviewer */}
@@ -197,7 +202,10 @@ export function ArticlePage({ content }: { content: ArticleContent }) {
                 <p className="text-base font-medium leading-6 text-ink">
                   {a.reviewer.name}
                 </p>
-                <p className="text-xs leading-5 text-ink/80">{a.reviewer.note}</p>
+                <Rich
+                  value={a.reviewer.note}
+                  className="text-xs leading-5 text-ink/80"
+                />
               </div>
             </div>
           </article>
