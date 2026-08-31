@@ -404,7 +404,9 @@ export type ProductContent = {
   slug: string;
   eyebrow: string;
   name: string;
-  description: string;
+  /** The paragraph under the product name. Also the meta description, which is
+      why every render site flattens it rather than passing the document on. */
+  description: RichTextValue;
   /** Short one-line tagline (used in cart line items, upsells). */
   tagline: string;
   gallery: {
@@ -1375,8 +1377,8 @@ export const footer: FooterContent = {
       links: [
         { label: "Shipping & Delivery", href: "/shipping", muted: true },
         { label: "Refund Policy", href: "/refund-policy", muted: true },
-        { label: "Privacy Policy", href: "/privacy", muted: true },
-        { label: "Telehealth consent", href: "/telehealth-consent", muted: true },
+        { label: "Privacy Policy", href: "/privacy-policy", muted: true },
+        { label: "Telehealth consent", href: "/consent-to-telehealth", muted: true },
         { label: "Terms & Conditions", href: "/terms", muted: true },
         { label: "Press kit", href: "/press", muted: true },
       ],
@@ -3798,7 +3800,7 @@ export const checkout: CheckoutContent = {
     "Submitting is a request for care, not a guarantee of a prescription. Your card is authorised now and charged only if a clinician approves your protocol.",
   footerLinks: [
     { label: "Refund policy", href: "#" },
-    { label: "Privacy policy", href: "/privacy" },
+    { label: "Privacy policy", href: "/privacy-policy" },
     { label: "Terms of service", href: "/terms" },
     { label: "Contact", href: "#" },
   ],

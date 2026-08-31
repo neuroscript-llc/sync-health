@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
     // links to both, so /faqs lands on the FAQ section of it.
     return Promise.resolve([
       { source: "/faqs", destination: "/contact#faq", permanent: false },
+      // The privacy policy story was rebuilt in Storyblok under a new slug.
+      // Temporary rather than permanent, because the slug is the client's to
+      // change and a 308 would be cached in browsers long after they did.
+      { source: "/privacy", destination: "/privacy-policy", permanent: false },
     ]);
   },
 };

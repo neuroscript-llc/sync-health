@@ -53,6 +53,31 @@ export const imgList = (v: unknown): string[] =>
 /*  Legal pages (Terms, Privacy)                                               */
 /* -------------------------------------------------------------------------- */
 
+/**
+ * The anchor a clause is linked by, from the contents list and from any URL
+ * someone has shared.
+ *
+ * The Anchor field is optional and blank on every clause of a page an editor
+ * has just created, which used to leave the whole contents list pointing at
+ * "#" and every clause sharing the same empty id. So a blank one is derived
+ * from the title instead, and a page works without the editor knowing the
+ * field exists.
+ *
+ * A value they did type is kept as it stands apart from its whitespace, since
+ * these ids are already published and a link that works today has to keep
+ * working. Spaces are the exception: an id containing one can't be reached by
+ * a fragment at all, and two clauses on the privacy policy have them.
+ */
+const clauseId = (c: Blok, index: number): string => {
+  const set = str(c.id).trim().replace(/\s+/g, "-");
+  if (set) return set;
+  const fromTitle = str(c.title)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return fromTitle || `clause-${index + 1}`;
+};
+
 export function mapLegal(
   content: Blok | null,
   fallback: LegalContent,
@@ -66,10 +91,10 @@ export function mapLegal(
     intro: rich(content.intro) || fallback.intro,
     contentsLabel: str(content.contentsLabel) || fallback.contentsLabel,
     clauses: clauses.length
-      ? clauses.map((c) => ({
+      ? clauses.map((c, i) => ({
           number: str(c.number),
           title: str(c.title),
-          id: str(c.id),
+          id: clauseId(c, i),
           body: rich(c.body),
         }))
       : fallback.clauses,
@@ -467,7 +492,7 @@ export function mapProduct(
     slug: str(content.slug) || fb.slug,
     eyebrow: str(content.eyebrow) || fb.eyebrow,
     name: str(content.name) || fb.name,
-    description: str(content.description) || fb.description,
+    description: rich(content.description) || fb.description,
     tagline: str(content.tagline) || fb.tagline,
     gallery: {
       main: img(content.galleryMain) || fb.gallery.main,

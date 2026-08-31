@@ -25,6 +25,7 @@ import {
 import { getStoryContent, resolveVersion } from "@/lib/storyblok";
 import { mapProduct } from "@/lib/storyblok-map";
 import { Reveal } from "@/components/reveal";
+import { richToPlain } from "@/lib/richtext";
 
 export const dynamic = "force-dynamic";
 
@@ -77,7 +78,10 @@ export async function generateMetadata({
   const product = await resolveProduct(slug, searchParams);
   // Nothing to describe: the page below 404s.
   if (!product) return {};
-  return { title: `${product.name} — Sync.`, description: product.description };
+  return {
+    title: `${product.name} — Sync.`,
+    description: richToPlain(product.description),
+  };
 }
 
 export default async function ProductPage({

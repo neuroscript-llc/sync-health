@@ -5,8 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown, ArrowUpRight, ChevronDown } from "lucide-react";
 import { useCart } from "@/components/cart-provider";
-import type { ProductContent, ProductPlan } from "@/lib/content";
 import { Rich } from "@/components/rich";
+import type { ProductContent, ProductPlan } from "@/lib/content";
 
 /** Shared by the two CTA shapes so the priced button and the unpriced link
     are pixel-identical. */
@@ -283,9 +283,13 @@ export function ProductHero({
             </h1>
           </div>
 
-          <p className="text-base leading-[1.4] text-ink/80">
-            {content.description}
-          </p>
+          {/* Formatted in Storyblok, the same as the accordion below. As a
+              plain <p> the blank lines an editor typed collapsed into one
+              run-on paragraph. */}
+          <Rich
+            value={content.description}
+            className="text-base leading-[1.4] text-ink/80"
+          />
 
           {/* Trust row */}
           <ul className="flex flex-col gap-2">

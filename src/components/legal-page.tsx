@@ -10,15 +10,22 @@ export function LegalPage({ content }: { content: LegalContent }) {
       <div className="mx-auto flex max-w-[1368px] flex-col gap-10 sm:gap-12">
         {/* Header */}
         <div className="flex flex-col gap-4">
-          <p className="font-mono text-sm font-medium uppercase tracking-[0.04em] text-brand">
-            {c.eyebrow}
-          </p>
+          {/* Eyebrow and date are optional, and both are empty on a page
+              that has only just been created. Rendered unconditionally they
+              left two blank lines above the title. */}
+          {c.eyebrow && (
+            <p className="font-mono text-sm font-medium uppercase tracking-[0.04em] text-brand">
+              {c.eyebrow}
+            </p>
+          )}
           <h1 className="text-[40px] font-medium leading-[1.05] tracking-[-0.02em] text-ink sm:text-[56px] sm:leading-[64px]">
             {c.title}
           </h1>
-          <p className="font-mono text-xs uppercase tracking-[0.02em] text-ink/80">
-            {c.lastUpdated}
-          </p>
+          {c.lastUpdated && (
+            <p className="font-mono text-xs uppercase tracking-[0.02em] text-ink/80">
+              {c.lastUpdated}
+            </p>
+          )}
           <Rich
             value={c.intro}
             className="max-w-[822px] text-base leading-[1.5] text-ink/80 sm:text-lg"
@@ -28,9 +35,11 @@ export function LegalPage({ content }: { content: LegalContent }) {
         {/* Body: sticky contents + clauses */}
         <div className="flex flex-col gap-10 lg:flex-row lg:gap-16">
           {/* Contents — desktop only */}
-          <aside className="hidden lg:block lg:w-[280px] lg:shrink-0">
-            <LegalContents label={c.contentsLabel} clauses={c.clauses} />
-          </aside>
+          {c.clauses.length > 0 && (
+            <aside className="hidden lg:block lg:w-[280px] lg:shrink-0">
+              <LegalContents label={c.contentsLabel} clauses={c.clauses} />
+            </aside>
+          )}
 
           {/* Clauses */}
           <div className="flex max-w-[760px] flex-col gap-10">
