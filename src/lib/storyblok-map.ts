@@ -103,15 +103,18 @@ export function mapTestimonials(
  * working. Spaces are the exception: an id containing one can't be reached by
  * a fragment at all, and two clauses on the privacy policy have them.
  */
-const clauseId = (c: Blok, index: number): string => {
-  const set = str(c.id).trim().replace(/\s+/g, "-");
-  if (set) return set;
-  const fromTitle = str(c.title)
+const anchorId = (set: unknown, from: string, fallback: string): string => {
+  const typed = str(set).trim().replace(/\s+/g, "-");
+  if (typed) return typed;
+  const derived = from
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
-  return fromTitle || `clause-${index + 1}`;
+  return derived || fallback;
 };
+
+const clauseId = (c: Blok, index: number): string =>
+  anchorId(c.id, str(c.title), `clause-${index + 1}`);
 
 export function mapLegal(
   content: Blok | null,
@@ -240,13 +243,17 @@ export function mapJournal(
 /*  Article detail                                                            */
 /* -------------------------------------------------------------------------- */
 
-function mapProse(b: Blok): ArticleProseBlock {
+function mapProse(b: Blok, index: number): ArticleProseBlock {
   const text = rich(b.text);
   switch (str(b.type)) {
     case "lead":
       return { type: "lead", text };
-    case "h2":
-      return { type: "h2", text: richToPlain(text), id: str(b.id) };
+    case "h2": {
+      // The anchor is derived from the heading unless one was typed, so the
+      // contents list works without anyone filling in a second field.
+      const heading = richToPlain(text);
+      return { type: "h2", text: heading, id: anchorId(b.id, heading, `section-${index + 1}`) };
+    }
     case "quote":
       return { type: "quote", text };
     case "image":
@@ -260,6 +267,17 @@ function mapProse(b: Blok): ArticleProseBlock {
   }
 }
 
+/** Rough reading time from the words actually on the page. 200 wpm is the
+    usual figure for this kind of writing. */
+function readingTime(blocks: ArticleProseBlock[]): string {
+  const words = blocks
+    .map((b) => ("text" in b ? richToPlain(b.text) : ""))
+    .join(" ")
+    .split(/\s+/)
+    .filter(Boolean).length;
+  return words ? `${Math.max(1, Math.round(words / 200))} min` : "";
+}
+
 export function mapArticle(
   content: Blok | null,
   fallback: ArticleContent,
@@ -268,6 +286,25 @@ export function mapArticle(
   const toc = arr(content.toc);
   const prose = arr(content.prose);
   const related = arr(content.relatedArticles);
+
+  // Everything below is derived from the body when the matching field is left
+  // empty, so writing a blog is the body plus a handful of facts about it
+  // rather than filling in twenty-five boxes.
+  const blocks = prose.length ? prose.map(mapProse) : fallback.prose;
+  const headings = blocks.filter(
+    (b): b is Extract<ArticleProseBlock, { type: "h2" }> => b.type === "h2",
+  );
+  const readTimeValue =
+    str(content.readTimeValue) || readingTime(blocks) || fallback.readTime.value;
+  const publishedValue =
+    str(content.publishedValue) || fallback.published.value;
+  const metaLine =
+    str(content.metaLine) ||
+    [readTimeValue && `${readTimeValue} read`, publishedValue]
+      .filter(Boolean)
+      .join(" · ") ||
+    fallback.metaLine;
+
   return {
     journalLabel: str(content.journalLabel) || fallback.journalLabel,
     category: str(content.category) || fallback.category,
@@ -280,19 +317,24 @@ export function mapArticle(
     },
     published: {
       label: str(content.publishedLabel) || fallback.published.label,
-      value: str(content.publishedValue) || fallback.published.value,
+      value: publishedValue,
     },
     readTime: {
       label: str(content.readTimeLabel) || fallback.readTime.label,
-      value: str(content.readTimeValue) || fallback.readTime.value,
+      value: readTimeValue,
     },
-    metaLine: str(content.metaLine) || fallback.metaLine,
+    metaLine,
     cover: img(content.cover) || fallback.cover,
     tocLabel: str(content.tocLabel) || fallback.tocLabel,
+    // The contents list is the headings in the body. Keeping it as a second
+    // list to fill in by hand meant two places to edit and ids that had to
+    // match exactly or the links silently stopped jumping.
     toc: toc.length
       ? toc.map((t) => ({ label: str(t.label), id: str(t.id) }))
-      : fallback.toc,
-    prose: prose.length ? prose.map(mapProse) : fallback.prose,
+      : headings.length
+        ? headings.map((h) => ({ label: h.text, id: h.id }))
+        : fallback.toc,
+    prose: blocks,
     disclaimer: {
       label: str(content.disclaimerLabel) || fallback.disclaimer.label,
       text: rich(content.disclaimerText) || fallback.disclaimer.text,
