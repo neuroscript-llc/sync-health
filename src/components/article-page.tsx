@@ -192,7 +192,10 @@ export function ArticlePage({ content }: { content: ArticleContent }) {
               />
             </div>
 
-            {/* Clinical reviewer */}
+            {/* Clinical reviewer. Hidden until someone is named: "clinically
+                reviewed by" with no clinician behind it is a claim the page
+                cannot support. */}
+            {a.reviewer.name && (
             <div className="flex items-center gap-5 rounded-[18px] border border-ink/[0.08] bg-white p-6">
               <Avatar src={a.reviewer.avatar} name={a.reviewer.name} size={64} />
               <div className="flex flex-col gap-1.5">
@@ -208,6 +211,7 @@ export function ArticlePage({ content }: { content: ArticleContent }) {
                 />
               </div>
             </div>
+            )}
           </article>
         </div>
       </section>

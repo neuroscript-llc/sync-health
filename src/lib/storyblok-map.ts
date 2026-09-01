@@ -36,8 +36,15 @@ export const arr = (v: unknown): Blok[] => (Array.isArray(v) ? (v as Blok[]) : [
  * Rich text field → the editor's document. Falls back to the plain string the
  * field held before it could be formatted, which is what a story still returns
  * until someone re-saves it.
+ *
+ * A field an editor never typed into still comes back as a document, just an
+ * empty one, and an object is truthy. So every `rich(x) || fallback` in this
+ * file silently stopped falling back the moment the field existed, which is how
+ * a new article rendered an empty medical disclaimer. An empty document is
+ * reported as empty so those fallbacks work again.
  */
-export const rich = (v: unknown): RichTextValue => (isRichDoc(v) ? v : str(v));
+export const rich = (v: unknown): RichTextValue =>
+  isRichDoc(v) ? (richToPlain(v) ? v : "") : str(v);
 /** Storyblok asset field → URL string; plain string path passes through. */
 export const img = (v: unknown): string =>
   v && typeof v === "object" && "filename" in v

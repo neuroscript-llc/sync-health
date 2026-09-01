@@ -972,10 +972,12 @@ export const article: ArticleContent = {
     label: "Medical disclaimer",
     text: "This article is general education, not medical advice, and it is not a recommendation to take any compound mentioned. Peptide therapy is not appropriate for everyone, and some compounds are contraindicated with common medications and conditions. Talk to a licensed clinician about your own situation before starting anything.",
   },
+  // No default name on purpose. "Clinically reviewed by" is a claim, and the
+  // card is hidden until an article names the clinician who actually made it.
   reviewer: {
     label: "Clinically reviewed by",
-    name: "[Reviewing clinician name, credentials]",
-    note: "Placeholder — replace with the actual reviewing provider. Attributing clinical review to a named, licensed individual is what makes this line meaningful.",
+    name: "",
+    note: "",
     avatar: "/images/journal/avatar.png",
   },
   related: {
