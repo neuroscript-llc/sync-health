@@ -227,7 +227,7 @@ export function ArticlePage({ content }: { content: ArticleContent }) {
               {a.related.heading}
             </h2>
           </div>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 stagger">
             {a.related.articles.map((art, i) => (
               <ArticleCard key={i} article={art} />
             ))}

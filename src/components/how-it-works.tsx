@@ -41,7 +41,7 @@ export function HowItWorks({
               key={step.number}
               // --i drives the stacked-deck offset on mobile (see .stack-card).
               style={{ "--i": i } as React.CSSProperties}
-              className="stack-card flex min-h-[520px] flex-col justify-between rounded-[36px] border border-white bg-white/40 p-8 backdrop-blur-sm"
+              className="stack-card flex min-h-[520px] flex-col justify-between rounded-[36px] border border-white bg-white/40 p-8 backdrop-blur-sm transition-colors hover:border-brand/30 hover:bg-white/60"
             >
               <div className="flex items-start justify-between gap-4">
                 <h3 className="max-w-[265px] font-manrope text-[28px] font-medium leading-8 tracking-[-0.01em] text-ink">

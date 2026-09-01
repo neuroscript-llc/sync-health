@@ -40,7 +40,7 @@ export function Principles({ content }: { content: PrinciplesContent }) {
             {content.principles.map((p) => (
               <div
                 key={p.number}
-                className="flex flex-col gap-3 border-b border-ink/[0.08] py-4 first:border-t lg:px-5 lg:py-5"
+                className="flex flex-col gap-3 border-b border-ink/[0.08] py-4 transition-colors first:border-t hover:bg-ink/[0.02] lg:px-5 lg:py-5"
               >
                 <p className="font-mono text-xs font-medium tracking-[0.02em] text-brand">
                   [{p.number}]

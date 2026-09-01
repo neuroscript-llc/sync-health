@@ -161,7 +161,7 @@ export function Formulary({ content }: { content: FormularyContent }) {
 
           {/* Product grid */}
           {products.length > 0 ? (
-            <div className="grid grid-cols-2 gap-2 sm:gap-6 lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-2 sm:gap-6 lg:grid-cols-4 stagger">
               {products.map((p) => (
                 <ProductCard key={p.name} product={p} />
               ))}

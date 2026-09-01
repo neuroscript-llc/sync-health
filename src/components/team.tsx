@@ -27,9 +27,9 @@ export function Team({ content }: { content: TeamContent }) {
           {content.members.map((m) => (
             <div
               key={m.name}
-              className="flex w-60 shrink-0 snap-start flex-col gap-4 rounded-3xl border border-ink/[0.08] bg-white p-1 pb-3 lg:w-auto lg:p-2 lg:pb-4"
+              className="group flex w-60 shrink-0 snap-start flex-col gap-4 rounded-3xl border border-ink/[0.08] bg-white p-1 pb-3 transition-[border-color,transform] hover:-translate-y-1 hover:border-brand/40 lg:w-auto lg:p-2 lg:pb-4"
             >
-              <div className="relative h-60 w-full overflow-hidden rounded-2xl bg-[#EAECEC] lg:h-[280px]">
+              <div className="relative h-60 w-full overflow-hidden rounded-2xl bg-[#EAECEC] lg:h-[280px] [&_img]:transition-transform [&_img]:duration-500 group-hover:[&_img]:scale-[1.03]">
                 <Image
                   src={m.photo}
                   alt={m.name}

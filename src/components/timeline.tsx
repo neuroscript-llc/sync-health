@@ -35,7 +35,7 @@ export function Timeline({ content }: { content: TimelineContent }) {
             ))}
           </div>
 
-          <div className="grid grid-cols-4 gap-6">
+          <div className="grid grid-cols-4 gap-6 stagger">
             {content.steps.map((step) => (
               <div key={step.year} className="flex flex-col gap-4">
                 <p className="font-mono text-xl font-medium leading-7 tracking-[0.04em] text-ink">

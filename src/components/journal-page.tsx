@@ -220,7 +220,7 @@ export function JournalPage({ content }: { content: JournalContent }) {
             {tab === c.tabs[0] && <FeaturedCard featured={c.featured} />}
 
             {filtered.length > 0 ? (
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 stagger">
                 {filtered.map((article, i) => (
                   <ArticleCard key={i} article={article} />
                 ))}
