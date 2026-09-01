@@ -5,7 +5,11 @@
  * partially-filled one still renders. Field technical names in Storyblok match
  * the content.ts keys.
  */
-import { PDP_WHY_ICONS, TRUST_ICON } from "@/lib/content";
+import {
+  PDP_WHY_ICONS,
+  TRUST_ICON,
+  testimonials as siteTestimonials,
+} from "@/lib/content";
 import { isRichDoc, richToPlain, type RichTextValue } from "@/lib/richtext";
 import type {
   LegalContent,
@@ -19,6 +23,7 @@ import type {
   CartContent,
   ProductContent,
   ProductPlan,
+  TestimonialsContent,
 } from "@/lib/content";
 
 type Blok = Record<string, unknown>;
@@ -48,6 +53,36 @@ export const imgList = (v: unknown): string[] =>
   arr(v)
     .map((a) => img(a) || str(a.text))
     .filter(Boolean);
+
+/* -------------------------------------------------------------------------- */
+/*  Testimonials                                                               */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Shared by the home page, where testimonials are one section of the page body,
+ * and by product pages, where a product can carry its own set.
+ */
+export function mapTestimonials(
+  blok: Blok | null,
+  fallback: TestimonialsContent,
+): TestimonialsContent {
+  if (!blok) return fallback;
+  const items = arr(blok.testimonials);
+  return {
+    eyebrow: str(blok.eyebrow) || fallback.eyebrow,
+    heading: str(blok.heading) || fallback.heading,
+    ratingLabel: str(blok.ratingLabel) || fallback.ratingLabel,
+    testimonials: items.length
+      ? items.map((t) => ({
+          highlight: str(t.highlight) || undefined,
+          quote: str(t.quote),
+          name: str(t.name),
+          tag: str(t.tag),
+          image: img(t.image),
+        }))
+      : fallback.testimonials,
+  };
+}
 
 /* -------------------------------------------------------------------------- */
 /*  Legal pages (Terms, Privacy)                                               */
@@ -484,12 +519,19 @@ export function mapProduct(
   const methods = arr(content.methods);
   const accordion = arr(content.accordion);
   const whyFeatures = arr(content.whyFeatures);
+  const ownTestimonials = arr(content.testimonials)[0];
   const thumbs = imgList(content.galleryThumbnails);
   const collage = imgList(q?.collage);
   const fq = arr(content.faq)[0];
 
   return {
     slug: str(content.slug) || fb.slug,
+    // Only set when this product carries its own reviews. Left absent the page
+    // falls back to the site-wide set, so 20 products don't each need filling
+    // in before any of them show anything.
+    ...(ownTestimonials
+      ? { testimonials: mapTestimonials(ownTestimonials, siteTestimonials) }
+      : {}),
     eyebrow: str(content.eyebrow) || fb.eyebrow,
     name: str(content.name) || fb.name,
     description: rich(content.description) || fb.description,

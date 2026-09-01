@@ -33,6 +33,8 @@ import type {
   SiteHeaderContent,
   CompareCell,
 } from "@/lib/content";
+import { testimonials } from "@/lib/content";
+import { mapTestimonials } from "@/lib/storyblok-map";
 import { isRichDoc, type RichTextValue } from "@/lib/richtext";
 
 /* ------------------------------------------------------------------ *
@@ -484,18 +486,7 @@ export function TestimonialsBlok({ blok }: { blok: SbBlokData }) {
   return (
     <Testimonials
       {...storyblokEditable(blok)}
-      content={{
-        eyebrow: str(blok.eyebrow),
-        heading: str(blok.heading),
-        ratingLabel: str(blok.ratingLabel),
-        testimonials: arr(blok.testimonials).map((t) => ({
-          highlight: str(t.highlight) || undefined,
-          quote: str(t.quote),
-          name: str(t.name),
-          tag: str(t.tag),
-          image: img(t.image),
-        })),
-      }}
+      content={mapTestimonials(blok, testimonials)}
     />
   );
 }

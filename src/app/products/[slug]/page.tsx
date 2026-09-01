@@ -23,7 +23,7 @@ import {
   footer,
 } from "@/lib/content";
 import { getStoryContent, resolveVersion } from "@/lib/storyblok";
-import { mapProduct } from "@/lib/storyblok-map";
+import { mapProduct, mapTestimonials } from "@/lib/storyblok-map";
 import { Reveal } from "@/components/reveal";
 import { richToPlain } from "@/lib/richtext";
 
@@ -67,6 +67,30 @@ async function resolveProduct(
   return { ...mapProduct(story, local ?? blankProduct), slug };
 }
 
+/**
+ * The reviews a product page shows when the product has none of its own.
+ *
+ * They live in their own "product-testimonials" story rather than being read
+ * off the home page, so the home page and the product pages can say different
+ * things and both stay editable without a developer.
+ *
+ * Three levels, most specific first: this product's own reviews, then this
+ * story, then the copy in content.ts if Storyblok is unreachable.
+ *
+ * Only called when the product has no reviews of its own, so a product that
+ * does never pays for the extra fetch.
+ */
+async function fallbackTestimonials(
+  searchParams: Promise<Record<string, string | string[] | undefined>>,
+) {
+  const { isEnabled } = await draftMode();
+  const version = resolveVersion(await searchParams, isEnabled);
+  return mapTestimonials(
+    await getStoryContent("product-testimonials", version),
+    testimonials,
+  );
+}
+
 export async function generateMetadata({
   params,
   searchParams,
@@ -94,6 +118,8 @@ export default async function ProductPage({
   const { slug } = await params;
   const product = await resolveProduct(slug, searchParams);
   if (!product) notFound();
+  const reviews =
+    product.testimonials ?? (await fallbackTestimonials(searchParams));
 
   return (
     <main className="min-h-screen overflow-x-clip bg-[linear-gradient(180deg,#f0f0e6_0%,#ffffff_100%)]">
@@ -118,7 +144,7 @@ export default async function ProductPage({
         <ProductQuality content={product} />
       </Reveal>
       <Reveal>
-        <Testimonials content={testimonials} />
+        <Testimonials content={reviews} />
       </Reveal>
       <Reveal>
         <Catalog content={catalog} />

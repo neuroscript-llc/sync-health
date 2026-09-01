@@ -436,6 +436,9 @@ export type ProductContent = {
   qualityTest: ProductQualityContent;
   howItWorks: HowItWorksContent;
   faq: FaqContent;
+  /** Reviews for this compound. Absent until the product is given its own, at
+      which point they replace the set every other product shows. */
+  testimonials?: TestimonialsContent;
 };
 
 /** Default content for the home page (stands in for the Storyblok story). */
