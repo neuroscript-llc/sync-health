@@ -245,7 +245,12 @@ export function mapJournal(
 
 function mapProse(b: Blok, index: number): ArticleProseBlock {
   const text = rich(b.text);
-  switch (str(b.type)) {
+  // A block with a picture in it is a picture. The type dropdown used to
+  // decide on its own and defaulted to something else, so an image uploaded
+  // into a block nobody re-typed rendered as an empty paragraph and simply
+  // did not appear.
+  const kind = img(b.image) && !richToPlain(text) ? "image" : str(b.type);
+  switch (kind) {
     case "lead":
       return { type: "lead", text };
     case "h2": {
@@ -287,10 +292,35 @@ export function mapArticle(
   const prose = arr(content.prose);
   const related = arr(content.relatedArticles);
 
+  // The body is a list of sections, each a heading and the blocks under it.
+  // The heading is what the contents list on the right shows, so there is one
+  // place to write it rather than a heading block and a matching entry in a
+  // separate list. `prose` is the older flat list, kept working for stories
+  // written before sections existed.
+  //
   // Everything below is derived from the body when the matching field is left
   // empty, so writing a blog is the body plus a handful of facts about it
   // rather than filling in twenty-five boxes.
-  const blocks = prose.length ? prose.map(mapProse) : fallback.prose;
+  const sections = arr(content.sections);
+  const blocks = sections.length
+    ? sections.flatMap((sec, i) => {
+        const heading = str(sec.heading);
+        return [
+          ...(heading
+            ? [
+                {
+                  type: "h2" as const,
+                  text: heading,
+                  id: anchorId(sec.id, heading, `section-${i + 1}`),
+                },
+              ]
+            : []),
+          ...arr(sec.blocks).map(mapProse),
+        ];
+      })
+    : prose.length
+      ? prose.map(mapProse)
+      : fallback.prose;
   const headings = blocks.filter(
     (b): b is Extract<ArticleProseBlock, { type: "h2" }> => b.type === "h2",
   );
