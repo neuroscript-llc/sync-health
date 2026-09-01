@@ -652,21 +652,34 @@ const SECTION_BLOKS: Record<string, BlokComponent> = {
 };
 
 /**
- * Every section is wrapped so it settles into place the first time it is
- * scrolled to. Doing it here rather than inside each section means a blok
- * added later gets the behaviour without anyone remembering to ask for it.
+ * Registry passed to storyblokInit (server + client).
+ *
+ * Two things are done here rather than inside each section, so a blok added
+ * later gets both without anyone remembering to ask.
+ *
+ * A section ticked as hidden in Storyblok stops rendering. Nothing is deleted:
+ * the content stays on the story and unticking the box brings it back exactly
+ * as it was. That is the difference between switching a section off for a while
+ * and dragging it to the bin. The check runs for every blok, and only the
+ * components that carry the field can be switched off at all, which keeps the
+ * header and the footer out of reach.
+ *
+ * Everything else is wrapped so it settles into place the first time it is
+ * scrolled to.
  */
-/** Registry passed to storyblokInit (server + client). */
 export const storyblokComponents: Record<string, BlokComponent> =
   Object.fromEntries(
     Object.entries(SECTION_BLOKS).map(([name, Blok]) => {
-      if (NEVER_REVEAL.has(name)) return [name, Blok];
-      const Revealed: BlokComponent = (props) => (
-        <Reveal>
-          <Blok {...props} />
-        </Reveal>
-      );
-      Revealed.displayName = `Reveal(${name})`;
-      return [name, Revealed];
+      const Section: BlokComponent = (props) => {
+        if (props.blok?.hidden === true) return null;
+        if (NEVER_REVEAL.has(name)) return <Blok {...props} />;
+        return (
+          <Reveal>
+            <Blok {...props} />
+          </Reveal>
+        );
+      };
+      Section.displayName = `Section(${name})`;
+      return [name, Section];
     }),
   );
