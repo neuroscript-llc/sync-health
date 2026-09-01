@@ -985,6 +985,33 @@ export const article: ArticleContent = {
   },
 };
 
+/**
+ * Articles the site ships its own copy of, keyed by slug the way products are,
+ * so the one finished piece still renders if Storyblok is unreachable.
+ */
+export const articlesBySlug: Record<string, ArticleContent> = {
+  "compounded-peptides": article,
+};
+
+/**
+ * A blog before anyone has written it.
+ *
+ * Keeps the furniture the template needs, the section labels, the author and
+ * reviewer blocks, the disclaimer, and empties everything that is one article's
+ * own words. Without it a story with an empty body rendered the compounded
+ * peptides piece under whatever title it had been given.
+ */
+export const blankArticle: ArticleContent = {
+  ...article,
+  category: "",
+  title: "",
+  dek: "",
+  metaLine: "",
+  cover: "",
+  toc: [],
+  prose: [],
+};
+
 /** /terms — Figma 957-11899. Long-form legal doc: header + sticky TOC +
     numbered clauses. Clause bodies are plain text; emails are auto-linked. */
 export const termsOfService: LegalContent = {

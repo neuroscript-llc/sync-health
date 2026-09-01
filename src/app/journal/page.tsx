@@ -41,12 +41,15 @@ export default async function JournalRoute({
     },
     version,
   );
-  // The cards authored on the journal story win, so the index stays the grid
-  // the design calls for and the client can order and edit it. Auto-listing
-  // every article_page story is the fallback for when that list is emptied;
-  // it used to take priority, which collapsed the six-card grid down to the
-  // single article that exists so far.
-  const dynamic = stories.map(mapArticleStoryCard).filter((a) => a.title);
+  // Every published article, newest first. Creating a story in the journal
+  // folder is the whole job of publishing a blog: it appears here with nothing
+  // else to edit.
+  //
+  // The cards authored on the journal story are the fallback for when there are
+  // no article stories at all, rather than the primary list. They used to win,
+  // which is why the grid showed six titles that all led to the one article
+  // that had been written.
+  const fromStories = stories.map(mapArticleStoryCard).filter((a) => a.title);
 
   // Thumbnails follow the article's own hero image. Publishing a blog with a
   // cover is the whole job: the card it links to picks the image up, so the
@@ -58,10 +61,28 @@ export default async function JournalRoute({
     return cover ? { ...card, image: cover } : card;
   };
 
-  const listed = base.articles.length ? base.articles : dynamic;
+  const listed = fromStories.length ? fromStories : base.articles;
+
+  // The featured slot is chosen on the journal story. When it points at an
+  // article nobody has written, the newest one stands in, rather than leading
+  // the most prominent card on the page to a 404.
+  const live = new Set(fromStories.map((a) => a.href));
+  const lead = fromStories[0];
+  const featured =
+    !lead || live.has(base.featured.href)
+      ? base.featured
+      : {
+          ...base.featured,
+          title: lead.title,
+          excerpt: lead.excerpt,
+          meta: lead.meta,
+          image: lead.image,
+          href: lead.href,
+        };
+
   const content = {
     ...base,
-    featured: withCover(base.featured),
+    featured: withCover(featured),
     articles: listed.map(withCover),
   };
 
