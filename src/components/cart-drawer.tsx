@@ -382,8 +382,16 @@ export function CartDrawer({ content }: { content: CartContent }) {
         role="dialog"
         aria-modal="true"
         aria-label={content.title}
-        className={`absolute right-0 top-0 flex h-full w-[calc(100%-20px)] max-w-[980px] flex-col gap-4 overflow-hidden rounded-l-[32px] bg-[#FCF8F1] px-4 py-6 shadow-[-24px_0_80px_rgba(29,29,27,0.18)] transition-transform duration-300 ease-out sm:w-full sm:gap-6 sm:rounded-none sm:px-10 sm:py-8 ${
-          isOpen ? "translate-x-0" : "translate-x-full"
+        /* The shadow belongs to the open drawer only. Parked at
+           translate-x-full the panel is off-screen but its 80px blur is not:
+           it reached back over the right ~100px of every page, which on a
+           390-wide phone is a quarter of the screen quietly greyed out. An
+           overflow-hidden parent does not clip it. Transitioning the shadow
+           with the transform keeps the close from popping. */
+        className={`absolute right-0 top-0 flex h-full w-[calc(100%-20px)] max-w-[980px] flex-col gap-4 overflow-hidden rounded-l-[32px] bg-[#FCF8F1] px-4 py-6 transition-[transform,box-shadow] duration-300 ease-out sm:w-full sm:gap-6 sm:rounded-none sm:px-10 sm:py-8 ${
+          isOpen
+            ? "translate-x-0 shadow-[-24px_0_80px_rgba(29,29,27,0.18)]"
+            : "translate-x-full shadow-none"
         }`}
       >
         {/* Header */}
