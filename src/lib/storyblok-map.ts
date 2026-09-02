@@ -11,6 +11,16 @@ import {
   testimonials as siteTestimonials,
 } from "@/lib/content";
 import { isRichDoc, richToPlain, type RichTextValue } from "@/lib/richtext";
+import { isQuizIcon } from "@/components/quiz/quiz-icons";
+import type {
+  QuizContent,
+  QuizIntroContent,
+  QuizNameContent,
+  QuizInterstitialContent,
+  QuizChoiceContent,
+  QuizMultiContent,
+  QuizEducationContent,
+} from "@/lib/quiz-content";
 import type {
   LegalContent,
   JournalContent,
@@ -742,5 +752,166 @@ export function mapProduct(
             : fb.faq.items,
         }
       : fb.faq,
+  };
+}
+
+/**
+ * Quiz — the opening screen.
+ *
+ * Paragraphs are a `text_item` list rather than one textarea because the gap
+ * between them is the design's, not whatever the editor happened to type. An
+ * empty list falls back whole: two paragraphs where one was deleted by
+ * accident would leave the screen looking unfinished rather than edited.
+ */
+function mapQuizIntro(
+  content: Blok | null,
+  fb: QuizIntroContent,
+): QuizIntroContent {
+  if (!content) return fb;
+  const paragraphs = arr(content.paragraphs)
+    .map((p) => str(p.text))
+    .filter(Boolean);
+  return {
+    heading: str(content.heading) || fb.heading,
+    paragraphs: paragraphs.length ? paragraphs : fb.paragraphs,
+    ctaLabel: str(content.ctaLabel) || fb.ctaLabel,
+    footnote: str(content.footnote) || fb.footnote,
+  };
+}
+
+function mapQuizName(content: Blok | null, fb: QuizNameContent): QuizNameContent {
+  if (!content) return fb;
+  return {
+    progressLabel: str(content.progressLabel) || fb.progressLabel,
+    heading: str(content.heading) || fb.heading,
+    fieldLabel: str(content.fieldLabel) || fb.fieldLabel,
+    ctaLabel: str(content.ctaLabel) || fb.ctaLabel,
+  };
+}
+
+function mapQuizInterstitial(
+  content: Blok | null,
+  fb: QuizInterstitialContent,
+): QuizInterstitialContent {
+  if (!content) return fb;
+  return {
+    heading: str(content.heading) || fb.heading,
+    body: str(content.body) || fb.body,
+    ctaLabel: str(content.ctaLabel) || fb.ctaLabel,
+  };
+}
+
+/**
+ * A pick-one step. The options fall back whole rather than per item: a list
+ * half-filled by an editor would render a question you cannot answer.
+ */
+function mapQuizChoice(
+  content: Blok | null,
+  fb: QuizChoiceContent,
+): QuizChoiceContent {
+  if (!content) return fb;
+  const options = arr(content.options)
+    .map((o) => {
+      const icon = str(o.icon);
+      return {
+        value: str(o.value),
+        label: str(o.label),
+        description: str(o.description) || undefined,
+        icon: isQuizIcon(icon) ? icon : undefined,
+      };
+    })
+    .filter((o) => o.value && o.label);
+  return {
+    progressLabel: str(content.progressLabel) || fb.progressLabel,
+    heading: str(content.heading) || fb.heading,
+    subheading: str(content.subheading) || fb.subheading,
+    recognition: (() => {
+      const r = arr(content.recognition)[0];
+      if (!r) return fb.recognition;
+      return {
+        eyebrow: str(r.eyebrow) || fb.recognition?.eyebrow || "",
+        body: str(r.body) || fb.recognition?.body || "",
+        // The rule that decides whether it shows is design, not copy, so it
+        // stays in code rather than becoming a field an editor can break.
+        when: fb.recognition?.when,
+      };
+    })(),
+    options: options.length ? options : fb.options,
+    helper: str(content.helper) || fb.helper,
+    // Presentation, not copy: it stays with the design rather than becoming a
+    // switch an editor can flip by accident.
+    dense: fb.dense,
+    headingSize: fb.headingSize,
+  };
+}
+
+/** A pick-many step: the same options, plus the count line and the button. */
+function mapQuizMulti(
+  content: Blok | null,
+  fb: QuizMultiContent,
+): QuizMultiContent {
+  if (!content) return fb;
+  const base = mapQuizChoice(content, { ...fb, helper: "" });
+  return {
+    progressLabel: base.progressLabel,
+    heading: base.heading,
+    subheading: base.subheading,
+    options: base.options,
+    countLabel: str(content.countLabel) || fb.countLabel,
+    ctaLabel: str(content.ctaLabel) || fb.ctaLabel,
+    recognition: base.recognition ?? fb.recognition,
+    dense: fb.dense,
+    headingSize: fb.headingSize,
+  };
+}
+
+function mapQuizEducation(
+  content: Blok | null,
+  fb: QuizEducationContent,
+): QuizEducationContent {
+  if (!content) return fb;
+  return {
+    pillLabel: str(content.pillLabel) || fb.pillLabel,
+    eyebrow: str(content.eyebrow) || fb.eyebrow,
+    heading: str(content.heading) || fb.heading,
+    lead: str(content.lead) || fb.lead,
+    body: str(content.body) || fb.body,
+    footnote: str(content.footnote) || fb.footnote,
+    ctaLabel: str(content.ctaLabel) || fb.ctaLabel,
+  };
+}
+
+/**
+ * The whole quiz. One story holds every step, because the flow renders from a
+ * single fetch — see QuizFlow for why it is not a route per step.
+ */
+export function mapQuiz(content: Blok | null, fb: QuizContent): QuizContent {
+  if (!content) return fb;
+  return {
+    totalSteps: num(content.totalSteps) || fb.totalSteps,
+    intro: mapQuizIntro(arr(content.intro)[0] ?? content, fb.intro),
+    name: mapQuizName(arr(content.name)[0] ?? null, fb.name),
+    interstitial: mapQuizInterstitial(
+      arr(content.interstitial)[0] ?? null,
+      fb.interstitial,
+    ),
+    sex: mapQuizChoice(arr(content.sex)[0] ?? null, fb.sex),
+    goal: mapQuizChoice(arr(content.goal)[0] ?? null, fb.goal),
+    depth: mapQuizChoice(arr(content.depth)[0] ?? null, fb.depth),
+    secondary: mapQuizMulti(arr(content.secondary)[0] ?? null, fb.secondary),
+    branchDiscriminator: mapQuizMulti(
+      arr(content.branchDiscriminator)[0] ?? null,
+      fb.branchDiscriminator,
+    ),
+    branchQualifier: mapQuizChoice(
+      arr(content.branchQualifier)[0] ?? null,
+      fb.branchQualifier,
+    ),
+    branchEducation: mapQuizEducation(
+      arr(content.branchEducation)[0] ?? null,
+      fb.branchEducation,
+    ),
+    sleep: mapQuizChoice(arr(content.sleep)[0] ?? null, fb.sleep),
+    stress: mapQuizChoice(arr(content.stress)[0] ?? null, fb.stress),
   };
 }
