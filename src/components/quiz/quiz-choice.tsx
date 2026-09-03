@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { QuizScreen, backdropFocus } from "@/components/quiz/quiz-screen";
+import { QuizScreen } from "@/components/quiz/quiz-screen";
+import type { Pan } from "@/components/quiz/quiz-screen";
 import { QuizProgress } from "@/components/quiz/quiz-progress";
 import { QuizOptionCard } from "@/components/quiz/quiz-option-card";
 import type { QuizChoiceContent } from "@/lib/quiz-content";
@@ -33,11 +34,12 @@ export function QuizChoice({
   onBack,
   step,
   total,
-  focus,
+  pan,
 }: {
   content: QuizChoiceContent;
   /** Which part of the backdrop this step looks at. */
-  focus?: string;
+  /** Overrides the frame default; see Pan. */
+  pan?: Pan;
   /** The option value already chosen, if the step is being revisited. */
   value: string | null;
   onSelect: (value: string) => void;
@@ -64,7 +66,7 @@ export function QuizChoice({
   }, [pending]);
 
   return (
-    <QuizScreen variant="question" focus={focus ?? backdropFocus(-60, -200)}>
+    <QuizScreen variant="question" pan={pan ?? [-60, -200]}>
       <QuizProgress
         label={content.progressLabel}
         current={step}

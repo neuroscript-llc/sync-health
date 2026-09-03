@@ -1,7 +1,7 @@
 "use client";
 
 import { useId } from "react";
-import { QuizScreen, backdropFocus } from "@/components/quiz/quiz-screen";
+import { QuizScreen } from "@/components/quiz/quiz-screen";
 import { QuizProgress } from "@/components/quiz/quiz-progress";
 import type { QuizNameContent } from "@/lib/quiz-content";
 
@@ -39,7 +39,7 @@ export function QuizName({
   const fieldId = useId();
 
   return (
-    <QuizScreen variant="question" focus={backdropFocus(-209, -103)}>
+    <QuizScreen variant="question" pan={[-209, -103]}>
       <QuizProgress
         label={content.progressLabel}
         current={step}
@@ -65,17 +65,22 @@ export function QuizName({
           {content.fieldLabel}
         </label>
 
-        <input
-          id={fieldId}
-          name="firstName"
-          type="text"
-          autoComplete="given-name"
-          autoCapitalize="words"
-          enterKeyHint="next"
-          value={value}
-          onChange={(event) => onChange(event.target.value)}
-          className="quiz-glass-field mt-[7px] h-[62px] w-full rounded-[31px] px-6 text-[20px] leading-[26px] tracking-[-0.005em] text-white caret-brand outline-none placeholder:text-white/35"
-        />
+        {/* The glass ring is a masked ::before, and form controls do not draw
+            pseudo-elements — so the glass goes on a wrapper and the input
+            fills it. */}
+        <div className="quiz-glass-field mt-[7px] h-[62px] rounded-[31px]">
+          <input
+            id={fieldId}
+            name="firstName"
+            type="text"
+            autoComplete="given-name"
+            autoCapitalize="words"
+            enterKeyHint="next"
+            value={value}
+            onChange={(event) => onChange(event.target.value)}
+            className="h-full w-full rounded-[31px] bg-transparent px-6 text-[20px] leading-[26px] tracking-[-0.005em] text-white caret-brand outline-none placeholder:text-white/35"
+          />
+        </div>
 
         {/* Bottom of the space left over, which on a phone is the top of the
             keyboard once the field takes focus. */}

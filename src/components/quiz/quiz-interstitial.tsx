@@ -1,4 +1,4 @@
-import { QuizScreen, backdropFocus } from "@/components/quiz/quiz-screen";
+import { QuizScreen } from "@/components/quiz/quiz-screen";
 import { withName } from "@/lib/quiz-content";
 import type { QuizInterstitialContent } from "@/lib/quiz-content";
 
@@ -22,7 +22,7 @@ export function QuizInterstitial({
   onContinue: () => void;
 }) {
   return (
-    <QuizScreen variant="interstitial" focus={backdropFocus(-209, -103)}>
+    <QuizScreen variant="interstitial" pan={[-209, -103]}>
       <div className="flex flex-1 flex-col items-center justify-center">
         <div
           aria-hidden

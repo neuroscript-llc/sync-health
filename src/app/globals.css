@@ -30,6 +30,7 @@
 
   /* Sync. brand tokens (from Figma) */
   --color-brand: var(--brand);
+  --color-coral: var(--coral);
   --color-brand-foreground: var(--brand-foreground);
   --color-ink: var(--ink);
   --color-cream: var(--cream);
@@ -103,6 +104,9 @@
 
   /* Sync. brand palette */
   --brand: #d03516;
+  /* The reveal's accent: chip icons, section eyebrows, the privacy padlock on
+     S9. A lightened brand tint, not --brand itself. */
+  --coral: #ff9c7d;
   --brand-foreground: #ffffff;
   --ink: #1d1d1b;
   --cream: #f0f0e6;
@@ -461,6 +465,10 @@ body:has(.quiz-root) {
    between them — which needs the mask trick rather than a border colour: a
    ring drawn by a pseudo-element, masked to everything except its own content
    box, so the middle stays transparent and the backdrop filter shows through. */
+/* NOTE: these set position, and this file is declared after Tailwind's
+   utilities — so `fixed`/`absolute` from a class list loses to the
+   `position: relative` below on source order. Put the glass on an inner
+   element and position the wrapper. */
 .quiz-glass,
 .quiz-glass-field {
   position: relative;
@@ -541,4 +549,97 @@ body:has(.quiz-root) {
     linear-gradient(#000 0 0);
   mask-composite: exclude;
   pointer-events: none;
+}
+
+/* The reveal scrolls, unlike every step before it, so it gets the page rather
+   than a locked 100svh screen — and a bar that stays in view at the bottom of
+   it. The bar is far brighter glass than the controls above (white .188 to
+   .164 against their .032), which is what keeps a running total legible over
+   whatever has scrolled behind it, and its ring carries one dark stop so the
+   bright edge does not close into a full loop. */
+.quiz-reveal-bar {
+  position: relative;
+  /* The frame's literal fill: white .188 to .164. Over the near-black page
+     that lands at rgb(62,54,56), which is exactly what the frame's own render
+     measures — so unlike the controls above, this one needs no fitting. */
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.188) 0%,
+    rgba(255, 255, 255, 0.164) 100%
+  );
+  backdrop-filter: blur(20px) saturate(0.9);
+  -webkit-backdrop-filter: blur(20px) saturate(0.9);
+  box-shadow: 0 -14px 40px rgba(0, 0, 0, 0.5);
+}
+
+.quiz-sheet::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    134deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.28) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+
+.quiz-reveal-bar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    134deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(255, 255, 255, 0.35) 38%,
+    rgba(29, 29, 27, 0.06) 72%,
+    rgba(255, 255, 255, 0.85) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* The read band's own dimming. Taller than the band it sits in (560 of a 476
+   window, clipped) so only the first 85% of the gradient is ever seen — the
+   frame's own arrangement, and the reason the band never reaches the
+   gradient's darkest stop. */
+.quiz-reveal-dim {
+  background: linear-gradient(
+    180deg,
+    rgba(18, 8, 11, 0.58) 0%,
+    rgba(46, 15, 6, 0.4) 40%,
+    rgba(18, 8, 11, 0.72) 100%
+  );
+}
+
+/* And the band's hand-off to the page: solid by the bottom so the card below
+   sits on flat colour rather than on photograph. */
+.quiz-reveal-fade {
+  background: linear-gradient(
+    180deg,
+    rgba(18, 8, 11, 0) 0%,
+    rgba(18, 8, 11, 0.85) 60%,
+    #12080b 100%
+  );
 }

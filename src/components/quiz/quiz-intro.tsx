@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { QuizScreen, backdropFocus } from "@/components/quiz/quiz-screen";
+import { QuizScreen } from "@/components/quiz/quiz-screen";
 import type { QuizIntroContent } from "@/lib/quiz-content";
 
 /**
@@ -24,7 +24,7 @@ export function QuizIntro({
   onStart: () => void;
 }) {
   return (
-    <QuizScreen variant="welcome" focus={backdropFocus(-209, -103)}>
+    <QuizScreen variant="welcome" pan={[-209, -103]}>
       {/* Not the site header: the flow deliberately offers no way out but
           finishing it or leaving, so the wordmark is a mark, not a link.
           Its own asset rather than the site's: white, and cropped to the

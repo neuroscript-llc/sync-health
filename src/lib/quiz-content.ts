@@ -1,4 +1,5 @@
 import type { QuizIconName } from "@/components/quiz/quiz-icons";
+import type { QuizRevealIconName } from "@/components/quiz/quiz-reveal-icons";
 
 /**
  * Quiz copy.
@@ -129,6 +130,138 @@ export type QuizEducationContent = {
   ctaLabel: string;
 };
 
+/**
+ * S8C 90-day capture — the one answer they write themselves.
+ *
+ * Per the design note on the frame, this text is quoted back to them at week
+ * 8, so it has to be stored verbatim rather than parsed or summarised into
+ * anything. Nothing consumes it yet.
+ */
+export type QuizCaptureContent = {
+  progressLabel: string;
+  heading: string;
+  subheading: string;
+  /**
+   * Shown in the empty field rather than prefilled, so nobody has to delete
+   * someone else's goal before writing their own. Its job is to show the
+   * shape of a useful answer: specific, and about a week rather than a year.
+   */
+  placeholder: string;
+  ctaLabel: string;
+};
+
+/** S9 Email — the last question, and the gate on the reveal. */
+export type QuizEmailContent = {
+  progressLabel: string;
+  heading: string;
+  subheading: string;
+  fieldLabel: string;
+  placeholder: string;
+  ctaLabel: string;
+  /** The line in the padlock panel under the button. */
+  privacyNote: string;
+};
+
+/** One benefit chip on a protocol card. */
+export type QuizRevealChip = {
+  icon: QuizRevealIconName;
+  label: string;
+};
+
+/**
+ * A protocol card — the big one.
+ *
+ * Serves both the base and Shape 3's supporting protocol, because the frames
+ * draw them identically: a 78 product tile beside a three-line title block, a
+ * 2x2 grid of chips, the reasoning, a rule, and a price. The two differ only
+ * in their copy, so they differ only in their content here.
+ */
+export type QuizRevealProtocol = {
+  /** The small line above the name: "Your base", "Supporting protocol". */
+  kicker: string;
+  name: string;
+  /** The compounds, or what the single molecule does. */
+  subtitle: string;
+  chips: QuizRevealChip[];
+  /** Why this, for this person. The card's height follows this. */
+  body: string;
+  priceLabel: string;
+  price: string;
+  cadence: string;
+};
+
+/**
+ * Shape 2's adjunct card — smaller, and the only card with its own button.
+ *
+ * Per the frame note, pairs-well-with fires on Shape 2 and nowhere else: it is
+ * not a section that other shapes hide, it is the thing that makes a reveal
+ * Shape 2.
+ */
+export type QuizRevealPairs = {
+  kicker: string;
+  name: string;
+  /** One line, unlike the protocol card's three-part price row. */
+  price: string;
+  body: string;
+  ctaLabel: string;
+};
+
+/** The plan in the picker, and the running total in the bar. */
+export type QuizRevealPlan = {
+  name: string;
+  price: string;
+  cadence: string;
+};
+
+/*
+ * A note on the money, because it does not add up in the frames.
+ *
+ * All three shapes show the same plan price and the same footer total —
+ * $289.00 — while their cards read $225, $340, and $340 + $95. The footer is
+ * a placeholder the shapes were copied from, not a running total, however the
+ * sticky-footer frame describes it. So the plan is the single source here and
+ * the bar mirrors it, rather than this file guessing at a pricing model: no
+ * arithmetic runs over these strings anywhere.
+ */
+
+/**
+ * One reveal.
+ *
+ * Three of these exist and none is derived from another. The frames are
+ * explicit that Shape 1 is its own shorter template "never merged into the
+ * standard reveal", and the same holds in reverse: Shape 2 is not Shape 1 plus
+ * a card. So the sections are shared components and the content is not — a
+ * shape declares what it has, and an absent section is absent rather than
+ * hidden.
+ */
+export type QuizRevealContent = {
+  eyebrow: string;
+  /** "{name}" is replaced with what they typed on the name step. */
+  heading: string;
+  body: string;
+  baseLabel: string;
+  base: QuizRevealProtocol;
+  /** Shape 3 only. */
+  supportingLabel: string;
+  supporting?: QuizRevealProtocol;
+  removeSupportingLabel: string;
+  /** Shape 2 only. */
+  pairs?: QuizRevealPairs;
+  planHeading: string;
+  plan: QuizRevealPlan;
+  /** Verbatim in the frames, and not ours to reword. */
+  lockedLine: string;
+  dayNinety: string;
+  swapLabel: string;
+  startOverLabel: string;
+  disclaimer: string;
+  ctaLabel: string;
+  /** The bar that appears once the read band has scrolled away. */
+  condensedKicker: string;
+  condensedTitle: string;
+  closeLabel: string;
+};
+
 export type QuizContent = {
   /**
    * How many steps the progress bar counts. The frame says 11; it will need to
@@ -148,6 +281,18 @@ export type QuizContent = {
   branchEducation: QuizEducationContent;
   sleep: QuizChoiceContent;
   stress: QuizChoiceContent;
+  capture: QuizCaptureContent;
+  email: QuizEmailContent;
+  /**
+   * The three engine shapes. Which one a person sees is decided by rules the
+   * frames refer to but do not define (R7 dedup, R8 cross-lane default), so
+   * nothing picks between them yet.
+   */
+  reveal: {
+    shape1: QuizRevealContent;
+    shape2: QuizRevealContent;
+    shape3: QuizRevealContent;
+  };
 };
 
 export const quiz: QuizContent = {
@@ -349,6 +494,170 @@ export const quiz: QuizContent = {
     ],
     helper: "",
     dense: true,
+  },
+  capture: {
+    progressLabel: "Your read",
+    heading: "90 days from now \u2014 what\u2019s different?",
+    subheading:
+      "Your words. This is the line your clinician reads back at day 90 to check what actually moved.",
+    placeholder:
+      "In 90 days I want to get through a full training week without my shoulder flaring up.",
+    ctaLabel: "Continue",
+  },
+  email: {
+    progressLabel: "Almost there",
+    heading: "Where should we send your personalised protocol?",
+    subheading:
+      "Your read and your assembled stack \u2014 then you'll move into the clinical assessment with a licensed provider. You won't be asked any of this twice.",
+    fieldLabel: "Email address",
+    placeholder: "you@example.com",
+    ctaLabel: "Show me my personalised protocol",
+    privacyNote: "Your answers never reach an advertising platform.",
+  },
+  reveal: {
+    // SHAPE 1 — recommend-less single. Its own template: a single molecule,
+    // no adjunct, and reasoning that stops at one sentence because there is
+    // no second thing to justify.
+    shape1: {
+      eyebrow: "Your read",
+      heading: "Here's what we see, {name}.",
+      body: "You told us where it's showing up and how long it's been going on. Whether the problem is one tissue or the whole system is the distinction a clinician uses to decide what to actually target. You just gave us the answer.",
+      baseLabel: "Your base",
+      base: {
+        kicker: "Your base",
+        name: "BPC-157",
+        subtitle: "Single molecule \u00b7 systemic soft-tissue and gut repair",
+        chips: [
+          { icon: "systemic", label: "Systemic repair" },
+          { icon: "inflam", label: "Gut lining support" },
+          { icon: "gut", label: "Soft-tissue repair" },
+          { icon: "restore", label: "Targets inflammation" },
+        ],
+        body: "It's the compound built for the pattern you described. Nothing else earns a place yet.",
+        priceLabel: "From",
+        price: "$225.00",
+        cadence: "/month",
+      },
+      supportingLabel: "Supporting protocol",
+      removeSupportingLabel: "Remove supporting protocol",
+      planHeading: "Choose your plan.",
+      plan: { name: "3-month plan", price: "$289.00", cadence: "/month" },
+    lockedLine:
+      "Peptide protocols are clinically recommended to run for at least 3 months to signal your body properly.",
+    dayNinety:
+      "At day 90, your clinician reviews what moved and adjusts the next cycle around it.",
+    swapLabel: "Swap the base",
+    startOverLabel: "Start over",
+    disclaimer:
+      "This is a personalised match, not a prescription. Everything you've entered passes to your clinical assessment \u2014 a licensed provider makes the final call. Peptide therapy is prescribed at a provider's discretion.",
+    ctaLabel: "Begin clinical assessment",
+    closeLabel: "Close",
+      condensedKicker: "Your protocol",
+      condensedTitle: "BPC-157",
+    },
+
+    // SHAPE 2 — blend, plus the one adjunct that sits outside it. The
+    // pairs-well-with card fires here and nowhere else.
+    shape2: {
+      eyebrow: "Your read",
+      heading: "Here's what we see, {name}.",
+      body: "You told us where it's showing up and how long it's been going on. Whether the problem is one tissue or the whole system is the distinction a clinician uses to decide what to actually target. You just gave us the answer.",
+      baseLabel: "Your base",
+      base: {
+        kicker: "Your base",
+        name: "REPAIR",
+        subtitle: "BPC-157 \u00b7 TB-500 \u00b7 KPV \u00b7 GHK-Cu",
+        chips: [
+          { icon: "systemic", label: "Systemic repair" },
+          { icon: "inflam", label: "Targets inflammation" },
+          { icon: "gut", label: "Supports gut lining" },
+          { icon: "restore", label: "Rebuilds connective tissue" },
+        ],
+        body: "You told us the recovery is showing up in your gut and something structural. REPAIR is built for exactly that pattern \u2014 four compounds working on the shared repair system, not one tissue at a time.",
+        priceLabel: "From",
+        price: "$340.00",
+        cadence: "/month",
+      },
+      supportingLabel: "Supporting protocol",
+      removeSupportingLabel: "Remove supporting protocol",
+      pairs: {
+        kicker: "Pairs well with",
+        name: "NAD+",
+        price: "From $95.00/month",
+        body: "Recovery leans on cellular energy \u2014 NAD+ is the natural pair, and it sits outside the REPAIR blend.",
+        ctaLabel: "Add to my protocol",
+      },
+      planHeading: "Choose your plan.",
+      plan: { name: "3-month plan", price: "$289.00", cadence: "/month" },
+    lockedLine:
+      "Peptide protocols are clinically recommended to run for at least 3 months to signal your body properly.",
+    dayNinety:
+      "At day 90, your clinician reviews what moved and adjusts the next cycle around it.",
+    swapLabel: "Swap the base",
+    startOverLabel: "Start over",
+    disclaimer:
+      "This is a personalised match, not a prescription. Everything you've entered passes to your clinical assessment \u2014 a licensed provider makes the final call. Peptide therapy is prescribed at a provider's discretion.",
+    ctaLabel: "Begin clinical assessment",
+    closeLabel: "Close",
+      condensedKicker: "Your protocol",
+      condensedTitle: "REPAIR + NAD+",
+    },
+
+    // SHAPE 3 — blend, plus a supporting protocol in its own right. A
+    // cross-lane single that came in on the R8 default and survived R7 dedup,
+    // which is why it is a second card rather than a suggestion.
+    shape3: {
+      eyebrow: "Your read",
+      heading: "Here's what we see, {name}.",
+      body: "You told us where it's showing up and how long it's been going on. Whether the problem is one tissue or the whole system is the distinction a clinician uses to decide what to actually target. You just gave us the answer.",
+      baseLabel: "Your base",
+      base: {
+        kicker: "Your base",
+        name: "REPAIR",
+        subtitle: "BPC-157 \u00b7 TB-500 \u00b7 KPV \u00b7 GHK-Cu",
+        chips: [
+          { icon: "systemic", label: "Systemic repair" },
+          { icon: "inflam", label: "Targets inflammation" },
+          { icon: "gut", label: "Supports gut lining" },
+          { icon: "restore", label: "Rebuilds connective tissue" },
+        ],
+        body: "You told us the recovery is showing up in your gut and something structural. REPAIR is built for exactly that pattern \u2014 four compounds working on the shared repair system, not one tissue at a time.",
+        priceLabel: "From",
+        price: "$340.00",
+        cadence: "/month",
+      },
+      supportingLabel: "Supporting protocol",
+      removeSupportingLabel: "Remove supporting protocol",
+      supporting: {
+        kicker: "Supporting protocol",
+        name: "NAD+",
+        subtitle: "Cross-lane single \u00b7 from your RESTORE flag",
+        chips: [
+          { icon: "energy", label: "Cellular energy" },
+          { icon: "mito", label: "Mitochondrial function" },
+          { icon: "signal", label: "Recovery signalling" },
+          { icon: "fatigue", label: "Anti-fatigue" },
+        ],
+        body: "You also flagged energy \u2014 that's a separate system, running low. NAD+ powers the fuel your cells run on. Paired with REPAIR, it means the repair machinery has something to work with.",
+        priceLabel: "From",
+        price: "$95.00",
+        cadence: "/month",
+      },
+      planHeading: "Choose your plan.",
+      plan: { name: "3-month plan", price: "$289.00", cadence: "/month" },
+    lockedLine:
+      "Peptide protocols are clinically recommended to run for at least 3 months to signal your body properly.",
+    dayNinety:
+      "At day 90, your clinician reviews what moved and adjusts the next cycle around it.",
+    swapLabel: "Swap the base",
+    startOverLabel: "Start over",
+    disclaimer:
+      "This is a personalised match, not a prescription. Everything you've entered passes to your clinical assessment \u2014 a licensed provider makes the final call. Peptide therapy is prescribed at a provider's discretion.",
+    ctaLabel: "Begin clinical assessment",
+    closeLabel: "Close",
+      condensedKicker: "Your protocol",
+      condensedTitle: "REPAIR + NAD+",
+    },
   },
 };
 

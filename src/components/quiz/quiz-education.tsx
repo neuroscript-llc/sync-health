@@ -1,4 +1,4 @@
-import { QuizScreen, backdropFocus } from "@/components/quiz/quiz-screen";
+import { QuizScreen } from "@/components/quiz/quiz-screen";
 import type { QuizEducationContent } from "@/lib/quiz-content";
 
 /**
@@ -24,7 +24,7 @@ export function QuizEducation({
   return (
     <QuizScreen
       variant="question"
-      focus={backdropFocus(-80, -240)}
+      pan={[-80, -240]}
       bottom="0px"
     >
       <div className="quiz-glass mx-auto flex h-11 items-center rounded-full px-4">

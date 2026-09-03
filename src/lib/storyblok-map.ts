@@ -20,6 +20,12 @@ import type {
   QuizChoiceContent,
   QuizMultiContent,
   QuizEducationContent,
+  QuizCaptureContent,
+  QuizEmailContent,
+  QuizRevealContent,
+  QuizRevealProtocol,
+  QuizRevealPairs,
+  QuizRevealChip,
 } from "@/lib/quiz-content";
 import type {
   LegalContent,
@@ -881,6 +887,120 @@ function mapQuizEducation(
   };
 }
 
+function mapQuizCapture(
+  content: Blok | null,
+  fb: QuizCaptureContent,
+): QuizCaptureContent {
+  if (!content) return fb;
+  return {
+    progressLabel: str(content.progressLabel) || fb.progressLabel,
+    heading: str(content.heading) || fb.heading,
+    subheading: str(content.subheading) || fb.subheading,
+    placeholder: str(content.placeholder) || fb.placeholder,
+    ctaLabel: str(content.ctaLabel) || fb.ctaLabel,
+  };
+}
+
+function mapQuizEmail(
+  content: Blok | null,
+  fb: QuizEmailContent,
+): QuizEmailContent {
+  if (!content) return fb;
+  return {
+    progressLabel: str(content.progressLabel) || fb.progressLabel,
+    heading: str(content.heading) || fb.heading,
+    subheading: str(content.subheading) || fb.subheading,
+    fieldLabel: str(content.fieldLabel) || fb.fieldLabel,
+    placeholder: str(content.placeholder) || fb.placeholder,
+    ctaLabel: str(content.ctaLabel) || fb.ctaLabel,
+    privacyNote: str(content.privacyNote) || fb.privacyNote,
+  };
+}
+
+function mapQuizRevealProtocol(
+  content: Blok | null,
+  fb: QuizRevealProtocol,
+): QuizRevealProtocol {
+  if (!content) return fb;
+  const chips = arr(content.chips);
+  return {
+    kicker: str(content.kicker) || fb.kicker,
+    name: str(content.name) || fb.name,
+    subtitle: str(content.subtitle) || fb.subtitle,
+    // An icon names a shape in quiz-reveal-icons; the fallback keeps the
+    // pairing when the CMS supplies labels but no icon.
+    chips: chips.length
+      ? chips.map((chip, i): QuizRevealChip => ({
+          icon: fb.chips[i]?.icon ?? fb.chips[0].icon,
+          label: str(chip.label) || fb.chips[i]?.label || "",
+        }))
+      : fb.chips,
+    body: str(content.body) || fb.body,
+    priceLabel: str(content.priceLabel) || fb.priceLabel,
+    price: str(content.price) || fb.price,
+    cadence: str(content.cadence) || fb.cadence,
+  };
+}
+
+function mapQuizRevealPairs(
+  content: Blok | null,
+  fb: QuizRevealPairs,
+): QuizRevealPairs {
+  if (!content) return fb;
+  return {
+    kicker: str(content.kicker) || fb.kicker,
+    name: str(content.name) || fb.name,
+    price: str(content.price) || fb.price,
+    body: str(content.body) || fb.body,
+    ctaLabel: str(content.ctaLabel) || fb.ctaLabel,
+  };
+}
+
+/**
+ * One engine shape.
+ *
+ * Whether a shape has a supporting protocol or a pairs-well-with card is not
+ * a CMS decision — it is what makes it that shape — so those sections come
+ * from the fallback and only their copy is editable.
+ */
+function mapQuizReveal(
+  content: Blok | null,
+  fb: QuizRevealContent,
+): QuizRevealContent {
+  if (!content) return fb;
+  return {
+    eyebrow: str(content.eyebrow) || fb.eyebrow,
+    heading: str(content.heading) || fb.heading,
+    body: str(content.body) || fb.body,
+    baseLabel: str(content.baseLabel) || fb.baseLabel,
+    base: mapQuizRevealProtocol(arr(content.base)[0] ?? null, fb.base),
+    supportingLabel: str(content.supportingLabel) || fb.supportingLabel,
+    supporting: fb.supporting
+      ? mapQuizRevealProtocol(arr(content.supporting)[0] ?? null, fb.supporting)
+      : undefined,
+    removeSupportingLabel:
+      str(content.removeSupportingLabel) || fb.removeSupportingLabel,
+    pairs: fb.pairs
+      ? mapQuizRevealPairs(arr(content.pairs)[0] ?? null, fb.pairs)
+      : undefined,
+    planHeading: str(content.planHeading) || fb.planHeading,
+    plan: {
+      name: str(content.planName) || fb.plan.name,
+      price: str(content.planPrice) || fb.plan.price,
+      cadence: str(content.planCadence) || fb.plan.cadence,
+    },
+    lockedLine: str(content.lockedLine) || fb.lockedLine,
+    dayNinety: str(content.dayNinety) || fb.dayNinety,
+    swapLabel: str(content.swapLabel) || fb.swapLabel,
+    startOverLabel: str(content.startOverLabel) || fb.startOverLabel,
+    disclaimer: str(content.disclaimer) || fb.disclaimer,
+    ctaLabel: str(content.ctaLabel) || fb.ctaLabel,
+    condensedKicker: str(content.condensedKicker) || fb.condensedKicker,
+    condensedTitle: str(content.condensedTitle) || fb.condensedTitle,
+    closeLabel: str(content.closeLabel) || fb.closeLabel,
+  };
+}
+
 /**
  * The whole quiz. One story holds every step, because the flow renders from a
  * single fetch — see QuizFlow for why it is not a route per step.
@@ -913,5 +1033,12 @@ export function mapQuiz(content: Blok | null, fb: QuizContent): QuizContent {
     ),
     sleep: mapQuizChoice(arr(content.sleep)[0] ?? null, fb.sleep),
     stress: mapQuizChoice(arr(content.stress)[0] ?? null, fb.stress),
+    capture: mapQuizCapture(arr(content.capture)[0] ?? null, fb.capture),
+    email: mapQuizEmail(arr(content.email)[0] ?? null, fb.email),
+    reveal: {
+      shape1: mapQuizReveal(arr(content.revealShape1)[0] ?? null, fb.reveal.shape1),
+      shape2: mapQuizReveal(arr(content.revealShape2)[0] ?? null, fb.reveal.shape2),
+      shape3: mapQuizReveal(arr(content.revealShape3)[0] ?? null, fb.reveal.shape3),
+    },
   };
 }

@@ -48,9 +48,17 @@ export default async function QuizRoute({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { isEnabled } = await draftMode();
-  const version = resolveVersion(await searchParams, isEnabled);
+  const params = await searchParams;
+  const version = resolveVersion(params, isEnabled);
   // Renders from quiz-content.ts until the `quiz` story exists in the CMS.
   const story = await getStoryContent("quiz", version);
 
-  return <QuizFlow content={mapQuiz(story, quiz)} />;
+  // The reveal has three engine shapes and nothing picks between them yet, so
+  // ?shape=1|2|3 selects one for review. Temporary: it comes out the moment
+  // the shape is decided by the answers instead of the URL.
+  const requested = Array.isArray(params.shape) ? params.shape[0] : params.shape;
+  const shape =
+    requested === "1" ? "shape1" : requested === "3" ? "shape3" : "shape2";
+
+  return <QuizFlow content={mapQuiz(story, quiz)} shape={shape} />;
 }

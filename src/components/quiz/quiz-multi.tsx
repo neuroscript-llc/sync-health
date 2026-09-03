@@ -1,6 +1,7 @@
 "use client";
 
-import { QuizScreen, backdropFocus } from "@/components/quiz/quiz-screen";
+import { QuizScreen } from "@/components/quiz/quiz-screen";
+import type { Pan } from "@/components/quiz/quiz-screen";
 import { QuizProgress } from "@/components/quiz/quiz-progress";
 import { QuizOptionCard } from "@/components/quiz/quiz-option-card";
 import { recognitionFires } from "@/lib/quiz-content";
@@ -34,11 +35,12 @@ export function QuizMulti({
   onBack,
   step,
   total,
-  focus,
+  pan,
 }: {
   content: QuizMultiContent;
   /** Which part of the backdrop this step looks at. */
-  focus?: string;
+  /** Overrides the frame default; see Pan. */
+  pan?: Pan;
   values: string[];
   onToggle: (value: string) => void;
   onSubmit: () => void;
@@ -49,7 +51,7 @@ export function QuizMulti({
   return (
     <QuizScreen
       variant="question"
-      focus={focus ?? backdropFocus(-420, -300)}
+      pan={pan ?? [-420, -300]}
       bottom={content.dense ? "2.125rem" : undefined}
     >
       <QuizProgress

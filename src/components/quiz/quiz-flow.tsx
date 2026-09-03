@@ -7,7 +7,9 @@ import { QuizInterstitial } from "@/components/quiz/quiz-interstitial";
 import { QuizChoice } from "@/components/quiz/quiz-choice";
 import { QuizMulti } from "@/components/quiz/quiz-multi";
 import { QuizEducation } from "@/components/quiz/quiz-education";
-import { backdropFocus } from "@/components/quiz/quiz-screen";
+import { QuizCapture } from "@/components/quiz/quiz-capture";
+import { QuizEmail } from "@/components/quiz/quiz-email";
+import { QuizReveal } from "@/components/quiz/quiz-reveal";
 import type { QuizContent } from "@/lib/quiz-content";
 
 /**
@@ -33,7 +35,17 @@ const toggle = (current: string[], value: string): string[] =>
     ? current.filter((v) => v !== value)
     : [...current, value];
 
-export function QuizFlow({ content }: { content: QuizContent }) {
+export function QuizFlow({
+  content,
+  shape = "shape2",
+}: {
+  content: QuizContent;
+  /**
+   * Which reveal to render. Overridable from the URL while the three shapes
+   * are being reviewed, because no rule engine picks between them yet.
+   */
+  shape?: "shape1" | "shape2" | "shape3";
+}) {
   const [screen, setScreen] = useState(0);
   const [firstName, setFirstName] = useState("");
   const [sex, setSex] = useState<string | null>(null);
@@ -44,6 +56,8 @@ export function QuizFlow({ content }: { content: QuizContent }) {
   const [inflammation, setInflammation] = useState<string | null>(null);
   const [sleep, setSleep] = useState<string | null>(null);
   const [stress, setStress] = useState<string | null>(null);
+  const [ninetyDay, setNinetyDay] = useState("");
+  const [email, setEmail] = useState("");
 
   switch (screen) {
     case 0:
@@ -144,7 +158,7 @@ export function QuizFlow({ content }: { content: QuizContent }) {
           onBack={() => setScreen(6)}
           step={6}
           total={content.totalSteps}
-          focus={backdropFocus(-190, -380)}
+          pan={[-190, -380]}
         />
       );
 
@@ -160,7 +174,7 @@ export function QuizFlow({ content }: { content: QuizContent }) {
           onBack={() => setScreen(7)}
           step={7}
           total={content.totalSteps}
-          focus={backdropFocus(-330, -60)}
+          pan={[-330, -60]}
         />
       );
 
@@ -184,23 +198,80 @@ export function QuizFlow({ content }: { content: QuizContent }) {
           onBack={() => setScreen(9)}
           step={8}
           total={content.totalSteps}
-          focus={backdropFocus(-240, -420)}
+          pan={[-240, -420]}
         />
       );
 
-    default:
+    case 11:
       return (
         <QuizChoice
           content={content.stress}
           value={stress}
           onSelect={(value) => {
             setStress(value);
-            // S8C, the 90-day capture, lands next.
+            setScreen(12);
           }}
           onBack={() => setScreen(10)}
           step={9}
           total={content.totalSteps}
-          focus={backdropFocus(-140, -160)}
+          pan={[-140, -160]}
+        />
+      );
+
+    case 12:
+      // Step 10, not 9: the frames number the branch screens into the same
+      // count, so the two Recovery steps already spent 6 and 7.
+      return (
+        <QuizCapture
+          content={content.capture}
+          value={ninetyDay}
+          onChange={setNinetyDay}
+          onSubmit={() => setScreen(13)}
+          onBack={() => setScreen(11)}
+          step={10}
+          total={content.totalSteps}
+        />
+      );
+
+    case 13:
+      return (
+        <QuizEmail
+          content={content.email}
+          value={email}
+          onChange={setEmail}
+          onSubmit={() => {
+            // Nothing is sent anywhere yet — there is no endpoint, and the
+            // reveal below reads from content rather than from an answer.
+            //
+            // When it is wired: everything from this step on goes server-side
+            // (Conversions API), and no health parameter may reach an ad
+            // platform — not the lane, not the branch, not a symptom, not the
+            // free text from S8C. A client-side pixel fired here would carry
+            // the answers in the page context by default, which is exactly
+            // what the screen above promises it does not do.
+            setScreen(14);
+          }}
+          onBack={() => setScreen(12)}
+          step={11}
+          total={content.totalSteps}
+        />
+      );
+
+    default:
+      // Which shape a person actually gets is decided by rules the frames
+      // name but do not define (R7 dedup, R8 cross-lane default), so the
+      // shape is chosen for us rather than derived from the answers above.
+      return (
+        <QuizReveal
+          content={content.reveal[shape]}
+          name={firstName}
+          onClose={() => setScreen(0)}
+          onStartOver={() => setScreen(0)}
+          onSwap={() => setScreen(4)}
+          onBegin={() => {
+            // The clinical assessment is a separate flow and does not exist
+            // yet.
+          }}
         />
       );
   }

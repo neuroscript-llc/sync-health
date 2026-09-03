@@ -1,5 +1,22 @@
 import Image from "next/image";
 
+/** The frame width and height every step is measured against. */
+const FRAME_W = 402;
+const FRAME_H = 874;
+/** The backdrop layer's own size, the same on every frame. */
+const PHOTO_W = 820;
+const PHOTO_H = 1080;
+
+/**
+ * Where a frame put the top-left corner of the backdrop photograph, relative
+ * to the screen. Both numbers are negative on every frame: the photo is bigger
+ * than the window and is dragged up and to the left behind it.
+ */
+export type Pan = [x: number, y: number];
+
+/** The frames' most common pan, and the one the welcome screens use. */
+const DEFAULT_PAN: Pan = [-209, -103];
+
 /**
  * Where in the backdrop a step is looking.
  *
@@ -10,10 +27,26 @@ import Image from "next/image";
  * it gives the corner of the window inside the photo, and the middle of that
  * window as a fraction of the photo is exactly what background-position wants.
  */
-export function backdropFocus(frameX: number, frameY: number): string {
-  const x = ((-frameX + 402 / 2) / 820) * 100;
-  const y = ((-frameY + 874 / 2) / 1080) * 100;
+function backdropPosition([frameX, frameY]: Pan): string {
+  const x = ((-frameX + FRAME_W / 2) / PHOTO_W) * 100;
+  const y = ((-frameY + FRAME_H / 2) / PHOTO_H) * 100;
   return `${x.toFixed(1)}% ${y.toFixed(1)}%`;
+}
+
+/**
+ * Where the photograph runs out.
+ *
+ * Some frames pan the photo up far enough that its bottom edge lands inside
+ * the window — on S9 at 750 of 874, on the sleep step at 660 — and below that
+ * edge the frame shows only its dimming over the near-black page. It reads as
+ * deliberate: the empty lower third of those steps grounds out dark.
+ *
+ * object-cover never runs out, so that edge has to be put back. Returns the
+ * frame y where the photo ends, or null when it covers the whole window.
+ */
+function backdropFloor([, frameY]: Pan): number | null {
+  const edge = frameY + PHOTO_H;
+  return edge < FRAME_H ? edge : null;
 }
 
 /**
@@ -34,14 +67,14 @@ export function backdropFocus(frameX: number, frameY: number): string {
  */
 export function QuizScreen({
   variant,
-  focus,
+  pan = DEFAULT_PAN,
   bottom: bottomOverride,
   children,
   ...rest
 }: {
   variant: "welcome" | "question" | "interstitial";
-  /** From backdropFocus(). Defaults to the frames' most common pan. */
-  focus?: string;
+  /** Where this frame dragged the photo. See Pan. */
+  pan?: Pan;
   /** Overrides the variant's bottom space, for a frame that sits lower. */
   bottom?: string;
   children: React.ReactNode;
@@ -58,6 +91,7 @@ export function QuizScreen({
       : variant === "question"
         ? "3.875rem"
         : "2.875rem");
+  const floor = backdropFloor(pan);
 
   return (
     <section
@@ -74,9 +108,27 @@ export function QuizScreen({
         fill
         priority
         sizes="100vw"
-        style={{ objectPosition: focus ?? backdropFocus(-209, -103) }}
+        style={{ objectPosition: backdropPosition(pan) }}
         className="object-cover"
       />
+
+      {/* The photo's own bottom edge, in the page's colour so the dimming
+          below composites exactly as it does in the frame — where there is no
+          photo to dim. Softened over 60 because the blurred photo's edge is
+          soft in the frames too, and measured up from the bottom rather than
+          down from the top so a screen taller than the 874 frame keeps the
+          dark base under the button instead of stretching it. */}
+      {floor !== null ? (
+        <div
+          className="absolute inset-x-0 bottom-0"
+          style={{
+            height: `${FRAME_H - floor + 30}px`,
+            background:
+              "linear-gradient(to bottom, rgba(18, 8, 11, 0) 0, #12080b 60px)",
+          }}
+        />
+      ) : null}
+
       <div
         className={`absolute inset-0 ${
           welcome ? "quiz-dim-welcome" : "quiz-dim-question"
